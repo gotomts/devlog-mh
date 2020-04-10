@@ -1,0 +1,19 @@
+- name: Check vendor
+  stat:
+    path: /home/vagrant/{{ project_name }}/vendor
+  register: check_composer_install
+# - debug: var=check_composer_install
+- name: composer install
+  shell: "composer install"
+  args:
+    chdir: /home/vagrant/{{ project_name }}
+  become_user: vagrant
+  when: check_composer_install.stat.exists == false
+- name: Check env
+  stat:
+    path: /home/vagrant/{{ project_name }}/.env
+  register: check_env
+# - debug: var=check_env
+- name: Copy env
+  shell: "cp /home/vagrant/{{ project_name }}/.env.example /home/vagrant/{{ project_name }}/.env"
+  when: check_env.stat.exists == false

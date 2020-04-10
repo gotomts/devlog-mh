@@ -1,0 +1,58 @@
+# mysql
+- name: Download MySQL Community
+  yum:
+    name: https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+    state: present
+- name: Delete mariadb
+  yum:
+    name: mariadb-libs
+    state: removed
+- name: Install MySQL 8
+  yum:
+    name: ['mysql-community-devel*', 'mysql-community-server*', 'MySQL-python']
+    state: present
+- name: enable mysql
+  systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+- name: get root password
+  shell: "grep 'A temporary password is generated for root@localhost' /var/log/mysqld.log | awk -F ' ' '{print $(NF)}'"
+  register: root_password
+  failed_when: "'FAILED' in root_password.stderr"
+- name: Copy db access file
+  copy:
+    src: tmp_dbaccess.cnf
+    dest: /tmp/tmp_dbaccess.cnf
+    mode: 0644
+    owner: vagrant
+    group: vagrant
+  failed_when: "'FAILED' in root_password.stderr"
+- name: Edit db access file
+  lineinfile:
+    dest: /tmp/tmp_dbaccess.cnf
+    regexp: '\password =$'
+    line: "password = '{{ root_password.stdout }}'"
+  failed_when: "'FAILED' in root_password.stderr"
+- debug: "{{ root_password.stdout }}"
+- name: Copy my.conf
+  copy:
+    src: my.cnf
+    dest: /etc/my.cnf
+    mode: 0644
+- name: enable mysql
+  systemd:
+    name: mysqld
+    state: restarted
+    enabled: yes
+# - name: echo new password
+#   shell: 'echo Ft[Jkz.Jcvn^9M8b'
+#   register: new_password
+- name: update expired root user password
+  command: mysql --defaults-extra-file=/tmp/tmp_dbaccess.cnf --connect-expired-password --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ new_password }}';"
+- name: Create a new database with name 'sampledb'
+  mysql_db:
+    login_user: root
+    login_password: "{{ new_password }}"
+    name: sampledb
+    state: present

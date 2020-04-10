@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+  ServerName {{ server_name }}
+  DocumentRoot /home/vagrant/{{ project_name }}/public
+  ErrorLog /etc/httpd/logs/{{ project_name }}_error.log
+  CustomLog /etc/httpd/logs/{{ project_name }}_access.log combined
+  
+  <Directory /home/vagrant/{{ project_name }}>
+    Require all granted
+  </Directory>
+</VirtualHost>

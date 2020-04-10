@@ -1,0 +1,7 @@
+- name: Install Zip & Unzip
+  yum:
+    name: [
+      zip,
+      unzip
+    ]
+    state: latest

@@ -1,0 +1,43 @@
+- name: Install httpd
+  yum:
+    name: httpd
+    state: latest
+
+# 設定ファイルのコピー
+- name: check httpd.conf.org
+  stat: path=/etc/httpd/conf/httpd.conf.org
+  register: httpd_conf_org
+- name: Setting file httpd backup
+  command: cp -p /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.org
+  when: httpd_conf_org.stat.exists == false
+- name: Setting file httpd copy
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+    mode: 0600
+    owner: root
+    group: root
+  when: httpd_conf_org.stat.exists == false
+- name: check vhttpd
+  stat: "path=/etc/httpd/conf.d/{{ project_name }}.conf"
+  register: vhttpd_conf_org
+- name: Setting file vhttpd copy
+  template:
+    src: template.conf.j2
+    dest: "/etc/httpd/conf.d/{{ project_name }}.conf"
+    mode: 0600
+    owner: root
+    group: root
+  when: vhttpd_conf_org.stat.exists == false
+- name: Change Permission Apache Log
+  file:
+    path: /var/log/httpd
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+- name: Start httpd
+  service:
+    name: httpd
+    state: started
+    enabled: true
+  when: vhttpd_conf_org.stat.exists == false

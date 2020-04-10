@@ -1,0 +1,33 @@
+- name: Install PHP 7.4
+  yum: 
+    name: [
+      php,
+      php-devel,
+      php-common,
+      php-fpm,
+      php-opcache,
+      php-pecl-redis,
+      php-mbstring,
+      php-mcrypt,
+      php-mysqlnd,
+      php-pdo,
+      php-gd,
+      php-xml,
+      php-zip
+    ]
+    enablerepo: remi,remi-php74
+    state: latest
+
+- name: Copy php.ini
+  copy:
+    src: php.ini
+    dest: /etc/php.ini
+    mode: 0600
+    owner: root
+    group: root
+
+- name: Restart httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: true
