@@ -14,13 +14,14 @@ class UserLogic
      * @param [type] $inputs
      * @return void
      */
-    public static function check($inputs) {
+    public static function check($inputs)
+    {
         $inputRequires = [];
         $inputRequires['name']      = isset($inputs['name']) ? true : false;
         $inputRequires['email']     = isset($inputs['email']) ? true : false;
         $inputRequires['role']      = isset($inputs['role']) ? true : false;
         $inputRequires['password']  = isset($inputs['password']) ? true : false;
-        $check;
+        $check = null;
         foreach ($inputRequires as $input) {
             $check = $input;
         }
@@ -55,13 +56,13 @@ class UserLogic
     public static function getUsers($delete_flg)
     {
         $users = User::select(
-                'users.id',
-                'users.name',
-                'users.updated_at',
-                'users.delete_flg',
-                'updater.name as updater'
-            )
-            ->leftjoin('users as updater', function($join) {
+            'users.id',
+            'users.name',
+            'users.updated_at',
+            'users.delete_flg',
+            'updater.name as updater'
+        )
+            ->leftjoin('users as updater', function ($join) {
                 $join->on('users.user_id', '=', 'updater.id');
             })
             ->where('users.delete_flg', '=', $delete_flg)
@@ -71,7 +72,7 @@ class UserLogic
     }
 
     /**
-        * カテゴリー登録処理
+        * ユーザ 登録処理
         *
         * @param $inputs
         * @return bool
@@ -89,23 +90,23 @@ class UserLogic
         }
         return false;
     }
-//
-//    /**
-//     * カテゴリー 更新処理
-//     *
-//     * @param $inputs
-//     * @return bool
-//     */
-//    public static function update($inputs)
-//    {
-//        $id = isset($inputs['id']) ? $inputs['id'] : false;
-//        $categoryName = isset($inputs['category_name']) ? $inputs['category_name'] : false;
-//        if ($id && $categoryName) {
-//            $category = Category::find($id);
-//            $category->category_name = $categoryName;
-//            $category->user_id = \Auth::id();
-//            return $category->save();
-//        }
-//        return false;
-//    }
+
+    /**
+     * ユーザ 更新処理
+     *
+     * @param $inputs
+     * @return bool
+     */
+    public static function update($inputs)
+    {
+        if (self::check($inputs)) {
+            $user = User::find(\Auth::user()->id);
+            $user->name     = $inputs['name'];
+            $user->email    = $inputs['email'];
+            $user->role     = $inputs['role'];
+            $user->password = Crypt::encrypt($inputs['password']);
+            return $user->save();
+        }
+        return false;
+    }
 }

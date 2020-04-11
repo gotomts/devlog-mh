@@ -64,7 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('create', 'Admin\UserController@showCreate');
             Route::post('create', 'Admin\UserController@exeCreate');
             Route::get('{id}', 'Admin\UserController@showEdit');
-            Route::match(['put', 'patch'], '{id}', 'Admin\UserController@exeEdit');
+            Route::post('{id}', 'Admin\UserController@exeEdit');
         });
         /*
         // 画像管理
