@@ -5,6 +5,13 @@
     mode: 0600
     owner: root
     group: root
+- name: copy file sshd_config copy
+  copy:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    mode: 0600
+    owner: root
+    group: root
 - name: restart sshd
   service:
     name: sshd
