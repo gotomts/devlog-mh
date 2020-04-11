@@ -178,6 +178,9 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
 
+        App\Providers\Helper\HelperServiceProvider::class,
+        App\Providers\ViewHelper\ViewHelperServiceProvider::class,
+
     ],
 
     /*

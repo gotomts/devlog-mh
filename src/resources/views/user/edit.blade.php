@@ -40,7 +40,7 @@
             <label for="inputRole1">ユーザー権限 <span class="badge badge-danger">必須</span></label>
             <select name="role" class="form-control @error('role') is-invalid @enderror" id="inputRole1" aria-describedby="roleHelp" required>
                     <option value="" @if ( !old('role') && !$user['role'] ) selected @endif>選択してください</option>
-                @foreach($roles as $role)
+                @foreach(\UserRoleTypeViewHelper::getSelectAll() as $role)
                     <option value="{{ $role['key'] }}" @if ( old('role') == $role['key'] ) selected @elseif ( $user['role'] == $role['key'] && !old('role') ) selected @endif >{{ $role['value'] }}</option>
                 @endforeach
             </select>
