@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\WebBaseController;
-use App\Http\Request\CategoryRequest;
+use App\Http\Requests\CategoryRequest;
 use App\Logic\CategoryLogic;
 use Illuminate\Http\Request;
 
