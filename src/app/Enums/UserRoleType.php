@@ -2,6 +2,7 @@
 
 
 namespace App\Enums;
+
 use MyCLabs\Enum\Enum;
 
 class UserRoleType extends Enum
