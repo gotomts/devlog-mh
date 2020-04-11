@@ -14,10 +14,10 @@
 @section('content')
     <div class="container mb-5">
         <div class="page-title">
-            <a href="{{ url('mh-login/user') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
+            <a href="{{ url('admin/user') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.user.create') }}</h1>
         </div>
-        {{ Form::open(['url' => 'mh-login/user/edit', 'method' => 'PUT']) }}
+        {{ Form::open(['url' => 'admin/user/edit', 'method' => 'PUT']) }}
         <div class="form-group">
             <label for="inputName1">ユーザー名 <span class="badge badge-danger">必須</span></label>
             <input name="name" class="form-control @error('name') is-invalid @enderror" id="inputName1" type="text" aria-describedby="nameHelp" placeholder="ユーザー名" value="{{ $user['name'] }}" required>
@@ -40,7 +40,7 @@
             <label for="inputRole1">ユーザー権限 <span class="badge badge-danger">必須</span></label>
             <select name="role" class="form-control @error('role') is-invalid @enderror" id="inputRole1" aria-describedby="roleHelp" required>
                     <option value="" @if ( !old('role') && !$user['role'] ) selected @endif>選択してください</option>
-                @foreach($roles as $role)
+                @foreach(\UserRoleTypeViewHelper::getSelectAll() as $role)
                     <option value="{{ $role['key'] }}" @if ( old('role') == $role['key'] ) selected @elseif ( $user['role'] == $role['key'] && !old('role') ) selected @endif >{{ $role['value'] }}</option>
                 @endforeach
             </select>

@@ -27,7 +27,7 @@ class LoginController extends WebBaseController
      *
      * @var string
      */
-    protected $redirectTo = 'mh-login';
+    protected $redirectTo = 'admin';
 
     /**
      * Create a new controller instance.

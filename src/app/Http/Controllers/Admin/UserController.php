@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRoleType;
 use App\Http\Request\UserRequest;
@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 
 class UserController extends WebBaseController
 {
-
-    use ArrayConvertion;
-
     /**
      * ユーザ管理 一覧
      *
@@ -32,10 +29,7 @@ class UserController extends WebBaseController
      */
     public function showCreate()
     {
-        $roleTypes = UserRoleType::values();
-        $roles = $this->enumToArray($roleTypes);
-        return \View::make('user.create')
-            ->with('roles', $roles);
+        return \View::make('user.create');
     }
 
     /**
@@ -57,13 +51,13 @@ class UserController extends WebBaseController
             if (\Auth::check()) {
                 $result = UserLogic::insert($inputs);
                 \DB::commit();
-                return redirect('mh-login/user')
+                return redirect('admin/user')
                     ->with('success', config('messages.success'))
                     ->withInput();
             }
         } catch (\Throwable $e) {
             \DB::rollback();
-            return redirect('mh-login/user')
+            return redirect('admin/user')
                 ->with('error', config('messages.error.insert'));
         }
         \DB::commit();
@@ -79,21 +73,16 @@ class UserController extends WebBaseController
     {
         $inputs['id'] = $request->id;
         $user = UserLogic::getUserById($inputs['id']);
-        $roleTypes = UserRoleType::values();
-        $roles = $this->enumToArray($roleTypes);
         // セッション切れ
         if (!\Auth::check()) {
             return redirect('login')
                 ->with('error', 'messages.error.session');
         }
-        // カテゴリーが見つからない場合
+        // ユーザーが見つからない場合
         if (is_null($user)) {
             return back()->with('error', config('messages.nodata'));
         }
         return \View::make('user.edit')
-            ->with('user', $user)
-            ->with('roles', $roles);
+            ->with('user', $user);
     }
-
-
 }

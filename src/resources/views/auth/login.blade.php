@@ -15,7 +15,7 @@
     <div class="flex-body">
         <div class="form-signin">
             <h1 class="text-center">{{ config('titles.login.top') }}</h1>
-            {{ Form::open(['url' => 'mh-login', 'method' => 'POST']) }}
+            {{ Form::open(['url' => 'admin', 'method' => 'POST']) }}
             <div class="form-group">
                 <label for="inputEmail1">メールアドレス</label>
                 <input type="text" class="form-control @error('email') is-invalid @enderror" id="inputEmail1"
