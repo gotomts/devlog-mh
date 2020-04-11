@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class UserController extends WebBaseController
 {
-
     use ArrayConvertion;
 
     /**
@@ -94,6 +93,4 @@ class UserController extends WebBaseController
             ->with('user', $user)
             ->with('roles', $roles);
     }
-
-
 }

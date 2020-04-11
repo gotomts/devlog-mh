@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class IndexController extends WebBaseController
 {
-    public function showIndex() {
+    public function showIndex()
+    {
         return view('welcome');
     }
 }

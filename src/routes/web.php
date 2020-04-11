@@ -27,21 +27,21 @@ Route::group(['middleware' => 'web'], function () {
 
 Route::group(['middleware' => 'guest'], function () {
     // ログイン
-    Route::get( 'admin',                    'Auth\LoginController@showLoginForm')->name('login');
-    Route::post('admin',                    'Auth\LoginController@login');
+    Route::get('admin', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('admin', 'Auth\LoginController@login');
     Route::group(['prefix' => 'admin'], function () {
         // パスワードリセット
-        Route::get( 'password/email',           'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-        Route::get( 'password/reset',           'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-        Route::post('password/reset',           'Auth\ForgotPasswordController@reset')->name('password.update');
-        Route::get( 'password/reset/{token}',   'Auth\ForgotPasswordController@showResetForm')->name('password.reset');
+        Route::get('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+        Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+        Route::post('password/reset', 'Auth\ForgotPasswordController@reset')->name('password.update');
+        Route::get('password/reset/{token}', 'Auth\ForgotPasswordController@showResetForm')->name('password.reset');
     });
 });
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'admin'], function () {
         // ログイン後TOP
-        Route::get( 'home',                     'Admin\HomeController@showHome')->name('home');
+        Route::get('home', 'Admin\HomeController@showHome')->name('home');
         // // 記事
         // Route::group(['prefix' => 'post'], function () {
         //     Route::get( '/',                'Admin\PostController@showIndex');
@@ -52,19 +52,19 @@ Route::group(['middleware' => 'auth'], function() {
         // });
         // カテゴリー
         Route::group(['prefix' => 'category'], function () {
-            Route::get( '/',                'Admin\CategoryController@showList');
-            Route::get( 'create',           'Admin\CategoryController@showCreate');
-            Route::post('create',           'Admin\CategoryController@exeCreate');
-            Route::get( '{id}',             'Admin\CategoryController@showEdit');
-            Route::match(['put', 'patch'],  '{id}', 'Admin\CategoryController@exeEdit');
+            Route::get('/', 'Admin\CategoryController@showList');
+            Route::get('create', 'Admin\CategoryController@showCreate');
+            Route::post('create', 'Admin\CategoryController@exeCreate');
+            Route::get('{id}', 'Admin\CategoryController@showEdit');
+            Route::match(['put', 'patch'], '{id}', 'Admin\CategoryController@exeEdit');
         });
         // ユーザ管理
         Route::group(['prefix' => 'user'], function () {
-            Route::get( '/',                'Admin\UserController@showList');
-            Route::get( 'create',           'Admin\UserController@showCreate');
-            Route::post('create',           'Admin\UserController@exeCreate');
-            Route::get( '{id}',             'Admin\UserController@showEdit');
-            Route::match(['put', 'patch'],  '{id}', 'Admin\UserController@exeEdit');
+            Route::get('/', 'Admin\UserController@showList');
+            Route::get('create', 'Admin\UserController@showCreate');
+            Route::post('create', 'Admin\UserController@exeCreate');
+            Route::get('{id}', 'Admin\UserController@showEdit');
+            Route::match(['put', 'patch'], '{id}', 'Admin\UserController@exeEdit');
         });
         /*
         // 画像管理
