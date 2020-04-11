@@ -17,7 +17,7 @@ class CategoryController extends WebBaseController
     public function showList()
     {
         $categories = CategoryLogic::getCategories(config('const.DELETE_FLG.none'));
-        return \View::make('category.list')
+        return \View::make('admin.category.list')
             ->with('categories', $categories);
     }
 
@@ -28,7 +28,7 @@ class CategoryController extends WebBaseController
      */
     public function showCreate()
     {
-        return \View::make('category.create');
+        return \View::make('admin.category.create');
     }
 
     /**
@@ -75,7 +75,7 @@ class CategoryController extends WebBaseController
         if (is_null($category)) {
             return back()->with('error', config('messages.nodata'));
         }
-        return \View::make('category.edit')
+        return \View::make('admin.category.edit')
             ->with('category', $category);
     }
 

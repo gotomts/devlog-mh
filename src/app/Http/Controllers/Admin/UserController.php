@@ -18,7 +18,7 @@ class UserController extends WebBaseController
     public function showList()
     {
         $users = UserLogic::getUsers(config('const.DELETE_FLG.none'));
-        return \View::make('user.list')
+        return \View::make('admin.user.list')
             ->with('users', $users);
     }
 
@@ -29,7 +29,7 @@ class UserController extends WebBaseController
      */
     public function showCreate()
     {
-        return \View::make('user.create');
+        return \View::make('admin.user.create');
     }
 
     /**
@@ -82,7 +82,7 @@ class UserController extends WebBaseController
         if (is_null($user)) {
             return back()->with('error', config('messages.nodata'));
         }
-        return \View::make('user.edit')
+        return \View::make('admin.user.edit')
             ->with('user', $user);
     }
 }

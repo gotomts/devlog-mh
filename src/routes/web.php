@@ -26,10 +26,10 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 Route::group(['middleware' => 'guest'], function () {
-    // ログイン
-    Route::get('admin', 'Auth\LoginController@showLoginForm')->name('login');
-    Route::post('admin', 'Auth\LoginController@login');
     Route::group(['prefix' => 'admin'], function () {
+        // ログイン
+        Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
+        Route::post('/', 'Auth\LoginController@login');
         // パスワードリセット
         Route::get('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
         Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -41,7 +41,7 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'admin'], function () {
         // ログイン後TOP
-        Route::get('home', 'Admin\HomeController@showHome')->name('home');
+        Route::get('index', 'Admin\IndexController@showIndex');
         // // 記事
         // Route::group(['prefix' => 'post'], function () {
         //     Route::get( '/',                'Admin\PostController@showIndex');

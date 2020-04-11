@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\WebBaseController;
 use Illuminate\Http\Request;
 
-class HomeController extends WebBaseController
+class IndexController extends WebBaseController
 {
     /**
      * Create a new controller instance.
@@ -22,8 +22,8 @@ class HomeController extends WebBaseController
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function showHome()
+    public function showIndex()
     {
-        return view('home');
+        return view('admin.index.index');
     }
 }
