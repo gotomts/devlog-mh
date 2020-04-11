@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Request;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,8 @@ class UserRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -20,7 +21,9 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
+        $test = $this->id;
         if ($this->id) {
             $unique = 'unique:users,email,' . $this->id;
         } else {

@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\UserRoleType;
-use App\Http\Request\UserRequest;
-use App\Http\Traits\ArrayConvertion;
+use App\Http\Requests\UserRequest;
 use App\Logic\UserLogic;
 use Illuminate\Http\Request;
 
@@ -69,10 +67,9 @@ class UserController extends WebBaseController
      * @param Request $request
      * return View
      */
-    public function showEdit(Request $request)
+    public function showEdit(Request $request, $id=null)
     {
-        $inputs['id'] = $request->id;
-        $user = UserLogic::getUserById($inputs['id']);
+        $user = UserLogic::getUserById($id);
         // セッション切れ
         if (!\Auth::check()) {
             return redirect('login')
@@ -84,5 +81,28 @@ class UserController extends WebBaseController
         }
         return \View::make('admin.user.edit')
             ->with('user', $user);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param UserRequest $request
+     * @return void
+     */
+    public function exeEdit(UserRequest $request)
+    {
+        $inputs = $request->all();
+        \DB::beginTransaction();
+        try {
+            // ログインチェック
+            if (\Auth::check()) {
+                $result = UserLogic::update($inputs);
+            }
+        } catch (\Throwable $th) {
+            \DB::rollback();
+        }
+        \DB::commit();
+        return redirect('admin/user')
+            ->with('success', config('messages.success'));
     }
 }
