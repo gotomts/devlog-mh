@@ -10,6 +10,7 @@
     - remi-repository
     - zip
     - git
+    - ssh
     - httpd
     - redis
     - mysql

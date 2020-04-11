@@ -50,9 +50,9 @@
 #   register: new_password
 - name: update expired root user password
   command: mysql --defaults-extra-file=/tmp/tmp_dbaccess.cnf --connect-expired-password --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ new_password }}';"
-- name: Create a new database with name 'sampledb'
+- name: Create a new database with name {{ db_name }}
   mysql_db:
     login_user: root
     login_password: "{{ new_password }}"
-    name: sampledb
+    name: "{{ db_name }}"
     state: present
