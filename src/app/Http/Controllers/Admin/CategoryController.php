@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\WebBaseController;
+use App\Http\Controllers\Admin\WebBaseController;
 use App\Http\Request\CategoryRequest;
 use App\Logic\CategoryLogic;
 use Illuminate\Http\Request;
@@ -48,11 +48,11 @@ class CategoryController extends WebBaseController
             }
         } catch (\Throwable $e) {
             \DB::rollback();
-            return redirect('mh-login/category')
+            return redirect('admin/category')
                 ->with('success', config('messages.error.insert'));
         }
         \DB::commit();
-        return redirect('mh-login/category')
+        return redirect('admin/category')
             ->with('success', config('messages.success'));
     }
 
@@ -100,16 +100,16 @@ class CategoryController extends WebBaseController
             // アップデート確認
             if (!$isUpdate) {
                 \DB::rollback();
-                return redirect('mh-login/category')
+                return redirect('admin/category')
                     ->with('error', 'messages.error.update');
             }
         } catch (\Throwable $e) {
             \DB::rollback();
-            return redirect('mh-login/category')
+            return redirect('admin/category')
                 ->with('error', 'messages.error.update');
         }
         \DB::commit();
-        return redirect('mh-login/category')
+        return redirect('admin/category')
             ->with('success', config('messages.success'));
     }
 }

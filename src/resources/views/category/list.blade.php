@@ -18,9 +18,9 @@
 
 
         <div class="page-title">
-            <a href="{{ url('mh-login/home') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
+            <a href="{{ url('admin/home') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.category.list') }}</h1>
-            <a class="btn btn-primary align-middle" href="{{ url('mh-login/category/create')  }}">新規作成</a>
+            <a class="btn btn-primary align-middle" href="{{ url('admin/category/create')  }}">新規作成</a>
         </div>
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover table-bordered">
@@ -38,7 +38,7 @@
                 <!-- End データが存在しなかった場合 -->
                 @foreach($categories as $category)
                 <tr>
-                    <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("mh-login/category/{$category->id}") }}'>編集</a></td>
+                    <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/category/{$category->id}") }}'>編集</a></td>
                     <td class="text-nowrap">{{ $category->category_name }}</td>
                     <td class="text-center text-nowrap">{{ $category->name }}</td>
                     <td class="text-center text-nowrap">{{ $category->update_at() }}</td>

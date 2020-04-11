@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\WebBaseController;
+use App\Http\Controllers\Admin\WebBaseController;
 use Illuminate\Http\Request;
 
 class HomeController extends WebBaseController

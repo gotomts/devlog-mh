@@ -14,10 +14,10 @@
 @section('content')
     <div class="container mb-5">
         <div class="page-title">
-            <a href="{{ url('mh-login/user') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
+            <a href="{{ url('admin/user') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.user.create') }}</h1>
         </div>
-        {{ Form::open(['url' => 'mh-login/user/create', 'method' => 'POST']) }}
+        {{ Form::open(['url' => 'admin/user/create', 'method' => 'POST']) }}
         <div class="form-group">
             <label for="inputName1">ユーザー名 <span class="badge badge-danger">必須</span></label>
             <input name="name" class="form-control @error('name') is-invalid @enderror" id="inputName1" type="text" aria-describedby="nameHelp" placeholder="ユーザー名" value="{{ old('name') }}" required>

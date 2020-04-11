@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRoleType;
 use App\Http\Request\UserRequest;
@@ -57,13 +57,13 @@ class UserController extends WebBaseController
             if (\Auth::check()) {
                 $result = UserLogic::insert($inputs);
                 \DB::commit();
-                return redirect('mh-login/user')
+                return redirect('admin/user')
                     ->with('success', config('messages.success'))
                     ->withInput();
             }
         } catch (\Throwable $e) {
             \DB::rollback();
-            return redirect('mh-login/user')
+            return redirect('admin/user')
                 ->with('error', config('messages.error.insert'));
         }
         \DB::commit();

@@ -5,7 +5,7 @@
             <ul class="navbar-nav mr-auto"></ul>
             @auth
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('mh-login/profile') }}">プロフィール編集</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('admin/profile') }}">プロフィール編集</a></li>
                     <li class="nav-item"><a id="logout-btn" class="nav-link" href="#">ログアウト</a></li>
                 </ul>
             @endauth
@@ -13,5 +13,5 @@
     </nav>
 </header>
 
-{{ Form::open(['url' => 'mh-login/logout', 'method' => 'POST', 'id' => 'logout-form', 'class' => 'hidden']) }}
+{{ Form::open(['url' => 'admin/logout', 'method' => 'POST', 'id' => 'logout-form', 'class' => 'hidden']) }}
 {{ Form::close() }}
