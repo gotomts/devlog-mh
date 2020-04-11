@@ -13,7 +13,7 @@
         "**/vendor/**/*.php"
       ],
       "pathMappings": {
-        "/home/vagrant/www.devlog-mh.com": "${workspaceRoot}"
+        "/home/vagrant/www.devlog-mh.com": "${workspaceRoot}/src"
       }
     },
     {
