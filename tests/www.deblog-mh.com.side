@@ -1,0 +1,76 @@
+{
+  "id": "99df560b-c602-434e-b0d6-da3cf34225a0",
+  "version": "2.0",
+  "name": "www.deblog-mh.com",
+  "url": "http://localdev/",
+  "tests": [{
+    "id": "f4d8e374-d494-470b-bd3f-11447902b918",
+    "name": "管理画面ログイン",
+    "commands": [{
+      "id": "67be9efc-4024-4dbf-bba4-c893cc794e28",
+      "comment": "",
+      "command": "open",
+      "target": "http://localdev/admin",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "27639ce9-4b33-4768-b483-4010550502ed",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1660x1007",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "29fc931b-1a36-4179-8f2f-ed9058753e22",
+      "comment": "",
+      "command": "type",
+      "target": "id=inputEmail1",
+      "targets": [
+        ["id=inputEmail1", "id"],
+        ["name=email", "name"],
+        ["css=#inputEmail1", "css:finder"],
+        ["xpath=//input[@id='inputEmail1']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/div/form/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "develop@example.com"
+    }, {
+      "id": "92c97ac3-3835-4455-ae94-121a3baa9c47",
+      "comment": "",
+      "command": "type",
+      "target": "id=inputPassword1",
+      "targets": [
+        ["id=inputPassword1", "id"],
+        ["name=password", "name"],
+        ["css=#inputPassword1", "css:finder"],
+        ["xpath=//input[@id='inputPassword1']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/div/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "Password!"
+    }, {
+      "id": "6ff40cc3-5fec-44b6-9b37-e04c908d98bc",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'ログイン')]",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/div/form/div[3]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'ログイン')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "f5e86e70-4fdb-4c9c-9e74-1490d449d37d",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["f4d8e374-d494-470b-bd3f-11447902b918"]
+  }],
+  "urls": ["http://localdev/"],
+  "plugins": []
+}
