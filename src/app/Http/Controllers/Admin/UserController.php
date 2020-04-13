@@ -15,7 +15,7 @@ class UserController extends WebBaseController
      */
     public function showList()
     {
-        $users = UserLogic::getUsers(\IniHelper::get('DELETE_FLG', false, 'NO_ITEM'));
+        $users = UserLogic::getUsers();
         return \View::make('admin.user.list')
             ->with('users', $users);
     }
@@ -56,8 +56,7 @@ class UserController extends WebBaseController
         }
         \DB::commit();
         return redirect('admin/user')
-            ->with('success', \MsgHelper::get('MSG_SUCCESS'))
-            ->withInput();
+            ->with('success', \MsgHelper::get('MSG_SUCCESS'));
     }
 
     /**

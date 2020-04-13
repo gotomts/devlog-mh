@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
+    use SoftDeletes;
 
     protected $table = 'categories';
 
@@ -15,9 +16,11 @@ class Category extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'category_name',
-        'user_id',
-        'delete_flg',
+        'name',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+        'deleted_at',
     ];
 
     protected $dates = [
@@ -27,8 +30,8 @@ class Category extends Model
     /**
      * @return mixed
      */
-    public function update_at() {
+    public function update_at()
+    {
         return $this->updated_at->format('Y/m/d h:m');
     }
-
 }

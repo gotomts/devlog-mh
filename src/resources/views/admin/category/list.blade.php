@@ -15,8 +15,6 @@
     <div class="container mb-5">
         @component('components.alert')
         @endcomponent
-
-
         <div class="page-title">
             <a href="{{ url('admin') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.category.list') }}</h1>
@@ -39,9 +37,9 @@
                 @foreach($categories as $category)
                 <tr>
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/category/{$category->id}") }}'>編集</a></td>
-                    <td class="text-nowrap">{{ $category->category_name }}</td>
-                    <td class="text-center text-nowrap">{{ $category->name }}</td>
-                    <td class="text-center text-nowrap">{{ $category->update_at() }}</td>
+                    <td class="text-nowrap">{{ $category->name }}</td>
+                    <td class="text-center text-nowrap">{{ $category->user_name }}</td>
+                    <td class="text-center text-nowrap">{{ $category->updated_at }}</td>
                 </tr>
                 @endforeach
                 </tbody>

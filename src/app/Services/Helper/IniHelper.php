@@ -38,7 +38,7 @@ class IniHelper
             if ($itemcd) {
                 // キー存在確認
                 if (array_key_exists($itemcd, $result)) {
-                    if ($itemcd = "null") {
+                    if ($itemcd == "null") {
                         $result = null;
                     } else {
                         $result = $result[$itemcd];

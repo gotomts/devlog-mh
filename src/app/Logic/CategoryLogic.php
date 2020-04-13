@@ -24,27 +24,42 @@ class CategoryLogic
     }
 
     /**
-     * カテゴリー全件取得
+     * カテゴリー全件取得(削除以外)
      *
-     * @param  int $delete_flg
      * @return Category[]
      */
-    public static function getCategories($delete_flg)
+    public static function getCategories()
     {
         $category = Category::select(
-                'categories.id',
-                'categories.category_name',
-                'categories.user_id',
-                'categories.delete_flg',
-                'categories.updated_at',
-                'users.name'
-            )
-            ->leftjoin('users', function($join) {
-                $join->on('users.id', '=', 'categories.user_id');
-            })
-            ->where('categories.delete_flg', '=', $delete_flg)
-            ->orderBy('categories.updated_at', 'desc')
-            ->paginate(config('const.Paginate.NUM'));
+            'categories.id',
+            'categories.name',
+            'categories.updated_by',
+            'categories.updated_at',
+            'users.name as user_name'
+        )->leftjoin('users', function ($join) {
+            $join->on('users.id', '=', 'categories.updated_by');
+        })->orderBy('categories.updated_at', 'desc')
+        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
+        return $category;
+    }
+
+    /**
+     * カテゴリー全件取得(削除済み)
+     *
+     * @return Category[]
+     */
+    public static function getDeletedCategories()
+    {
+        $category = Category::onlyTrashed()->select(
+            'categories.id',
+            'categories.name',
+            'categories.deleted_by',
+            'categories.deleted_at',
+            'users.name as user_name'
+        )->leftjoin('users', function ($join) {
+            $join->on('users.id', '=', 'categories.deleted_by');
+        })->orderBy('categories.deleted_at', 'desc')
+        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
         return $category;
     }
 
@@ -56,11 +71,12 @@ class CategoryLogic
      */
     public static function insert($inputs)
     {
-        $isCategoryName = isset($inputs['category_name']) ? true : false;
+        $isCategoryName = isset($inputs['name']) ? true : false;
         if ($isCategoryName) {
             $category = new Category;
-            $category->category_name = $inputs['category_name'];
-            $category->user_id = \Auth::id();
+            $category->name = $inputs['name'];
+            $category->created_by = \Auth::user()->id;
+            $category->updated_by = \Auth::user()->id;
             return $category->save();
         }
         return false;
@@ -72,14 +88,14 @@ class CategoryLogic
      * @param $inputs
      * @return bool
      */
-    public static function update($inputs)
+    public static function update($id, $inputs)
     {
         $id = isset($inputs['id']) ? $inputs['id'] : false;
-        $categoryName = isset($inputs['category_name']) ? $inputs['category_name'] : false;
+        $categoryName = isset($inputs['name']) ? $inputs['name'] : false;
         if ($id && $categoryName) {
             $category = Category::find($id);
-            $category->category_name = $categoryName;
-            $category->user_id = \Auth::id();
+            $category->name = $categoryName;
+            $category->updated_by = \Auth::user()->id;
             return $category->save();
         }
         return false;

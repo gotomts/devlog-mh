@@ -32,7 +32,7 @@ class UserRequest extends FormRequest
         return [
             'name'      => 'bail|required|max:64|',
             'email'     => 'bail|required|max:255|email|' . $unique,
-            'role'      => 'bail|required|',
+            'role_type' => 'bail|required|',
             'password'  => 'bail|required|min:8|max:16|',
         ];
     }

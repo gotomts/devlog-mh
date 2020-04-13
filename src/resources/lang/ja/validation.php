@@ -104,7 +104,7 @@ return [
     */
 
     'attributes' => [
-        'category_name' => 'カテゴリー名',
+        'name' => 'カテゴリー名',
         'email'         => 'メールアドレス',
         'password'      => 'パスワード',
     ],
