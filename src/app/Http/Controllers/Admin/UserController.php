@@ -15,7 +15,7 @@ class UserController extends WebBaseController
      */
     public function showList()
     {
-        $users = UserLogic::getUsers(config('const.DELETE_FLG.none'));
+        $users = UserLogic::getUsers(\IniHelper::get('DELETE_FLG', false, 'NO_ITEM'));
         return \View::make('admin.user.list')
             ->with('users', $users);
     }
@@ -45,39 +45,33 @@ class UserController extends WebBaseController
         $inputs['password'] = $request->password;
         \DB::beginTransaction();
         try {
-            // ログイン確認
-            if (\Auth::check()) {
-                $result = UserLogic::insert($inputs);
-                \DB::commit();
-                return redirect('admin/user')
-                    ->with('success', config('messages.success'))
-                    ->withInput();
+            if (!UserLogic::insert($inputs)) {
+                throw new \Throwable;
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
             \DB::rollback();
+            \Log::warning($th);
             return redirect('admin/user')
-                ->with('error', config('messages.error.insert'));
+                ->with('error', \MsgHelper::get('MSG_ERR_INSERT'));
         }
         \DB::commit();
+        return redirect('admin/user')
+            ->with('success', \MsgHelper::get('MSG_SUCCESS'))
+            ->withInput();
     }
 
     /**
      * ユーザ管理 編集画面表示
      *
-     * @param Request $request
+     * @param $id ユーザーID
      * return View
      */
-    public function showEdit(Request $request, $id=null)
+    public function showEdit($id=null)
     {
         $user = UserLogic::getUserById($id);
-        // セッション切れ
-        if (!\Auth::check()) {
-            return redirect('login')
-                ->with('error', 'messages.error.session');
-        }
         // ユーザーが見つからない場合
         if (is_null($user)) {
-            return back()->with('error', config('messages.nodata'));
+            return back()->with('error', \MsgHelper::get('MSG_NODATA'));
         }
         return \View::make('admin.user.edit')
             ->with('user', $user);
@@ -89,20 +83,22 @@ class UserController extends WebBaseController
      * @param UserRequest $request
      * @return void
      */
-    public function exeEdit(UserRequest $request)
+    public function exeEdit(UserRequest $request, $id=null)
     {
         $inputs = $request->all();
         \DB::beginTransaction();
         try {
-            // ログインチェック
-            if (\Auth::check()) {
-                $result = UserLogic::update($inputs);
+            if (!UserLogic::update($id, $inputs)) {
+                throw new \Throwable;
             }
         } catch (\Throwable $th) {
             \DB::rollback();
+            \Log::warning($th);
+            return redirect('admin/user')
+                ->with('error', \MsgHelper::get('MSG_ERR_UPDATE'));
         }
         \DB::commit();
         return redirect('admin/user')
-            ->with('success', config('messages.success'));
+            ->with('success', \MsgHelper::get('MSG_SUCCESS'));
     }
 }
