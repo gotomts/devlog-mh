@@ -7,6 +7,8 @@
  */
 namespace App\Services\Helper;
 
+use Carbon\Carbon;
+
 class CommonHelper
 {
     /**
@@ -21,5 +23,10 @@ class CommonHelper
             return redirect('login')
                 ->with('error', \MsgHelper::get('MSG_ERR_SESSION'));
         }
+    }
+
+    public function getNow()
+    {
+        return new Carbon();
     }
 }
