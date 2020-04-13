@@ -33,7 +33,7 @@
         ["xpath=//div[@id='app']/div/div/form/div/input", "xpath:idRelative"],
         ["xpath=//div/input", "xpath:position"]
       ],
-      "value": "develop@example.com"
+      "value": "admin@example.com"
     }, {
       "id": "92c97ac3-3835-4455-ae94-121a3baa9c47",
       "comment": "",

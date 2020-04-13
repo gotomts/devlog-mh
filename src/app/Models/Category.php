@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,9 +16,11 @@ class Category extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'category_name',
-        'user_id',
-        'delete_flg',
+        'name',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+        'deleted_at',
     ];
 
     protected $dates = [
