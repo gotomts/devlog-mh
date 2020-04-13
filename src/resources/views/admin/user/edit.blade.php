@@ -38,10 +38,10 @@
         </div>
         <div class="form-group">
             <label for="inputRole1">ユーザー権限 <span class="badge badge-danger">必須</span></label>
-            <select name="role" class="form-control @error('role') is-invalid @enderror" id="inputRole1" aria-describedby="roleHelp" required>
-                    <option value="" @if ( !old('role') && !$user['role'] ) selected @endif>選択してください</option>
-                @foreach(\UserRoleTypeViewHelper::getSelectAll() as $role)
-                    <option value="{{ $role['key'] }}" @if ( old('role') == $role['key'] ) selected @elseif ( $user['role'] == $role['key'] && !old('role') ) selected @endif >{{ $role['value'] }}</option>
+            <select name="role_type" class="form-control @error('role_type') is-invalid @enderror" id="inputRole1" aria-describedby="roleHelp" required>
+                    <option value="" @if ( !old('role_type') && !$user['role_type'] ) selected @endif>選択してください</option>
+                @foreach(\UserRoleTypeViewHelper::getSelectAll() as $roleType)
+                    <option value="{{ $roleType['key'] }}" @if ( old('role_type') == $roleType['key'] ) selected @elseif ( $user['role_type'] == $roleType['key'] && !old('role_type') ) selected @endif >{{ $roleType['value'] }}</option>
                 @endforeach
             </select>
             @error('role')

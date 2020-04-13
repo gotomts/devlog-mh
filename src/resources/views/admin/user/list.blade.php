@@ -40,7 +40,7 @@
                 <tr>
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/user/{$user->id}") }}'>編集</a></td>
                     <td class="text-nowrap">{{ $user->name }}</td>
-                    <td class="text-center text-nowrap">{{ $user->updater }}</td>
+                    <td class="text-center text-nowrap">{{ $user->updated_name }}</td>
                     <td class="text-center text-nowrap">{{ $user->update_at() }}</td>
                 </tr>
                 @endforeach

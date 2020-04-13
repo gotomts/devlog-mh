@@ -50,21 +50,20 @@ class UserLogic
     /**
      * ユーザー全件取得
      *
-     * @param  int $delete_flg
      * @return User[]
      */
-    public static function getUsers($delete_flg=null)
+    public static function getUsers()
     {
         $users = User::select(
             'users.id',
             'users.name',
+            'users.updated_by',
             'users.updated_at',
-            'users.delete_flg',
-            'updater.name as updater'
-        )->leftjoin('users as updater', function ($join) {
-            $join->on('users.user_id', '=', 'updater.id');
-        })->where('users.delete_flg', '=', $delete_flg)
-        ->orderBy('users.updated_at', 'desc')
+            'users.deleted_at',
+            'updated.name as updated_name'
+        )->leftjoin('users as updated', function ($join) {
+            $join->on('users.updated_by', '=', 'updated.id');
+        })->orderBy('users.updated_at', 'desc')
         ->paginate(config('const.Paginate.NUM'));
         return $users;
     }
@@ -81,7 +80,7 @@ class UserLogic
             $user = new User;
             $user->name     = $inputs['name'];
             $user->email    = $inputs['email'];
-            $user->role     = $inputs['role'];
+            $user->role     = $inputs['role_type'];
             $user->password = Crypt::encrypt($inputs['password']);
             $user->user_id = \Auth::id();
             return $user->save();
@@ -100,7 +99,7 @@ class UserLogic
         if (self::check($inputs)) {
             $user = User::find($id);
             $user->name     = $inputs['name'];
-            $user->role     = $inputs['role'];
+            $user->role     = $inputs['role_type'];
             $user->password = Crypt::encrypt($inputs['password']);
             return $user->save();
         }

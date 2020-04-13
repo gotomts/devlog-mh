@@ -9,5 +9,6 @@ $factory->define(Category::class, function (Faker $faker) {
     return [
         'name' => "カテゴリー" . $faker->numberBetween($min = 1, $max = 10000),
         'created_by' => 1,
+        'updated_by' => 1,
     ];
 });

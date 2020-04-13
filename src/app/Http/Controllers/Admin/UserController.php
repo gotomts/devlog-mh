@@ -15,7 +15,7 @@ class UserController extends WebBaseController
      */
     public function showList()
     {
-        $users = UserLogic::getUsers(\IniHelper::get('DELETE_FLG', false, 'NO_ITEM'));
+        $users = UserLogic::getUsers();
         return \View::make('admin.user.list')
             ->with('users', $users);
     }
