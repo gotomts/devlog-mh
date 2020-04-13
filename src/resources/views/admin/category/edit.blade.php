@@ -17,11 +17,11 @@
             <a href="{{ url('admin/category')  }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.category.edit') }}</h1>
         </div>
-        {{ Form::open(['url' => url("admin/category/{$category->id}"), 'method' => 'PUT']) }}
+        {{ Form::open(['url' => url("admin/category/{$category->id}"), 'method' => 'POST']) }}
         <div class="form-group">
             <label for="inputCategory1">カテゴリー名</label>
-            <input name="category_name" class="form-control @error('category_name') is-invalid @enderror" id="inputCategory1" type="text" aria-describedby="categoryHelp" placeholder="カテゴリー名" value="{{ $category->category_name }}" required>
-            @error('category_name')
+            <input name="name" class="form-control @error('name') is-invalid @enderror" id="inputCategory1" type="text" aria-describedby="categoryHelp" placeholder="カテゴリー名" value="{{ $category->name }}" required>
+            @error('name')
             <div class="invalid-feedback">
                 <div class="text-danger">{{ $message }}</div>
             </div>

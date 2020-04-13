@@ -56,8 +56,7 @@ class UserController extends WebBaseController
         }
         \DB::commit();
         return redirect('admin/user')
-            ->with('success', \MsgHelper::get('MSG_SUCCESS'))
-            ->withInput();
+            ->with('success', \MsgHelper::get('MSG_SUCCESS'));
     }
 
     /**

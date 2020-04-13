@@ -25,12 +25,12 @@ class CategoryRequest extends FormRequest
     {
         $test = $this->id;
         if ($this->id) {
-            $unique = 'unique:categories,category_name,' . $this->id;
+            $unique = 'unique:categories,name,' . $this->id;
         } else {
-            $unique = 'unique:categories,category_name';
+            $unique = 'unique:categories,name';
         }
         return [
-            'category_name' => 'bail|required|max:64|' . $unique,
+            'name' => 'bail|required|max:64|' . $unique,
         ];
     }
 }

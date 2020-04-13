@@ -59,12 +59,11 @@ class UserLogic
             'users.name',
             'users.updated_by',
             'users.updated_at',
-            'users.deleted_at',
             'updated.name as updated_name'
         )->leftjoin('users as updated', function ($join) {
             $join->on('users.updated_by', '=', 'updated.id');
         })->orderBy('users.updated_at', 'desc')
-        ->paginate(config('const.Paginate.NUM'));
+        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
         return $users;
     }
 
@@ -78,14 +77,13 @@ class UserLogic
         $users = User::onlyTrashed()->select(
             'users.id',
             'users.name',
-            'users.updated_by',
-            'users.updated_at',
+            'users.deleted_by',
             'users.deleted_at',
-            'updated.name as updated_name'
-        )->leftjoin('users as updated', function ($join) {
-            $join->on('users.updated_by', '=', 'updated.id');
-        })->orderBy('users.updated_at', 'desc')
-        ->paginate(config('const.Paginate.NUM'));
+            'deleted.name as deleted_name'
+        )->leftjoin('users as deleted', function ($join) {
+            $join->on('users.deleted_by', '=', 'deleted.id');
+        })->orderBy('users.deleted_at', 'desc')
+        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
         return $users;
     }
 
@@ -99,11 +97,12 @@ class UserLogic
     {
         if (self::check($inputs)) {
             $user = new User;
-            $user->name     = $inputs['name'];
-            $user->email    = $inputs['email'];
-            $user->role     = $inputs['role_type'];
-            $user->password = Crypt::encrypt($inputs['password']);
-            $user->user_id = \Auth::id();
+            $user->name       = $inputs['name'];
+            $user->email      = $inputs['email'];
+            $user->role_type  = $inputs['role_type'];
+            $user->password   = Crypt::encrypt($inputs['password']);
+            $user->created_by = \Auth::user()->id;
+            $user->updated_by = \Auth::user()->id;
             return $user->save();
         }
         return false;
@@ -119,9 +118,10 @@ class UserLogic
     {
         if (self::check($inputs)) {
             $user = User::find($id);
-            $user->name     = $inputs['name'];
-            $user->role     = $inputs['role_type'];
-            $user->password = Crypt::encrypt($inputs['password']);
+            $user->name       = $inputs['name'];
+            $user->role_type  = $inputs['role_type'];
+            $user->password   = Crypt::encrypt($inputs['password']);
+            $user->updated_by = \Auth::user()->id;
             return $user->save();
         }
         return false;

@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('create', 'Admin\CategoryController@showCreate');
             Route::post('create', 'Admin\CategoryController@exeCreate');
             Route::get('{id}', 'Admin\CategoryController@showEdit');
-            Route::match(['put', 'patch'], '{id}', 'Admin\CategoryController@exeEdit');
+            Route::post('{id}', 'Admin\CategoryController@exeEdit');
         });
         // ユーザ管理
         Route::group(['prefix' => 'user'], function () {
