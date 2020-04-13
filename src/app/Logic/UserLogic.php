@@ -2,7 +2,7 @@
 
 namespace App\Logic;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Crypt;
 
 class UserLogic
@@ -53,7 +53,7 @@ class UserLogic
      * @param  int $delete_flg
      * @return User[]
      */
-    public static function getUsers($delete_flg)
+    public static function getUsers($delete_flg=null)
     {
         $users = User::select(
             'users.id',
@@ -61,13 +61,11 @@ class UserLogic
             'users.updated_at',
             'users.delete_flg',
             'updater.name as updater'
-        )
-            ->leftjoin('users as updater', function ($join) {
-                $join->on('users.user_id', '=', 'updater.id');
-            })
-            ->where('users.delete_flg', '=', $delete_flg)
-            ->orderBy('users.updated_at', 'desc')
-            ->paginate(config('const.Paginate.NUM'));
+        )->leftjoin('users as updater', function ($join) {
+            $join->on('users.user_id', '=', 'updater.id');
+        })->where('users.delete_flg', '=', $delete_flg)
+        ->orderBy('users.updated_at', 'desc')
+        ->paginate(config('const.Paginate.NUM'));
         return $users;
     }
 
@@ -97,12 +95,11 @@ class UserLogic
      * @param $inputs
      * @return bool
      */
-    public static function update($inputs)
+    public static function update($id, $inputs)
     {
         if (self::check($inputs)) {
-            $user = User::find(\Auth::user()->id);
+            $user = User::find($id);
             $user->name     = $inputs['name'];
-            $user->email    = $inputs['email'];
             $user->role     = $inputs['role'];
             $user->password = Crypt::encrypt($inputs['password']);
             return $user->save();

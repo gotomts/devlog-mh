@@ -27,7 +27,7 @@ class IniHelper
 
         $result = null;
         // 指定項目取得
-        if (array_key_exists($itemcd, self::$_iniArray)) {
+        if (array_key_exists($section, self::$_iniArray)) {
             // global指示があれば返却
             if ($global) {
                 $result = self::$_iniArray['global'] + self::$_iniArray[$section];
@@ -38,7 +38,11 @@ class IniHelper
             if ($itemcd) {
                 // キー存在確認
                 if (array_key_exists($itemcd, $result)) {
-                    $result = $result[$itemcd];
+                    if ($itemcd = "null") {
+                        $result = null;
+                    } else {
+                        $result = $result[$itemcd];
+                    }
                 } else {
                     $result = \MsgHelper::get('MSG_NOITEM');
                 }

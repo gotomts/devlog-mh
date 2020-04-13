@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -43,7 +43,8 @@ class User extends Authenticatable
     /**
      * @return mixed
      */
-    public function update_at() {
+    public function update_at()
+    {
         return $this->updated_at->format('Y/m/d h:m');
     }
 }
