@@ -12,7 +12,7 @@ class ImageController extends WebBaseController
     /**
      * 画像一覧
      *
-     * return View
+     * @return view
      */
     public function showList()
     {
@@ -24,7 +24,8 @@ class ImageController extends WebBaseController
     /**
      * 画像アップロード
      *
-     * return View
+     * @param request $request
+     * return void
      */
     public function exeUpload(Request $request)
     {
@@ -37,7 +38,8 @@ class ImageController extends WebBaseController
     /**
      * アップロードプレビュー・編集
      *
-     * @return void
+     * @param request $request
+     * @return view
      */
     public function showUpload(Request $request)
     {
