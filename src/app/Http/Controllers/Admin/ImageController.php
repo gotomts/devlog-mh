@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Images\ImageRequest;
 use App\Logic\ImageLogic;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -48,5 +48,33 @@ class ImageController extends WebBaseController
         $images['tmpPath'] = \PublicImageHelper::get(session('tmpPath'));
         return \View::make('admin.image.create')
             ->with('images', $images);
+    }
+
+    /**
+     * 画像新規登録
+     *
+     * @param ImageRequest $request
+     * @return void
+     */
+    public function exeCreate(ImageRequest $request)
+    {
+        $inputs = $request->all();
+        // TODO:AWSS3アップロード後のURL取得作成
+        // TODO:TMPファイルの一時ファイルを削除する
+        $inputs['name'] = 'name';
+        $inputs['url'] = 'url';
+        \DB::beginTransaction();
+        try {
+            if (ImageLogic::insert($inputs)) {
+                // TODO:insert成功時の処理を作成
+            } else {
+                // TODO:insert失敗時の処理を作成
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        \DB::commit();
+
+        return \Redirect::to('admin/image');
     }
 }

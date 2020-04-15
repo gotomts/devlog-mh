@@ -30,10 +30,6 @@
             <input class="form-control" id="inputAlt" type="text" placeholder="alt" name="alt">
         </div>
         <div class="form-group">
-            <label for="inputUrl">URL</label>
-            <input class="form-control" id="inputUrl" type="text" placeholder="URL" name="URL">
-        </div>
-        <div class="form-group">
             <button class="btn btn-primary" type="submit">保存する</button>
         </div>
         {{ Form::close() }}
