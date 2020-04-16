@@ -9,10 +9,7 @@ class ImageLogic
     private static function check($inputs)
     {
         $inputRequires = [];
-        $inputRequires['name']  = isset($inputs['name']) ? true : false;
         $inputRequires['url']   = isset($inputs['url']) ? true : false;
-        $inputRequires['title'] = isset($inputs['title']) ? true : false;
-        $inputRequires['alt']   = isset($inputs['alt']) ? true : false;
         $check = null;
         foreach ($inputRequires as $input) {
             $check = $input;
@@ -30,13 +27,8 @@ class ImageLogic
      */
     public static function getImages()
     {
-        $image = Image::select(
-            'images.id',
-            'images.name',
-            'images.updated_by',
-            'images.updated_at',
-        )->orderBy('images.updated_at', 'desc')
-        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
+        $image = Image::orderBy('images.updated_at', 'desc')
+            ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
         return $image;
     }
 
@@ -50,7 +42,6 @@ class ImageLogic
     {
         if (self::check($inputs)) {
             $image = new Image;
-            $image->name  = $inputs['name'];
             $image->url   = $inputs['url'];
             $image->title = $inputs['title'];
             $image->alt   = $inputs['alt'];

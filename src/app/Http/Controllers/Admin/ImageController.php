@@ -30,7 +30,7 @@ class ImageController extends WebBaseController
     public function exeUpload(Request $request)
     {
         $file = $request->file('uploadfile');
-        $tmpPath = \Storage::disk('public')->putFile(\IniHelper::get('IMAGES_PATH', false, 'TMP'), $file);
+        $tmpPath = \Storage::disk('public')->putFile(\IniHelper::get('IMAGES_PATH')['TMP'], $file);
         $request->session()->flash('tmpPath', $tmpPath);
         return \Redirect::to('admin/image/upload');
     }
@@ -59,12 +59,20 @@ class ImageController extends WebBaseController
     public function exeCreate(ImageRequest $request)
     {
         $inputs = $request->all();
-        // TODO:AWSS3アップロード後のURL取得作成
-        // TODO:TMPファイルの一時ファイルを削除する
-        $inputs['name'] = 'name';
-        $inputs['url'] = 'url';
         \DB::beginTransaction();
         try {
+            $file = \Storage::disk('public')->path(session('tmpPath'));
+            $path = \Storage::disk('s3')->putFile('images', $file, 'public');
+            if (isset($path)) {
+                // アップロード先URL取得
+                $inputs['url'] = \Storage::disk('s3')->url($path);
+                // 一時ファイルを削除
+                \Storage::disk('public')->delete(session('tmpPath'));
+            } else {
+                // 一時ファイルを削除
+                \Storage::disk('public')->delete(session('tmpPath'));
+                // TODO:AWS S3への保存が失敗した場合
+            }
             if (ImageLogic::insert($inputs)) {
                 // TODO:insert成功時の処理を作成
             } else {
@@ -72,6 +80,8 @@ class ImageController extends WebBaseController
             }
         } catch (\Throwable $th) {
             //throw $th;
+            $path = \Storage::disk('s3')->delete($path);
+            return $th;
         }
         \DB::commit();
 
