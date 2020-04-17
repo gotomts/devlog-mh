@@ -2,7 +2,5 @@
 
 return [
     'CommonHelper',
-    'MsgHelper',
-    'IniHelper',
     'PublicImageHelper',
 ];
