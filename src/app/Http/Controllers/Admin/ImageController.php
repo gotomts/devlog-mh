@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\Images\ImageRequest;
-use App\Logic\ImageLogic;
 use App\Models\Image;
 use Illuminate\Http\Request;
 
@@ -16,7 +15,7 @@ class ImageController extends WebBaseController
      */
     public function showList()
     {
-        $images = ImageLogic::getImages();
+        $images = Image::getAll();
         return \View::make('admin.image.list')
             ->with('images', $images);
     }
@@ -46,8 +45,7 @@ class ImageController extends WebBaseController
     {
         // TODO:リロード対策
         $images = [];
-        $request->session()->flash('tmpPath', session('tmpPath'));
-        // $images['tmpPath'] = \PublicImageHelper::get(session('tmpPath'));
+        session()->flash('tmpPath', session('tmpPath'));
         $images['tmpPath'] = \Storage::disk('public')->url(session('tmpPath'));
         return \View::make('admin.image.create')
             ->with('images', $images);
@@ -61,34 +59,37 @@ class ImageController extends WebBaseController
      */
     public function exeCreate(ImageRequest $request)
     {
-        $inputs = $request->all();
         \DB::beginTransaction();
         try {
             $file = \Storage::disk('public')->path(session('tmpPath'));
             $path = \Storage::disk('s3')->putFile(config('storage.aws_file_path.images'), $file, 'public');
             if (isset($path)) {
                 // アップロード先URL取得
-                $inputs['url'] = config('app.s3_url').$path;
+                $attrs['url'] = config('app.s3_url').$path;
                 // 一時ファイルを削除
                 \Storage::disk('public')->delete(session('tmpPath'));
             } else {
                 // 一時ファイルを削除
                 \Storage::disk('public')->delete(session('tmpPath'));
-                // TODO:AWS S3への保存が失敗した場合
+                flash(config('messages.error.file_upload'))->error();
+                \Log::warning(['Upload File Fail', 'Upload File Path:'.$path]);
+                return \Redirect::to('admin/image');
             }
-            if (ImageLogic::insert($inputs)) {
-                // TODO:insert成功時の処理を作成
+            if (Image::insert($request, $attrs)) {
+                flash(config('messages.common.success'))->success();
             } else {
-                // TODO:insert失敗時の処理を作成
+                flash(config('messages.error.insert'))->error();
+                \Log::warning(['Insert Fail', $request->all(), $attrs]);
+                return \Redirect::to('admin/image');
             }
         } catch (\Throwable $th) {
-            //throw $th;
             $path = \Storage::disk('s3')->delete($path);
-            return $th;
+            flash(config('messages.error.insert'))->error();
+            \Log::warning(['Insert Fail/Throwable', $th]);
+            return \Redirect::to('admin/image');
         }
         \DB::commit();
 
-        flash(config('messages.common.success'))->success();
         return \Redirect::to('admin/image');
     }
 

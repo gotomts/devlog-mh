@@ -13,11 +13,11 @@
 
 @section('content')
     <div class="container mb-5">
-        @include('flash::message')
         <div class="page-title">
             <a href="{{ url('admin') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.image.list') }}</h1>
         </div>
+        @include('flash::message')
         {{ Form::open(['url' => 'admin/image/upload', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
             <div class="form-group">
               {{ Form::file('uploadfile', ['class' => 'form-control-file']) }}

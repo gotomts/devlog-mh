@@ -20,4 +20,37 @@ class Image extends Model
         'deleted_by',
         'deleted_at',
     ];
+
+    /**
+     * 画像全件取得(削除以外)
+     *
+     * @return Image[]
+     */
+    public static function getAll()
+    {
+        $image = Image::orderBy('images.updated_at', 'desc')
+            ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
+        return $image;
+    }
+
+    /**
+     * 画像登録処理
+     *
+     * @param $inputs
+     * @return bool
+     */
+    public static function insert($request, $attrs)
+    {
+        $result = false;
+        $params = $request->all();
+        $attrs  = $attrs + [
+            'created_by' => \Auth::user()->id,
+            'updated_by' => \Auth::user()->id,
+        ];
+        if (isset($params)) {
+            $params = $params + $attrs;
+            $result = Image::create($params);
+        }
+        return $result;
+    }
 }
