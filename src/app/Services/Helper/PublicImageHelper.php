@@ -5,7 +5,7 @@ namespace App\Services\Helper;
 class PublicImageHelper
 {
     /**
-     * 定数値の取得
+     * ストレージのパス
      *
      * @param string $filePath ファイルパス
      * @param string $storage ストレージ名
@@ -16,7 +16,7 @@ class PublicImageHelper
         if (isset($filePath)) {
             $result = asset($storage . '/' . $filePath);
         } else {
-            $result = \MsgHelper::get('MSG_NOITEM');
+            $result = config('messages.common.noitem');
         }
         return $result;
     }

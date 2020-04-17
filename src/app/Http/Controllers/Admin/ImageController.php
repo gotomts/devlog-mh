@@ -31,7 +31,7 @@ class ImageController extends WebBaseController
     {
         // TODO:バリデーション作成
         $file = $request->file('uploadfile');
-        $tmpPath = \Storage::disk('public')->putFile(\IniHelper::get('IMAGES_PATH')['TMP'], $file);
+        $tmpPath = \Storage::disk('public')->putFile(config('storage.images_path.tmp'), $file);
         $request->session()->flash('tmpPath', $tmpPath);
         return \Redirect::to('admin/image/upload');
     }
@@ -47,7 +47,8 @@ class ImageController extends WebBaseController
         // TODO:リロード対策
         $images = [];
         $request->session()->flash('tmpPath', session('tmpPath'));
-        $images['tmpPath'] = \PublicImageHelper::get(session('tmpPath'));
+        // $images['tmpPath'] = \PublicImageHelper::get(session('tmpPath'));
+        $images['tmpPath'] = \Storage::disk('public')->url(session('tmpPath'));
         return \View::make('admin.image.create')
             ->with('images', $images);
     }
@@ -64,10 +65,10 @@ class ImageController extends WebBaseController
         \DB::beginTransaction();
         try {
             $file = \Storage::disk('public')->path(session('tmpPath'));
-            $path = \Storage::disk('s3')->putFile('images', $file, 'public');
+            $path = \Storage::disk('s3')->putFile(config('storage.aws_file_path.images'), $file, 'public');
             if (isset($path)) {
                 // アップロード先URL取得
-                $inputs['url'] = \Storage::disk('s3')->url($path);
+                $inputs['url'] = config('app.s3_url').$path;
                 // 一時ファイルを削除
                 \Storage::disk('public')->delete(session('tmpPath'));
             } else {
