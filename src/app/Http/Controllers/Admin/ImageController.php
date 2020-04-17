@@ -88,8 +88,7 @@ class ImageController extends WebBaseController
         }
         \DB::commit();
 
-        // TODO:登録成功時メッセージ作成
-
+        flash(config('messages.common.success'))->success();
         return \Redirect::to('admin/image');
     }
 
