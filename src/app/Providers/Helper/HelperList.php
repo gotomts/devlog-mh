@@ -1,6 +1,5 @@
 <?php
 
 return [
-    'CommonHelper',
-    'PublicImageHelper',
+    'UserRoleTypeHelper',
 ];

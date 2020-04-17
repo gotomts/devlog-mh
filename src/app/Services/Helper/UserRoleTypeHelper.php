@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\ViewHelper;
+namespace App\Services\Helper;
 
 use App\Enums\UserRoleType;
 use App\Http\Traits\ArrayConvertion;

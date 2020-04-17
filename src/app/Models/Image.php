@@ -49,7 +49,14 @@ class Image extends Model
         ];
         if (isset($params)) {
             $params = $params + $attrs;
-            $result = Image::create($params);
+            try {
+                \DB::transaction(function ($params) {
+                    $result = Image::create($params);
+                    return $result;
+                });
+            } catch (\Throwable $th) {
+                \Log::warning(['Insert Fail/Throwable', $th]);
+            }
         }
         return $result;
     }

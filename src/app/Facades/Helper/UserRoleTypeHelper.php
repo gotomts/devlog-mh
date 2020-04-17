@@ -4,7 +4,7 @@ namespace App\Facades\Helper;
 
 use Barryvdh\Debugbar\Facade;
 
-class PublicImageHelper extends Facade
+class UserRoleTypeHelper extends Facade
 {
     /**
      * Undocumented function
@@ -13,6 +13,6 @@ class PublicImageHelper extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'publicimagehelper';
+        return 'userroletypehelper';
     }
 }

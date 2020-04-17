@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\Images\ImageRequest;
 use App\Models\Image;
+use App\Services\AwsS3FIleUploadService;
 use Illuminate\Http\Request;
 
 class ImageController extends WebBaseController
@@ -59,37 +60,29 @@ class ImageController extends WebBaseController
      */
     public function exeCreate(ImageRequest $request)
     {
-        \DB::beginTransaction();
-        try {
-            $file = \Storage::disk('public')->path(session('tmpPath'));
-            $path = \Storage::disk('s3')->putFile(config('storage.aws_file_path.images'), $file, 'public');
-            if (isset($path)) {
-                // アップロード先URL取得
-                $attrs['url'] = config('app.s3_url').$path;
-                // 一時ファイルを削除
-                \Storage::disk('public')->delete(session('tmpPath'));
-            } else {
-                // 一時ファイルを削除
-                \Storage::disk('public')->delete(session('tmpPath'));
-                flash(config('messages.error.file_upload'))->error();
-                \Log::warning(['Upload File Fail', 'Upload File Path:'.$path]);
-                return \Redirect::to('admin/image');
-            }
-            if (Image::insert($request, $attrs)) {
-                flash(config('messages.common.success'))->success();
-            } else {
-                flash(config('messages.error.insert'))->error();
-                \Log::warning(['Insert Fail', $request->all(), $attrs]);
-                return \Redirect::to('admin/image');
-            }
-        } catch (\Throwable $th) {
-            $path = \Storage::disk('s3')->delete($path);
-            flash(config('messages.error.insert'))->error();
-            \Log::warning(['Insert Fail/Throwable', $th]);
+        $file = \Storage::disk('public')->path(session('tmpPath'));
+        $path = AwsS3FIleUploadService::upload($file);
+        // アップロード確認
+        if (AwsS3FIleUploadService::checkUpload($path)) {
+            // アップロード先URL取得
+            $attrs['url'] = config('app.s3_url').$path;
+            // 一時ファイルを削除
+            \Storage::disk('public')->delete(session('tmpPath'));
+        } else {
+            // 一時ファイルを削除
+            \Storage::disk('public')->delete(session('tmpPath'));
+            flash(config('messages.error.file_upload'))->error();
+            \Log::warning(['Upload File Fail', 'Upload File Path:'.$path]);
             return \Redirect::to('admin/image');
         }
-        \DB::commit();
-
+        // 登録処理
+        if (Image::insert($request, $attrs)) {
+            flash(config('messages.common.success'))->success();
+        } else {
+            flash(config('messages.error.insert'))->error();
+            \Log::warning(['Insert Fail', $request->all(), $attrs]);
+            return \Redirect::to('admin/image');
+        }
         return \Redirect::to('admin/image');
     }
 
