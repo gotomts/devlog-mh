@@ -29,6 +29,7 @@ class ImageController extends WebBaseController
      */
     public function exeUpload(Request $request)
     {
+        // TODO:バリデーション作成
         $file = $request->file('uploadfile');
         $tmpPath = \Storage::disk('public')->putFile(\IniHelper::get('IMAGES_PATH')['TMP'], $file);
         $request->session()->flash('tmpPath', $tmpPath);
@@ -43,6 +44,7 @@ class ImageController extends WebBaseController
      */
     public function showUpload(Request $request)
     {
+        // TODO:リロード対策
         $images = [];
         $request->session()->flash('tmpPath', session('tmpPath'));
         $images['tmpPath'] = \PublicImageHelper::get(session('tmpPath'));
@@ -85,6 +87,12 @@ class ImageController extends WebBaseController
         }
         \DB::commit();
 
+        // TODO:登録成功時メッセージ作成
+
         return \Redirect::to('admin/image');
     }
+
+    // TODO:画像編集 表示
+    // TODO:画像編集 更新
+    // TODO:画像削除
 }
