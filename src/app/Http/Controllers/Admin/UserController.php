@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\UserRequest;
 use App\Logic\UserLogic;
+use App\Services\RequestErrorService;
 use Illuminate\Http\Request;
 
 class UserController extends WebBaseController
@@ -27,6 +28,7 @@ class UserController extends WebBaseController
      */
     public function showCreate()
     {
+        RequestErrorService::validateInsertError();
         return \View::make('admin.user.create');
     }
 
@@ -41,7 +43,7 @@ class UserController extends WebBaseController
         // フォームから値を取得
         $inputs['name']     = $request->name;
         $inputs['email']    = $request->email;
-        $inputs['role']     = $request->role;
+        $inputs['role_type']     = $request->role_type;
         $inputs['password'] = $request->password;
         \DB::beginTransaction();
         try {
@@ -51,12 +53,12 @@ class UserController extends WebBaseController
         } catch (\Throwable $th) {
             \DB::rollback();
             \Log::warning($th);
-            return redirect('admin/user')
-                ->with('error', \MsgHelper::get('MSG_ERR_INSERT'));
+            flash(config('messages.exception.insert'))->error();
+            return redirect('admin/user');
         }
         \DB::commit();
-        return redirect('admin/user')
-            ->with('success', \MsgHelper::get('MSG_SUCCESS'));
+        flash(config('messages.common.success'))->success();
+        return redirect('admin/user');
     }
 
     /**
@@ -70,8 +72,9 @@ class UserController extends WebBaseController
         $user = UserLogic::getUserById($id);
         // ユーザーが見つからない場合
         if (is_null($user)) {
-            return back()->with('error', \MsgHelper::get('MSG_NODATA'));
+            return back()->with('error', config('messages.common.nodata'));
         }
+        RequestErrorService::validateUpdateError();
         return \View::make('admin.user.edit')
             ->with('user', $user);
     }
@@ -93,11 +96,11 @@ class UserController extends WebBaseController
         } catch (\Throwable $th) {
             \DB::rollback();
             \Log::warning($th);
-            return redirect('admin/user')
-                ->with('error', \MsgHelper::get('MSG_ERR_UPDATE'));
+            flash(config('messages.exception.update'))->error();
+            return redirect('admin/user');
         }
         \DB::commit();
-        return redirect('admin/user')
-            ->with('success', \MsgHelper::get('MSG_SUCCESS'));
+        flash(config('messages.common.success'))->success();
+        return redirect('admin/user');
     }
 }

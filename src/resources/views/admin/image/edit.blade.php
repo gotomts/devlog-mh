@@ -19,32 +19,26 @@
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.image.create') }}</h1>
         </div>
         {{ Form::open(['url' => "admin/image/edit/{$id}", 'method' => 'POST']) }}
-        <figure class="text-center">
-            <img class="img-fluid" src="{{ $images->url }}" alt="{{ $images->alt }}" title="{{ $images->title }}">
-        </figure>
-        <div class="form-group">
-            <label for="inputTitle">title属性</label>
+            <figure class="text-center">
+                <img class="img-fluid" src="{{ $images->url }}" alt="{{ $images->alt }}" title="{{ $images->title }}">
+            </figure>
             @include('admin.components.input_edit', [
+                'labelName'  => 'title属性',
                 'name' => 'title',
                 'type' => 'text',
                 'id' => 'inputTitle',
                 'placeholder' => 'タイトル',
                 'value' => $images->title,
             ])
-        </div>
-        <div class="form-group">
-            <label for="inputAlt">alt属性</label>
             @include('admin.components.input_edit', [
+                'labelName'  => 'alt属性',
                 'name' => 'alt',
                 'type' => 'text',
                 'id' => 'inputAlt',
                 'placeholder' => 'alt',
                 'value' => $images->alt,
             ])
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary" type="submit">保存する</button>
-        </div>
+            @include('admin.components.button_submit')
         {{ Form::close() }}
     </div>
 @endsection
