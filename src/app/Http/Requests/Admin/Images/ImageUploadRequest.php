@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Images;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ImageRequest extends FormRequest
+class ImageUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class ImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'max:50',
-            'alt'   => 'max:50',
+            'imagefile' => 'required|image|max:5120'
         ];
     }
 }

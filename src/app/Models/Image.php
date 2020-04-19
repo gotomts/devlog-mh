@@ -29,14 +29,20 @@ class Image extends Model
     public static function getAll()
     {
         $image = Image::orderBy('images.updated_at', 'desc')
-            ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
+            ->paginate(config('pagination.items'));
         return $image;
+    }
+
+    public static function getById($id)
+    {
+        return Image::find($id);
     }
 
     /**
      * 画像登録処理
      *
-     * @param $inputs
+     * @param $request
+     * @param $attrs
      * @return bool
      */
     public static function insert($request, $attrs)
@@ -50,12 +56,39 @@ class Image extends Model
         if (isset($params)) {
             $params = $params + $attrs;
             try {
-                \DB::transaction(function ($params) {
-                    $result = Image::create($params);
-                    return $result;
+                $result = \DB::transaction(function () use ($params) {
+                    return Image::create($params);
                 });
             } catch (\Throwable $th) {
-                \Log::warning(['Insert Fail/Throwable', $th]);
+                \Log::warning(['Insert Fail/Throwable', $th, $params]);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 画像更新処理
+     *
+     * @param request $request
+     * @return bool
+     */
+    public static function updateById($id, $request)
+    {
+        $result = false;
+        $params = $request->all();
+        $attrs  = [];
+        if (isset($params)) {
+            $params = $params + $attrs;
+            try {
+                $result = \DB::transaction(function () use ($id, $params) {
+                    $image = Image::find($id);
+                    $image->title      = $params['title'];
+                    $image->alt        = $params['alt'];
+                    $image->updated_by = \Auth::user()->id;
+                    return $image->save();
+                });
+            } catch (\Throwable $th) {
+                \Log::warning(['Update Fail/Throwable', $params, $th]);
             }
         }
         return $result;

@@ -72,6 +72,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('upload', 'Admin\ImageController@exeUpload');
             Route::get('upload', 'Admin\ImageController@showUpload');
             Route::post('create', 'Admin\ImageController@exeCreate');
+            Route::get('edit/{id}', 'Admin\ImageController@showEdit');
+            Route::post('edit/{id}', 'Admin\ImageController@exeEdit');
         });
         // // プロフィール編集
         // Route::group(['prefix' => 'profile'], function () {

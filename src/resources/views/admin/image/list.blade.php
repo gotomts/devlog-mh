@@ -20,7 +20,8 @@
         @include('flash::message')
         {{ Form::open(['url' => 'admin/image/upload', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
             <div class="form-group">
-              {{ Form::file('uploadfile', ['class' => 'form-control-file']) }}
+              {{ Form::file('imagefile', ['class' => 'form-control-file']) }}
+              @include('admin.components.upload_validate_message', ['property' => 'imagefile'])
             </div>
             <div class="form-group clearfix">
                 <div class="float-left">
@@ -31,7 +32,7 @@
          <div class="row">
             @foreach ($images as $image)
                 <div class="col-2 mb-4">
-                    <a href="upload-edit?id={{$image->id}}">
+                    <a href="image/edit/{{$image->id}}">
                         <img class="img-fluid" src="{{$image->url}}" alt="{{$image->alt}}" title="{{$image->title}}">
                     </a>
                 </div>

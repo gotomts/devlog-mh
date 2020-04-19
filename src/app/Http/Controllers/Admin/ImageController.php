@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\Images\ImageRequest;
+use App\Http\Requests\Admin\Images\ImageUploadRequest;
 use App\Models\Image;
-use App\Services\AwsS3FIleUploadService;
+use App\Services\AwsS3HandleUploadService;
+use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 
 class ImageController extends WebBaseController
@@ -27,13 +29,11 @@ class ImageController extends WebBaseController
      * @param request $request
      * return void
      */
-    public function exeUpload(Request $request)
+    public function exeUpload(ImageUploadRequest $request)
     {
-        // TODO:バリデーション作成
-        $file = $request->file('uploadfile');
-        $tmpPath = \Storage::disk('public')->putFile(config('storage.images_path.tmp'), $file);
-        $request->session()->flash('tmpPath', $tmpPath);
-        return \Redirect::to('admin/image/upload');
+        $file = $request->file('imagefile');
+        session()->flash('tmpPath', FileUploadService::getPublicTmpPath($file));
+        return redirect()->to('admin/image/upload');
     }
 
     /**
@@ -42,9 +42,8 @@ class ImageController extends WebBaseController
      * @param request $request
      * @return view
      */
-    public function showUpload(Request $request)
+    public function showUpload()
     {
-        // TODO:リロード対策
         $images = [];
         session()->flash('tmpPath', session('tmpPath'));
         $images['tmpPath'] = \Storage::disk('public')->url(session('tmpPath'));
@@ -61,32 +60,59 @@ class ImageController extends WebBaseController
     public function exeCreate(ImageRequest $request)
     {
         $file = \Storage::disk('public')->path(session('tmpPath'));
-        $path = AwsS3FIleUploadService::upload($file);
+        $path = AwsS3HandleUploadService::upload($file);
         // アップロード確認
-        if (AwsS3FIleUploadService::checkUpload($path)) {
+        if (AwsS3HandleUploadService::checkUpload($path)) {
             // アップロード先URL取得
             $attrs['url'] = config('app.s3_url').$path;
-            // 一時ファイルを削除
-            \Storage::disk('public')->delete(session('tmpPath'));
         } else {
-            // 一時ファイルを削除
-            \Storage::disk('public')->delete(session('tmpPath'));
-            flash(config('messages.error.file_upload'))->error();
+            flash(config('messages.exception.file_upload'))->error();
             \Log::warning(['Upload File Fail', 'Upload File Path:'.$path]);
-            return \Redirect::to('admin/image');
+            return redirect('admin/image');
         }
         // 登録処理
         if (Image::insert($request, $attrs)) {
             flash(config('messages.common.success'))->success();
         } else {
-            flash(config('messages.error.insert'))->error();
+            flash(config('messages.exception.insert'))->error();
             \Log::warning(['Insert Fail', $request->all(), $attrs]);
-            return \Redirect::to('admin/image');
+            return redirect('admin/image');
         }
-        return \Redirect::to('admin/image');
+        return redirect('admin/image');
     }
 
-    // TODO:画像編集 表示
-    // TODO:画像編集 更新
+    /**
+     * 画像編集 表示処理
+     */
+    public function showEdit($id = null)
+    {
+        $images = Image::getById($id);
+        $errors = session('errors');
+        if (isset($errors)) {
+            flash(config('messages.error.update'))->error();
+        }
+        return \View::make('admin.image.edit')
+            ->with('id', $id)
+            ->with('images', $images);
+    }
+
+    /**
+     * 画像編集 更新処理
+     *
+     * @param ImageRequest $request
+     * @return void
+     */
+    public function exeEdit($id = null, ImageRequest $request)
+    {
+        // 登録処理
+        if (Image::updateById($id, $request)) {
+            flash(config('messages.common.success'))->success();
+        } else {
+            flash(config('messages.exception.update'))->error();
+            \Log::warning(['Update Fail', $request->all(), 'User:'.\Auth::user()->id]);
+            return redirect('admin/image');
+        }
+        return redirect('admin/image');
+    }
     // TODO:画像削除
 }

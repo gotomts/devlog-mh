@@ -2,21 +2,19 @@
 
 namespace App\Services;
 
-use Carbon\Carbon;
-
 /**
  * 共通処理サービス
  *
  * @author M.Goto
  */
-class AwsS3FIleUploadService
+class AwsS3HandleUploadService
 {
     /**
      * AWS S3へファイルをアップロード
      *
      * @return void
      */
-    public function upload($file)
+    public static function upload($file)
     {
         $path = null;
         if (isset($file)) {
@@ -33,7 +31,7 @@ class AwsS3FIleUploadService
      * @param [type] $path
      * @return bool
      */
-    public function checkUpload($path)
+    public static function checkUpload($path)
     {
         $result = false;
         if (isset($path)) {
