@@ -114,5 +114,4 @@ class ImageController extends WebBaseController
         }
         return redirect('admin/image');
     }
-    // TODO:画像削除
 }
