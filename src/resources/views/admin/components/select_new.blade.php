@@ -3,14 +3,21 @@
         for="{{ $id }}">{{ $labelName }}
         @if(isset($required)) <span class="badge badge-danger">必須</span> @endif
     </label>
-    <input
+    <select
         name="{{ $name }}"
         class="form-control @error($name) is-invalid @enderror"
         id="{{ $id }}"
-        type="{{ $type }}"
-        @if(isset($placeholder)) placeholder="{{ $placeholder }}" @endif
-        @if(isset($value)) value="{{ $value }}" @endif
         @if(isset($required)) required @endif
     >
+    <option value="" @if ( !old($name) ) selected @endif>選択してください</option>
+    @foreach($items as $item)
+        <option
+            value="{{ $item['key'] }}"
+            @if ( old($name) == $item['key'] ) selected @endif
+        >
+            {{ $item['value'] }}
+        </option>
+    @endforeach
+    </select>
     @include('admin.components.validate_message', ['property' => $name])
 </div>

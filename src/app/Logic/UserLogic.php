@@ -63,7 +63,7 @@ class UserLogic
         )->leftjoin('users as updated', function ($join) {
             $join->on('users.updated_by', '=', 'updated.id');
         })->orderBy('users.updated_at', 'desc')
-        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
+        ->paginate(config('pagination.items'));
         return $users;
     }
 
@@ -83,7 +83,7 @@ class UserLogic
         )->leftjoin('users as deleted', function ($join) {
             $join->on('users.deleted_by', '=', 'deleted.id');
         })->orderBy('users.deleted_at', 'desc')
-        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
+        ->paginate(config('pagination.items'));
         return $users;
     }
 

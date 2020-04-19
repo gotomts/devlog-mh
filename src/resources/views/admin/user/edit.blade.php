@@ -13,57 +13,46 @@
 
 @section('content')
     <div class="container mb-5">
+        @include('admin.components.flash_message')
         <div class="page-title">
             <a href="{{ url('admin/user') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.user.edit') }}</h1>
         </div>
         {{ Form::open(['url' => "admin/user/{$user->id}", 'method' => 'POST']) }}
-        <div class="form-group">
-            <label for="inputName1">ユーザー名 <span class="badge badge-danger">必須</span></label>
-            <input name="name" class="form-control @error('name') is-invalid @enderror" id="inputName1" type="text" aria-describedby="nameHelp" placeholder="ユーザー名" value="{{ $user['name'] }}" required>
-            @error('name')
-            <div class="invalid-feedback">
-                <div class="text-danger">{{ $message }}</div>
-            </div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="inputEmail1">メールアドレス <span class="badge badge-danger">必須</span></label>
-            <input name="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail1" type="text" aria-describedby="emailHelp" placeholder="メールアドレス" value="{{ $user['email'] }}" required>
-            @error('email')
-            <div class="invalid-feedback">
-                <div class="text-danger">{{ $message }}</div>
-            </div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="inputRole1">ユーザー権限 <span class="badge badge-danger">必須</span></label>
-            <select name="role_type" class="form-control @error('role_type') is-invalid @enderror" id="inputRole1" aria-describedby="roleHelp" required>
-                    <option value="" @if ( !old('role_type') && !$user['role_type'] ) selected @endif>選択してください</option>
-                @foreach(\UserRoleTypeViewHelper::getSelectAll() as $roleType)
-                    <option value="{{ $roleType['key'] }}" @if ( old('role_type') == $roleType['key'] ) selected @elseif ( $user['role_type'] == $roleType['key'] && !old('role_type') ) selected @endif >{{ $roleType['value'] }}</option>
-                @endforeach
-            </select>
-            @error('role')
-            <div class="invalid-feedback">
-                <div class="text-danger">{{ $message }}</div>
-            </div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="inputPassword1">パスワード <span class="badge badge-danger">必須</span></label>
-            <input name="password" class="form-control @error('password') is-invalid @enderror" id="inputPassword1" type="password" aria-describedby="passwordHelp" value="" required>
-            @error('password')
-            <div class="invalid-feedback">
-                <div class="text-danger">{{ $message }}</div>
-            </div>
-            @enderror
-        </div>
-        <div class="form-group clearfix">
-            <div class="float-left">
-                <button class="btn btn-primary" type="submit">保存する</button>
-            </div>
-        </div>
+            @include('admin.components.input_edit', [
+                'labelName'     => 'ユーザー名',
+                'name'          => 'name',
+                'type'          => 'text',
+                'id'            => 'inputName1',
+                'placeholder'   => 'ユーザー名',
+                'value'         => $user->name,
+                'required'      => true,
+            ])
+            @include('admin.components.input_edit', [
+                'labelName'     => 'メールアドレス',
+                'name'          => 'email',
+                'type'          => 'email',
+                'id'            => 'inputEmail1',
+                'placeholder'   => 'sample@example.com',
+                'value'         => $user->email,
+                'required'      => true,
+            ])
+            @include('admin.components.select_edit', [
+                'labelName'     => 'ユーザー権限',
+                'name'          => 'role_type',
+                'id'            => 'inputRole1',
+                'items'         => \UserRoleTypeHelper::getSelectAll(),
+                'value'         => $user->role_type,
+                'required'      => true
+            ])
+            @include('admin.components.input_edit', [
+                'labelName'     => 'パスワード',
+                'name'          => 'password',
+                'type'          => 'password',
+                'id'            => 'inputPassword1',
+                'required'      => true,
+            ])
+            @include('admin.components.button_submit')
         {{ Form::close() }}
     </div>
 @endsection

@@ -5,7 +5,7 @@ namespace App\Services\Helper;
 use App\Enums\UserRoleType;
 use App\Http\Traits\ArrayConvertion;
 
-class UserRoleTypeViewHelper
+class UserRoleTypeHelper
 {
     use ArrayConvertion;
 

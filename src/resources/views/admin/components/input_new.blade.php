@@ -9,7 +9,7 @@
         id="{{ $id }}"
         type="{{ $type }}"
         @if(isset($placeholder)) placeholder="{{ $placeholder }}" @endif
-        @if(isset($value)) value="{{ $value }}" @endif
+        value="{{ old($name) }}"
         @if(isset($required)) required @endif
     >
     @include('admin.components.validate_message', ['property' => $name])
