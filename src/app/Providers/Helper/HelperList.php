@@ -1,7 +1,5 @@
 <?php
 
 return [
-    'CommonHelper',
-    'MsgHelper',
-    'IniHelper',
+    'UserRoleTypeHelper',
 ];

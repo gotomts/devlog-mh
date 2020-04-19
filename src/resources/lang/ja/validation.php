@@ -37,7 +37,7 @@ return [
     'email'                => ':attributeを正しいメールアドレスにしてください。',
     'filled'               => ':attributeは必須です。',
     'exists'               => '選択された:attributeは正しくありません。',
-    'image'                => ':attributeは画像にしてください。',
+    'image'                => ':attributeはjpg, png, gifを選択してください。',
     'in'                   => '選択された:attributeは正しくありません。',
     'integer'              => ':attributeは整数にしてください。',
     'ip'                   => ':attributeを正しいIPアドレスにしてください。',
@@ -107,6 +107,9 @@ return [
         'name' => 'カテゴリー名',
         'email'         => 'メールアドレス',
         'password'      => 'パスワード',
+        'imagefile'     => '画像ファイル',
+        'title'         => 'title属性',
+        'alt'           => 'alt属性',
     ],
 
 ];

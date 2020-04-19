@@ -20,12 +20,7 @@
         {{ Form::open(['url' => 'admin/user/create', 'method' => 'POST']) }}
         <div class="form-group">
             <label for="inputName1">ユーザー名 <span class="badge badge-danger">必須</span></label>
-            <input name="name" class="form-control @error('name') is-invalid @enderror" id="inputName1" type="text" aria-describedby="nameHelp" placeholder="ユーザー名" value="{{ old('name') }}" required>
-            @error('name')
-            <div class="invalid-feedback">
-                <div class="text-danger">{{ $message }}</div>
-            </div>
-            @enderror
+            @include('admin.components.input', ['name' => 'name', 'type' => 'text', 'id' => 'inputName1', 'placeholder' => 'ユーザー名', 'required' = true])
         </div>
         <div class="form-group">
             <label for="inputEmail1">メールアドレス <span class="badge badge-danger">必須</span></label>

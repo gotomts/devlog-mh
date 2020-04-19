@@ -66,20 +66,19 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('{id}', 'Admin\UserController@showEdit');
             Route::post('{id}', 'Admin\UserController@exeEdit');
         });
-        /*
         // 画像管理
         Route::group(['prefix' => 'image'], function () {
-            Route::get( '/',                'Admin\ImageController@showList');
-            Route::get( 'create',           'Admin\ImageController@showCreate');
-            Route::post('create',           'Admin\ImageController@exeCreate');
-            Route::get( '{id}',             'Admin\ImageController@showEdit');
-            Route::match(['put', 'patch'],  '{id}', 'Admin\ImageController@exeEdit');
+            Route::get('/', 'Admin\ImageController@showList');
+            Route::post('upload', 'Admin\ImageController@exeUpload');
+            Route::get('upload', 'Admin\ImageController@showUpload');
+            Route::post('create', 'Admin\ImageController@exeCreate');
+            Route::get('edit/{id}', 'Admin\ImageController@showEdit');
+            Route::post('edit/{id}', 'Admin\ImageController@exeEdit');
         });
-        // プロフィール編集
-        Route::group(['prefix' => 'profile'], function () {
-            Route::get( '/', 'Admin\ProfileController@showEdit');
-            Route::match(['put', 'patch'],  '/', 'Admin\ProfileController@exeEdit');
-        });
-        */
+        // // プロフィール編集
+        // Route::group(['prefix' => 'profile'], function () {
+        //     Route::get( '/', 'Admin\ProfileController@showEdit');
+        //     Route::match(['put', 'patch'],  '/', 'Admin\ProfileController@exeEdit');
+        // });
     });
 });

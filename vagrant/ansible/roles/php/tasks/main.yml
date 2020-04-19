@@ -35,6 +35,13 @@
     owner: root
     group: root
 
+- name: create xdebug.log
+  file:
+    path: /tmp/xdebug.log
+    mode: 0644
+    owner: vagrant
+    group: vagrant
+
 - name: Restart httpd
   service:
     name: httpd

@@ -56,6 +56,9 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    // S3の画像URL
+    's3_url' => env('AWS_STORAGE_URL'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -179,7 +182,6 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
 
         App\Providers\Helper\HelperServiceProvider::class,
-        App\Providers\ViewHelper\ViewHelperServiceProvider::class,
 
     ],
 
