@@ -39,7 +39,7 @@ class CategoryLogic
         )->leftjoin('users', function ($join) {
             $join->on('users.id', '=', 'categories.updated_by');
         })->orderBy('categories.updated_at', 'desc')
-        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
+        ->paginate(config('pagination.items'));
         return $category;
     }
 
@@ -59,7 +59,7 @@ class CategoryLogic
         )->leftjoin('users', function ($join) {
             $join->on('users.id', '=', 'categories.deleted_by');
         })->orderBy('categories.deleted_at', 'desc')
-        ->paginate(\IniHelper::get('PAGINATE', false, 'NUM'));
+        ->paginate(config('pagination.items'));
         return $category;
     }
 
@@ -90,7 +90,7 @@ class CategoryLogic
      */
     public static function update($id, $inputs)
     {
-        $id = isset($inputs['id']) ? $inputs['id'] : false;
+        $id = isset($id) ? $id : false;
         $categoryName = isset($inputs['name']) ? $inputs['name'] : false;
         if ($id && $categoryName) {
             $category = Category::find($id);

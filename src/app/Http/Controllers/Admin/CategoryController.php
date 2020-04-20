@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\WebBaseController;
 use App\Http\Requests\CategoryRequest;
 use App\Logic\CategoryLogic;
+use App\Services\RequestErrorService;
 use Illuminate\Http\Request;
 
 class CategoryController extends WebBaseController
@@ -28,6 +29,7 @@ class CategoryController extends WebBaseController
      */
     public function showCreate()
     {
+        RequestErrorService::validateInsertError();
         return \View::make('admin.category.create');
     }
 
@@ -48,12 +50,12 @@ class CategoryController extends WebBaseController
             }
         } catch (\Throwable $e) {
             \DB::rollback();
-            return redirect('admin/category')
-                ->with('success', \MsgHelper::get('MSG_ERR_INSERT'));
+            flash(config('messages.exception.insert'))->error();
+            return redirect('admin/category');
         }
         \DB::commit();
-        return redirect('admin/category')
-            ->with('success', \MsgHelper::get('MSG_SUCCESS'));
+        flash(config('messages.common.success'))->success();
+        return redirect('admin/category');
     }
 
     /**
@@ -67,8 +69,10 @@ class CategoryController extends WebBaseController
         $category = CategoryLogic::getCategoryById($id);
         // カテゴリーが見つからない場合
         if (is_null($category)) {
-            return back()->with('error', \MsgHelper::get('MSG_NODATA'));
+            flash(config('messages.common.noitem'))->error();
+            return back();
         }
+        RequestErrorService::validateUpdateError();
         return \View::make('admin.category.edit')
             ->with('category', $category);
     }
@@ -91,11 +95,11 @@ class CategoryController extends WebBaseController
         } catch (\Throwable $th) {
             \DB::rollback();
             \Log::warning($th);
-            return redirect('admin/category')
-                ->with('error', \MsgHelper::get('MSG_ERR_UPDATE'));
+            flash(config('messages.exception.update'))->error();
+            return redirect('admin/category');
         }
         \DB::commit();
-        return redirect('admin/category')
-            ->with('success', \MsgHelper::get('MSG_SUCCESS'));
+        flash(config('messages.common.success'))->success();
+        return redirect('admin/category');
     }
 }
