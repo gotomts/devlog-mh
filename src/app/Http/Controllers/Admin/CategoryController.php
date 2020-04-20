@@ -8,6 +8,11 @@ use App\Logic\CategoryLogic;
 use App\Services\RequestErrorService;
 use Illuminate\Http\Request;
 
+/**
+ * 管理側カテゴリーコントローラ
+ *
+ * @author mi-goto
+ */
 class CategoryController extends WebBaseController
 {
     /**
