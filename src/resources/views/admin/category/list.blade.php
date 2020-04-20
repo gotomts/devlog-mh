@@ -13,8 +13,7 @@
 
 @section('content')
     <div class="container mb-5">
-        @component('components.alert')
-        @endcomponent
+        @include('admin.components.flash_message')
         <div class="page-title">
             <a href="{{ url('admin') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.category.list') }}</h1>
