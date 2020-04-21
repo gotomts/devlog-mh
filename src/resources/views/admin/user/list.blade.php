@@ -30,9 +30,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Start データが存在しなかった場合 -->
-
-                <!-- End データが存在しなかった場合 -->
+                @if (count($users) === 0)
+                    <tr>
+                        <td class="text-center" colspan="4">データが存在しませんでした。ユーザーを登録してください。</td>
+                    </tr>
+                @endif
                 @foreach($users as $user)
                 <tr>
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/user/{$user->id}") }}'>編集</a></td>
@@ -44,9 +46,6 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="d-flex justify-content-center">
-            {{ $users->links() }}
-        </div>
+        @include('admin.components.pagilinks', ['property' => $users])
     </div>
 @endsection

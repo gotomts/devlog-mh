@@ -46,11 +46,6 @@
                 </tbody>
             </table>
         </div>
-
-        @if (count($categories) !== 0)
-            <div class="d-flex justify-content-center">
-                {{ $categories->links() }}
-            </div>
-        @endif
+        @include('admin.components.pagilinks', ['property' => $categories])
     </div>
 @endsection

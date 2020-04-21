@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\UserRequest;
-use App\Logic\UserLogic;
+use App\Models\User;
 use App\Services\RequestErrorService;
 use Illuminate\Http\Request;
 
 class UserController extends WebBaseController
 {
+
+    /** 一覧 */
+    private const LIST = 'admin/user';
+
     /**
      * ユーザ管理 一覧
      *
@@ -16,7 +20,7 @@ class UserController extends WebBaseController
      */
     public function showList()
     {
-        $users = UserLogic::getUsers();
+        $users = User::getAll();
         return \View::make('admin.user.list')
             ->with('users', $users);
     }
@@ -40,25 +44,13 @@ class UserController extends WebBaseController
      */
     public function exeCreate(UserRequest $request)
     {
-        // フォームから値を取得
-        $inputs['name']     = $request->name;
-        $inputs['email']    = $request->email;
-        $inputs['role_type']     = $request->role_type;
-        $inputs['password'] = $request->password;
-        \DB::beginTransaction();
-        try {
-            if (!UserLogic::insert($inputs)) {
-                throw new \Throwable;
-            }
-        } catch (\Throwable $th) {
-            \DB::rollback();
-            \Log::warning($th);
+        if (User::insert($request)) {
+            flash(config('messages.common.success'))->success();
+        } else {
             flash(config('messages.exception.insert'))->error();
-            return redirect('admin/user');
+            return redirect(self::LIST);
         }
-        \DB::commit();
-        flash(config('messages.common.success'))->success();
-        return redirect('admin/user');
+        return redirect(self::LIST);
     }
 
     /**
@@ -69,7 +61,7 @@ class UserController extends WebBaseController
      */
     public function showEdit($id=null)
     {
-        $user = UserLogic::getUserById($id);
+        $user = User::getById($id);
         // ユーザーが見つからない場合
         if (is_null($user)) {
             return back()->with('error', config('messages.common.nodata'));
@@ -87,20 +79,13 @@ class UserController extends WebBaseController
      */
     public function exeEdit(UserRequest $request, $id=null)
     {
-        $inputs = $request->all();
-        \DB::beginTransaction();
-        try {
-            if (!UserLogic::update($id, $inputs)) {
-                throw new \Throwable;
-            }
-        } catch (\Throwable $th) {
-            \DB::rollback();
-            \Log::warning($th);
+        // 更新処理
+        if (User::updateById($id, $request)) {
+            flash(config('messages.common.success'))->success();
+        } else {
             flash(config('messages.exception.update'))->error();
-            return redirect('admin/user');
+            return redirect(self::LIST);
         }
-        \DB::commit();
-        flash(config('messages.common.success'))->success();
-        return redirect('admin/user');
+        return redirect(self::LIST);
     }
 }
