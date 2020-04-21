@@ -97,7 +97,7 @@ class Category extends Model
      * @param $inputs
      * @return bool
      */
-    public static function insert($request, $attrs = [])
+    public static function insert($request, $attrs=[])
     {
         $result = false;
         $params = $request->all();
@@ -124,7 +124,7 @@ class Category extends Model
      * @param $inputs
      * @return bool
      */
-    public static function updateById($id, $request, $attrs = [])
+    public static function updateById($id, $request, $attrs=[])
     {
         $result = false;
         $params = $request->all();

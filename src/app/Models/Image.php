@@ -45,7 +45,7 @@ class Image extends Model
      * @param $attrs
      * @return bool
      */
-    public static function insert($request, $attrs)
+    public static function insert($request, $attrs=[])
     {
         $result = false;
         $params = $request->all();
@@ -72,11 +72,10 @@ class Image extends Model
      * @param request $request
      * @return bool
      */
-    public static function updateById($id, $request)
+    public static function updateById($id, $request, $attrs=[])
     {
         $result = false;
         $params = $request->all();
-        $attrs  = [];
         if (isset($params)) {
             $params = $params + $attrs;
             try {
