@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\WebBaseController;
 use App\Http\Requests\CategoryRequest;
-use App\Logic\CategoryLogic;
+use App\Models\Category;
 use App\Services\RequestErrorService;
 use Illuminate\Http\Request;
 
@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
  */
 class CategoryController extends WebBaseController
 {
+    /** トップページ */
+    private const TOP = 'admin/category';
+
     /**
      * カテゴリ一覧
      *
@@ -22,7 +25,7 @@ class CategoryController extends WebBaseController
      */
     public function showList()
     {
-        $categories = CategoryLogic::getCategories();
+        $categories = Category::getAll();
         return \View::make('admin.category.list')
             ->with('categories', $categories);
     }
@@ -47,20 +50,13 @@ class CategoryController extends WebBaseController
     public function exeCreate(CategoryRequest $request)
     {
         $inputs['name'] = $request->name;
-        \DB::beginTransaction();
-        try {
-            // ログイン確認
-            if (\Auth::check()) {
-                CategoryLogic::insert($inputs);
-            }
-        } catch (\Throwable $e) {
-            \DB::rollback();
+        if (Category::insert($request)) {
+            flash(config('messages.common.success'))->success();
+        } else {
             flash(config('messages.exception.insert'))->error();
-            return redirect('admin/category');
+            return redirect(self::TOP);
         }
-        \DB::commit();
-        flash(config('messages.common.success'))->success();
-        return redirect('admin/category');
+        return redirect(self::TOP);
     }
 
     /**
@@ -71,7 +67,7 @@ class CategoryController extends WebBaseController
      */
     public function showEdit($id=null)
     {
-        $category = CategoryLogic::getCategoryById($id);
+        $category = Category::getById($id);
         // カテゴリーが見つからない場合
         if (is_null($category)) {
             flash(config('messages.common.noitem'))->error();
@@ -88,23 +84,15 @@ class CategoryController extends WebBaseController
      * @param CategoryRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function exeEdit(CategoryRequest $request, $id=null)
+    public function exeEdit($id=null, CategoryRequest $request)
     {
-        $inputs = $request->all();
-        \DB::beginTransaction();
-        try {
-            // アップデート確認
-            if (!CategoryLogic::update($id, $inputs)) {
-                throw new \Throwable;
-            }
-        } catch (\Throwable $th) {
-            \DB::rollback();
-            \Log::warning($th);
+        // 登録処理
+        if (Category::updateById($id, $request)) {
+            flash(config('messages.common.success'))->success();
+        } else {
             flash(config('messages.exception.update'))->error();
-            return redirect('admin/category');
+            return redirect(self::TOP);
         }
-        \DB::commit();
-        flash(config('messages.common.success'))->success();
-        return redirect('admin/category');
+        return redirect(self::TOP);
     }
 }
