@@ -74,26 +74,6 @@ class Category extends Model
     }
 
     /**
-     * カテゴリー全件取得(削除済み)
-     *
-     * @return Category[]
-     */
-    public static function getDeletedAll()
-    {
-        $category = self::onlyTrashed()->select(
-            'categories.id',
-            'categories.name',
-            'categories.deleted_by',
-            'categories.deleted_at',
-            'users.name as user_name'
-        )->leftjoin('users', function ($join) {
-            $join->on('users.id', '=', 'categories.deleted_by');
-        })->orderBy('categories.deleted_at', 'desc')
-        ->paginate(config('pagination.items'));
-        return $category;
-    }
-
-    /**
      * カテゴリー登録処理
      *
      * @param $inputs

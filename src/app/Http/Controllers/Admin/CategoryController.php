@@ -15,8 +15,8 @@ use Illuminate\Http\Request;
  */
 class CategoryController extends WebBaseController
 {
-    /** トップページ */
-    private const TOP = 'admin/category';
+    /** 一覧 */
+    private const LIST = 'admin/category';
 
     /**
      * カテゴリ一覧
@@ -54,9 +54,9 @@ class CategoryController extends WebBaseController
             flash(config('messages.common.success'))->success();
         } else {
             flash(config('messages.exception.insert'))->error();
-            return redirect(self::TOP);
+            return redirect(self::LIST);
         }
-        return redirect(self::TOP);
+        return redirect(self::LIST);
     }
 
     /**
@@ -86,13 +86,13 @@ class CategoryController extends WebBaseController
      */
     public function exeEdit($id=null, CategoryRequest $request)
     {
-        // 登録処理
+        // 更新処理
         if (Category::updateById($id, $request)) {
             flash(config('messages.common.success'))->success();
         } else {
             flash(config('messages.exception.update'))->error();
-            return redirect(self::TOP);
+            return redirect(self::LIST);
         }
-        return redirect(self::TOP);
+        return redirect(self::LIST);
     }
 }
