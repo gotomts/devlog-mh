@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\Helper;
+namespace App\Services\ViewHelper;
 
 use App\Enums\UserRoleType;
 use App\Http\Traits\ArrayConvertion;
 
-class UserRoleTypeHelper
+class UserRoleTypeViewHelper
 {
     use ArrayConvertion;
 

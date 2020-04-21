@@ -39,7 +39,7 @@
                 'labelName'     => 'ユーザー権限',
                 'name'          => 'role_type',
                 'id'            => 'inputRole1',
-                'items'         => \UserRoleTypeHelper::getSelectAll(),
+                'items'         => \UserRoleTypeViewHelper::getSelectAll(),
                 'required'      => true
             ])
             @include('admin.components.input_new', [

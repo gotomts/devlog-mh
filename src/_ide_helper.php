@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 6.13.1 on 2020-04-21 00:20:41.
+ * Generated for Laravel 6.13.1 on 2020-04-22 02:55:57.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -16875,17 +16875,40 @@ namespace App\Facades\Helper {
      * 
      *
      */ 
-    class UserRoleTypeHelper {
+    class CommonHelper {
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getNow()
+        {
+                        /** @var \App\Services\Helper\CommonHelper $instance */
+                        return $instance->getNow();
+        }
+         
+    }
+ 
+}
+
+namespace App\Facades\ViewHelper { 
+
+    /**
+     * 
+     *
+     */ 
+    class UserRoleTypeViewHelper {
         
         /**
          * プルダウン生成用
          *
-         * @return \App\Services\Helper\$roles array(key, value)
+         * @return \App\Services\ViewHelper\$roles array(key, value)
          * @static 
          */ 
         public static function getSelectAll()
         {
-                        /** @var \App\Services\Helper\UserRoleTypeHelper $instance */
+                        /** @var \App\Services\ViewHelper\UserRoleTypeViewHelper $instance */
                         return $instance->getSelectAll();
         }
          
@@ -19783,7 +19806,9 @@ namespace  {
 
     class Flash extends \Laracasts\Flash\Flash {}
 
-    class UserRoleTypeHelper extends \App\Facades\Helper\UserRoleTypeHelper {}
+    class CommonHelper extends \App\Facades\Helper\CommonHelper {}
+
+    class UserRoleTypeViewHelper extends \App\Facades\ViewHelper\UserRoleTypeViewHelper {}
  
 }
 

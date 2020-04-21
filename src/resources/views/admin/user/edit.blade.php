@@ -41,7 +41,7 @@
                 'labelName'     => 'ユーザー権限',
                 'name'          => 'role_type',
                 'id'            => 'inputRole1',
-                'items'         => \UserRoleTypeHelper::getSelectAll(),
+                'items'         => \UserRoleTypeViewHelper::getSelectAll(),
                 'value'         => $user->role_type,
                 'required'      => true
             ])
