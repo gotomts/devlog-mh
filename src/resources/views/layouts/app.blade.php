@@ -9,9 +9,9 @@
 
     <title>
         @if ($__env->yieldContent('title'))
-            @yield('title') | {{ config('app.name', 'Laravel') }}
+            @yield('title') | {{ config('app.name') }}
         @else
-            {{ config('app.name', 'Laravel') }}
+            {{ config('app.name') }}
         @endif
     </title>
 

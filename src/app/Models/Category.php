@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\AuthorObservable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
     use SoftDeletes;
+    use AuthorObservable;
 
     protected $table = 'categories';
 
@@ -63,9 +65,9 @@ class Category extends Model
             'categories.name',
             'categories.updated_by',
             'categories.updated_at',
-            'users.name as user_name'
-        )->leftjoin('users', function ($join) {
-            $join->on('users.id', '=', 'categories.updated_by');
+            'updated_by.name as updated_name'
+        )->leftjoin('users as updated_by', function ($join) {
+            $join->on('updated_by.id', '=', 'categories.updated_by');
         })->orderBy('categories.updated_at', 'desc')
         ->paginate(config('pagination.items'));
         return $category;
@@ -97,16 +99,11 @@ class Category extends Model
      * @param $inputs
      * @return bool
      */
-    public static function insert($request, $attrs=[])
+    public static function insert($request)
     {
         $result = false;
         $params = $request->all();
-        $attrs  = $attrs + [
-            'created_by' => \Auth::user()->id,
-            'updated_by' => \Auth::user()->id,
-        ];
         if (isset($params)) {
-            $params = $params + $attrs;
             try {
                 $result = \DB::transaction(function () use ($params) {
                     return self::create($params);
@@ -124,17 +121,15 @@ class Category extends Model
      * @param $inputs
      * @return bool
      */
-    public static function updateById($id, $request, $attrs=[])
+    public static function updateById($id, $request)
     {
         $result = false;
         $params = $request->all();
         if (isset($params)) {
-            $params = $params + $attrs;
             try {
                 $result = \DB::transaction(function () use ($id, $params) {
                     $category = self::find($id);
                     $category->name      = $params['name'];
-                    $category->updated_by = \Auth::user()->id;
                     return $category->save();
                 });
             } catch (\Throwable $th) {

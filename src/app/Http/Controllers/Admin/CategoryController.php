@@ -25,7 +25,8 @@ class CategoryController extends WebBaseController
      */
     public function showList()
     {
-        $categories = Category::getAll();
+        $category = new Category;
+        $categories = $category->getAll();
         return \View::make('admin.category.list')
             ->with('categories', $categories);
     }
@@ -49,7 +50,6 @@ class CategoryController extends WebBaseController
      */
     public function exeCreate(CategoryRequest $request)
     {
-        $inputs['name'] = $request->name;
         if (Category::insert($request)) {
             flash(config('messages.common.success'))->success();
         } else {

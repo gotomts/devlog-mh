@@ -30,14 +30,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Start データが存在しなかった場合 -->
-
-                <!-- End データが存在しなかった場合 -->
+                @if (count($categories) === 0)
+                    <tr>
+                        <td class="text-center" colspan="4">データが存在しませんでした。カテゴリを登録してください。</td>
+                    </tr>
+                @endif
                 @foreach($categories as $category)
                 <tr>
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/category/{$category->id}") }}'>編集</a></td>
                     <td class="text-nowrap">{{ $category->name }}</td>
-                    <td class="text-center text-nowrap">{{ $category->user_name }}</td>
+                    <td class="text-center text-nowrap">{{ $category->updated_name }}</td>
                     <td class="text-center text-nowrap">{{ $category->updated_at }}</td>
                 </tr>
                 @endforeach
@@ -45,8 +47,10 @@
             </table>
         </div>
 
-        <div class="d-flex justify-content-center">
-            {{ $categories->links() }}
-        </div>
+        @if (count($categories) !== 0)
+            <div class="d-flex justify-content-center">
+                {{ $categories->links() }}
+            </div>
+        @endif
     </div>
 @endsection
