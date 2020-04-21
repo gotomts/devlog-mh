@@ -28,14 +28,14 @@ class Image extends Model
      */
     public static function getAll()
     {
-        $image = Image::orderBy('images.updated_at', 'desc')
+        $image = self::orderBy('images.updated_at', 'desc')
             ->paginate(config('pagination.items'));
         return $image;
     }
 
     public static function getById($id)
     {
-        return Image::find($id);
+        return self::find($id);
     }
 
     /**
@@ -57,10 +57,10 @@ class Image extends Model
             $params = $params + $attrs;
             try {
                 $result = \DB::transaction(function () use ($params) {
-                    return Image::create($params);
+                    return self::create($params);
                 });
             } catch (\Throwable $th) {
-                \Log::warning(['Insert Fail/Throwable', $th, $params]);
+                \Log::error($th);
             }
         }
         return $result;
@@ -81,14 +81,14 @@ class Image extends Model
             $params = $params + $attrs;
             try {
                 $result = \DB::transaction(function () use ($id, $params) {
-                    $image = Image::find($id);
+                    $image = self::find($id);
                     $image->title      = $params['title'];
                     $image->alt        = $params['alt'];
                     $image->updated_by = \Auth::user()->id;
                     return $image->save();
                 });
             } catch (\Throwable $th) {
-                \Log::warning(['Update Fail/Throwable', $params, $th]);
+                \Log::error($th);
             }
         }
         return $result;

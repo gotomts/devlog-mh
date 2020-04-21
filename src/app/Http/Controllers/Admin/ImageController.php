@@ -67,7 +67,7 @@ class ImageController extends WebBaseController
             $attrs['url'] = config('app.s3_url').$path;
         } else {
             flash(config('messages.exception.file_upload'))->error();
-            \Log::warning(['Upload File Fail', 'Upload File Path:'.$path]);
+            \Log::error('Upload File Path:'.$path);
             return redirect('admin/image');
         }
         // 登録処理
@@ -75,7 +75,6 @@ class ImageController extends WebBaseController
             flash(config('messages.common.success'))->success();
         } else {
             flash(config('messages.exception.insert'))->error();
-            \Log::warning(['Insert Fail', $request->all(), $attrs]);
             return redirect('admin/image');
         }
         return redirect('admin/image');
@@ -109,7 +108,6 @@ class ImageController extends WebBaseController
             flash(config('messages.common.success'))->success();
         } else {
             flash(config('messages.exception.update'))->error();
-            \Log::warning(['Update Fail', $request->all(), 'User:'.\Auth::user()->id]);
             return redirect('admin/image');
         }
         return redirect('admin/image');
