@@ -4,7 +4,7 @@ namespace App\Facades\Helper;
 
 use Barryvdh\Debugbar\Facade;
 
-class UserRoleTypeHelper extends Facade
+class CommonHelper extends Facade
 {
     /**
      * Undocumented function
@@ -13,6 +13,6 @@ class UserRoleTypeHelper extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'userroletypehelper';
+        return 'commonhelper';
     }
 }

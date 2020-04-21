@@ -8,18 +8,26 @@ class AuthorObserver
 {
     public function creating(Model $model)
     {
-        $model->created_by = \Auth::user()->id;
+        if (\Auth::check()) {
+            $model->created_by = \Auth::user()->id;
+        }
     }
     public function updating(Model $model)
     {
-        $model->updated_by = \Auth::user()->id;
+        if (\Auth::check()) {
+            $model->updated_by = \Auth::user()->id;
+        }
     }
     public function saving(Model $model)
     {
-        $model->updated_by = \Auth::user()->id;
+        if (\Auth::check()) {
+            $model->updated_by = \Auth::user()->id;
+        }
     }
     public function deleting(Model $model)
     {
-        $model->deleted_by = \Auth::user()->id;
+        if (\Auth::check()) {
+            $model->deleted_by = \Auth::user()->id;
+        }
     }
 }
