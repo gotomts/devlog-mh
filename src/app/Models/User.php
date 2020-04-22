@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Crypt;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -95,17 +96,14 @@ class User extends Authenticatable
     /**
         * ユーザ 登録処理
         *
-        * @param $inputs
+        * @param $request
         * @return bool
         */
     public static function insert($request)
     {
         $result = false;
         $params = $request->all();
-        $attr = [
-            'password' => Crypt::encrypt($params['password']),
-        ];
-        $params += $attr;
+        $params['password'] = bcrypt($params['password']);
         if (isset($params)) {
             try {
                 $result = \DB::transaction(function () use ($params) {
@@ -128,10 +126,6 @@ class User extends Authenticatable
     {
         $result = false;
         $params = $request->all();
-        $attr = [
-            'password' => Crypt::encrypt($params['password']),
-        ];
-        $params += $attr;
         if (isset($params)) {
             try {
                 $result = \DB::transaction(function () use ($id, $params) {
@@ -139,7 +133,35 @@ class User extends Authenticatable
                     $user->name      = $params['name'];
                     $user->email     = $params['email'];
                     $user->role_type = $params['role_type'];
-                    $user->password  = $params['password'];
+                    $user->password  = bcrypt($params['password']);
+                    return $user->save();
+                });
+            } catch (\Throwable $th) {
+                \Log::error($th);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * プロフィール更新処理
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function updateByProfile($request)
+    {
+        $result = false;
+        $params = $request->all();
+        if (isset($params)) {
+            try {
+                $result = \DB::transaction(function () use ($params) {
+                    $user = self::find(\Auth::guard()->user()->id);
+                    $user->name      = $params['name'];
+                    $user->email     = $params['email'];
+                    if (isset($params['password'])) {
+                        $user->password  = bcrypt($params['password']);
+                    }
                     return $user->save();
                 });
             } catch (\Throwable $th) {

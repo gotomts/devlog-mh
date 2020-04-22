@@ -7,7 +7,8 @@
         name="{{ $name }}"
         class="form-control @error($name) is-invalid @enderror"
         id="{{ $id }}"
-        @if(isset($required)) required @endif
+        @if(isset($required)) required="required" @endif
+        @if(isset($disabled)) disabled="disabled" @endif
     >
     <option value="" @if ( !old($name) && !isset($value) ) selected @endif>選択してください</option>
     @foreach($items as $item)

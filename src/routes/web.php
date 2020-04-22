@@ -75,10 +75,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('edit/{id}', 'Admin\ImageController@showEdit');
             Route::post('edit/{id}', 'Admin\ImageController@exeEdit');
         });
-        // // プロフィール編集
-        // Route::group(['prefix' => 'profile'], function () {
-        //     Route::get( '/', 'Admin\ProfileController@showEdit');
-        //     Route::match(['put', 'patch'],  '/', 'Admin\ProfileController@exeEdit');
-        // });
+        // プロフィール編集
+        Route::group(['prefix' => 'profile'], function () {
+            Route::get('/', 'Admin\ProfileController@showEdit');
+            Route::post('/', 'Admin\ProfileController@exeEdit');
+        });
     });
 });

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class ProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,16 +23,14 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->id) {
-            $unique = 'unique:users,email,' . $this->id;
-        } else {
-            $unique = 'unique:users,email';
-        }
-        return [
+        $rules = [
             'name'      => 'bail|required|max:64|',
-            'email'     => 'bail|required|max:255|email|' . $unique,
-            'role_type' => 'bail|required|',
-            'password'  => 'bail|required|min:8|max:16|',
+            'email'     => 'bail|required|max:255|email|unique:users,email,' . \Auth::guard()->user()->id,
         ];
+        $password = $this->password;
+        if (isset($password)) {
+            $rules['password'] = 'bail|min:8|max:16|';
+        }
+        return $rules;
     }
 }
