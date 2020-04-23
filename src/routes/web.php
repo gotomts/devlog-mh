@@ -42,29 +42,29 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'admin'], function () {
         // ログイン後TOP
         Route::get('index', 'Admin\IndexController@showIndex');
-        // // 記事
-        // Route::group(['prefix' => 'post'], function () {
-        //     Route::get( '/',                'Admin\PostController@showIndex');
-        //     Route::get( 'create',           'Admin\PostController@showCreate');
-        //     Route::post('create',           'Admin\PostController@exeCreate');
-        //     Route::get( '{id}',             'Admin\PostController@showEdit');
-        //     Route::match(['put', 'patch'],  '{id}', 'Admin\PostController@exeEdit');
-        // });
+        // 記事
+        Route::group(['prefix' => 'post'], function () {
+            Route::get('/', 'Admin\PostController@showIndex');
+            Route::get('create', 'Admin\PostController@showCreate');
+            Route::post('create', 'Admin\PostController@exeCreate');
+            Route::get('edit/{id}', 'Admin\PostController@showEdit');
+            Route::post('edit/{id}', 'Admin\PostController@exeEdit');
+        });
         // カテゴリー
         Route::group(['prefix' => 'category'], function () {
             Route::get('/', 'Admin\CategoryController@showList');
             Route::get('create', 'Admin\CategoryController@showCreate');
             Route::post('create', 'Admin\CategoryController@exeCreate');
-            Route::get('{id}', 'Admin\CategoryController@showEdit');
-            Route::post('{id}', 'Admin\CategoryController@exeEdit');
+            Route::get('edit/{id}', 'Admin\CategoryController@showEdit');
+            Route::post('edit/{id}', 'Admin\CategoryController@exeEdit');
         });
         // ユーザ管理
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', 'Admin\UserController@showList');
             Route::get('create', 'Admin\UserController@showCreate');
             Route::post('create', 'Admin\UserController@exeCreate');
-            Route::get('{id}', 'Admin\UserController@showEdit');
-            Route::post('{id}', 'Admin\UserController@exeEdit');
+            Route::get('edit/{id}', 'Admin\UserController@showEdit');
+            Route::post('edit/{id}', 'Admin\UserController@exeEdit');
         });
         // 画像管理
         Route::group(['prefix' => 'image'], function () {
@@ -77,8 +77,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         // プロフィール編集
         Route::group(['prefix' => 'profile'], function () {
-            Route::get('/', 'Admin\ProfileController@showEdit');
-            Route::post('/', 'Admin\ProfileController@exeEdit');
+            Route::get('edit', 'Admin\ProfileController@showEdit');
+            Route::post('edit', 'Admin\ProfileController@exeEdit');
         });
     });
 });

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ProfileController extends WebBaseController
 {
     /** 編集トップ */
-    private const TOP = 'admin/profile';
+    private const TOP = 'admin/profile/edit';
 
     /**
      * プロフィール編集 表示処理

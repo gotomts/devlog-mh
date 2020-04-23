@@ -18,7 +18,7 @@
             <a href="{{ url('admin') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.profile.edit') }}</h1>
         </div>
-        {{ Form::open(['url' => "admin/profile", 'method' => 'POST']) }}
+        {{ Form::open(['url' => "admin/profile/edit", 'method' => 'POST']) }}
             @include('admin.components.input_edit', [
                 'labelName'     => 'ユーザー名',
                 'name'          => 'name',

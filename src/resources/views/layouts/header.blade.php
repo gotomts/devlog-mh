@@ -5,7 +5,7 @@
             <ul class="navbar-nav mr-auto"></ul>
             @auth
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('admin/profile') }}">プロフィール編集</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('admin/profile/edit') }}">プロフィール編集</a></li>
                     <li class="nav-item"><a id="logout-btn" class="nav-link" href="#">ログアウト</a></li>
                 </ul>
             @endauth
