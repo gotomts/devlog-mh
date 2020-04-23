@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title'){{ config('titles.category.list') }}@endsection
+@section('title'){{ config('titles.post.list') }}@endsection
 
 @section('header_js')
 @endsection
@@ -16,8 +16,8 @@
         @include('admin.components.flash_message')
         <div class="page-title">
             <a href="{{ url('admin') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
-            <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.category.list') }}</h1>
-            <a class="btn btn-primary align-middle" href="{{ url('admin/category/create')  }}">新規作成</a>
+            <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.post.list') }}</h1>
+            <a class="btn btn-primary align-middle" href="{{ url('admin/post/create')  }}">新規作成</a>
         </div>
         <div class="table-responsive-xl">
             <table class="table table-striped table-hover table-bordered">
@@ -43,9 +43,9 @@
                     <td class="text-center text-nowrap"></td>
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/post/edit/{$post->id}") }}'>編集</a></td>
                     <td class="text-center">{{ $post->title }}</td>
-                    <td class="text-center">{{ $post->category }}</td>
-                    <td class="text-center">{{ $post->status }}</td>
-                    <td class="text-center text-nowrap">{{ $post->updated_name }}</td>
+                    <td class="text-center">{{ $post->categories->name }}</td>
+                    <td class="text-center">{{ $post->statuses->name }}</td>
+                    <td class="text-center text-nowrap">{{ $post->user->name }}</td>
                     <td class="text-center text-nowrap">{{ $post->updated_at }}</td>
                 </tr>
                 @endforeach

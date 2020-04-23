@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends WebBaseController
@@ -14,7 +14,9 @@ class PostController extends WebBaseController
      */
     public function showIndex()
     {
-        # code...
+        $posts = Post::getAll();
+        return \View::make('admin.post.list')
+            ->with('posts', $posts);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
@@ -16,11 +17,28 @@ class Post extends Model
         'description',
         'keyword',
         'content',
+        'status_id',
+        'category_id',
         'created_by',
         'updated_by',
         'deleted_by',
         'deleted_at',
     ];
+
+    public function User()
+    {
+        return $this->belongsTo('App\Models\User', 'updated_by');
+    }
+
+    public function statuses()
+    {
+        return $this->belongsTo('App\Models\Status', 'status_id');
+    }
+
+    public function categories()
+    {
+        return $this->belongsTo('App\Models\Category', 'category_id');
+    }
 
     /**
      * 記事全件取得(削除以外)
@@ -29,19 +47,7 @@ class Post extends Model
      */
     public static function getAll()
     {
-        $posts = self::select(
-            'posts.id',
-            'posts.url',
-            'posts.title',
-            'posts.description',
-            'posts.keyword',
-            'posts.content',
-            'posts.updated_by',
-            'posts.updated_at',
-            'updated_by.name as updated_name'
-        )->leftjoin('users as updated_by', function ($join) {
-            $join->on('updated_by.id', '=', 'posts.updated_by');
-        })->orderBy('posts.updated_at', 'desc')
+        $posts = self::orderBy('posts.updated_at', 'desc')
         ->paginate(config('pagination.items'));
         return $posts;
     }
