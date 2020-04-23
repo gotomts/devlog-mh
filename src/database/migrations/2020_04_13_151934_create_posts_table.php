@@ -20,6 +20,8 @@ class CreatePostsTable extends Migration
             $table->text('description');
             $table->string('keyword');
             $table->text('content');
+            $table->integer('status_id');
+            $table->integer('category_id');
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->integer('deleted_by')->nullable();
