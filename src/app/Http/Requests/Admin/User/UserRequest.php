@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +23,16 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        $test = $this->id;
         if ($this->id) {
-            $unique = 'unique:categories,name,' . $this->id;
+            $unique = 'unique:users,email,' . $this->id;
         } else {
-            $unique = 'unique:categories,name';
+            $unique = 'unique:users,email';
         }
         return [
-            'name' => 'bail|required|max:64|' . $unique,
+            'name'      => 'bail|required|max:64|',
+            'email'     => 'bail|required|max:255|email|' . $unique,
+            'role_type' => 'bail|required|',
+            'password'  => 'bail|required|min:8|max:16|',
         ];
     }
 }
