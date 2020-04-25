@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends WebBaseController
 {
+
+    /** 編集トップ */
+    private const TOP = 'admin/post';
+
     /**
      * 投稿管理 一覧表示
      *
@@ -26,7 +31,7 @@ class PostController extends WebBaseController
      */
     public function showCreate()
     {
-        # code...
+        return \View::make('admin.post.create');
     }
 
     /**
@@ -34,9 +39,9 @@ class PostController extends WebBaseController
      *
      * @return void
      */
-    public function exeCreate()
+    public function exeCreate(PostRequest $request)
     {
-        # code...
+        return \Redirect::to(self::TOP);
     }
 
     /**
@@ -44,7 +49,7 @@ class PostController extends WebBaseController
      *
      * @return void
      */
-    public function showEdit()
+    public function showEdit($id=null)
     {
         # code...
     }
@@ -54,8 +59,8 @@ class PostController extends WebBaseController
      *
      * @return void
      */
-    public function exeEdit()
+    public function exeEdit($id=null, PostRequest $request)
     {
-        # code...
+        return \Redirect::to(self::TOP);
     }
 }

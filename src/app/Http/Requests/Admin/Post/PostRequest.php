@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class PostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,13 +23,8 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->id) {
-            $unique = 'unique:categories,name,' . $this->id;
-        } else {
-            $unique = 'unique:categories,name';
-        }
         return [
-            'name' => 'bail|required|max:64|' . $unique,
+
         ];
     }
 }

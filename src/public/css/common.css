@@ -1,10 +1,9 @@
+@charset "UTF-8";
+
 .flex-body {
-  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   padding: 4% 0;
   background: #f5f5f5;
 }
@@ -36,5 +35,94 @@
 
 .hidden {
   display: none;
+}
+
+.input-group .input-group-prepend > .input-group-text {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group > .form-control:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.tabs {
+  margin-top: 50px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+}
+
+/*タブのスタイル*/
+
+.tab-item {
+  margin-bottom: 0;
+  width: calc(100%/2);
+  height: 50px;
+  border-bottom: 3px solid #5ab4bd;
+  background-color: #d9d9d9;
+  line-height: 50px;
+  font-size: 16px;
+  text-align: center;
+  color: #565656;
+  display: block;
+  float: left;
+  text-align: center;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.tab-item:hover {
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+/*ラジオボタンを全て消す*/
+
+input[name=tab-item] {
+  display: none;
+}
+
+/*タブ切り替えの中身のスタイル*/
+
+.tab-content {
+  display: none;
+  clear: both;
+  overflow: hidden;
+}
+
+/*選択されているタブのコンテンツのみを表示*/
+
+#markdown:checked ~ #markdown-content,
+#html:checked ~ #html-content {
+  display: block;
+}
+
+/*選択されているタブのスタイルを変える*/
+
+.tabs input:checked + .tab-item {
+  background-color: #5ab4bd;
+  color: #fff;
+}
+
+.markdown-area {
+  display: block;
+  width: 100%;
+  border: 1px solid #eee;
+  box-shadow: 1px 0 4px inset rgba(150, 150, 150, 0.5);
+}
+
+#html-preview {
+  min-height: 30rem;
+  padding: 2rem 2.5rem;
+}
+
+.markdown-area {
+  width: 100%;
+  min-height: 30rem;
+  padding: 2rem 2.5rem;
+  border: none;
+  box-shadow: 1px 0 4px inset rgba(150, 150, 150, 0.5);
 }
 

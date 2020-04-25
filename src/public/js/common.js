@@ -112,7 +112,7 @@ $(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/goto/repository/php/www.devlog-mh.com/resources/js/common.js */"./resources/js/common.js");
+module.exports = __webpack_require__(/*! /home/vagrant/www.devlog-mh.com/resources/js/common.js */"./resources/js/common.js");
 
 
 /***/ })
