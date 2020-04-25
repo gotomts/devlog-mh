@@ -36,8 +36,9 @@
     group: root
 
 - name: create xdebug.log
-  file:
-    path: /tmp/xdebug.log
+  copy:
+    src: xdebug.log
+    dest: /tmp/xdebug.log
     mode: 0644
     owner: vagrant
     group: vagrant
