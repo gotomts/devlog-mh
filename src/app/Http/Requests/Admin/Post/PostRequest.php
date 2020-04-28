@@ -24,7 +24,12 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-
+            'title'         => 'bail|required|max:255',
+            'url'           => 'bail|required|max:255',
+            'keyword'       => 'bail|max:255',
+            'description'   => 'bail|max:125',
+            'category_id'   => 'bail|required',
+            'status_id'     => 'bail|required',
         ];
     }
 }

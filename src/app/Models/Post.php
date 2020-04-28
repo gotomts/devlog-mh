@@ -51,4 +51,20 @@ class Post extends Model
         ->paginate(config('pagination.items'));
         return $posts;
     }
+
+    /**
+     * 記事 登録処理
+     *
+     * @param  $request
+     * @return bool
+     */
+    public static function insert($request)
+    {
+        $result = false;
+        $params = $request->all();
+        if (isset($params)) {
+            return self::create($params);
+        }
+        return $result;
+    }
 }

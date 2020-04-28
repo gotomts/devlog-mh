@@ -41,6 +41,20 @@ class PostController extends WebBaseController
      */
     public function exeCreate(PostRequest $request)
     {
+        // TODO:ファイルの登録処理作成
+        \DB::beginTransaction();
+        try {
+            if (Post::insert($request)) {
+                flash(config('messages.common.success'))->success();
+            } else {
+                flash(config('messages.exception.insert'))->error();
+                return self::TOP;
+            }
+        } catch (\Throwable $th) {
+            flash(config('messages.exception.insert'))->error();
+            \Log::error($th);
+            return self::TOP;
+        }
         return \Redirect::to(self::TOP);
     }
 
