@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\AuthorObservable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
     use SoftDeletes;
+    use AuthorObservable;
 
     protected $table = 'posts';
 
@@ -17,6 +19,7 @@ class Post extends Model
         'description',
         'keyword',
         'content',
+        'post_image_id',
         'status_id',
         'category_id',
         'created_by',
@@ -27,17 +30,22 @@ class Post extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User', 'updated_by');
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     public function statuses()
     {
-        return $this->belongsTo('App\Models\Status', 'status_id');
+        return $this->belongsTo(Status::class, 'status_id');
     }
 
     public function categories()
     {
-        return $this->belongsTo('App\Models\Category', 'category_id');
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function postImages()
+    {
+        return $this->hasOne(PostImage::class);
     }
 
     /**
@@ -58,12 +66,37 @@ class Post extends Model
      * @param  $request
      * @return bool
      */
-    public static function insert($request)
+    public static function insert($request, $attrs)
     {
         $result = false;
         $params = $request->all();
+        $attrs += isset($attrs) ? $attrs : null;
         if (isset($params)) {
-            return self::create($params);
+            $result = self::create($params);
+            return $result;
+        }
+        return $result;
+    }
+
+    public static function insertWithPostImage($request, $attrs)
+    {
+        $result = false;
+        $params = $request->all();
+        $attrs += isset($attrs) ? $attrs : null;
+        $postImagesAttrs = [];
+        $postImagesAttrs += [
+            'url'  => isset($attrs['post_images_url']) ? $attrs['post_images_url']  : null,
+            'name' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
+            'title' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
+            'alt' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
+        ];
+        if (isset($params)) {
+            $post = self::create($params);
+            $postImage = $post->postImages()->create($postImagesAttrs);
+            if (isset($post) && isset($postImage)) {
+                $result = true;
+            }
+            return $result;
         }
         return $result;
     }

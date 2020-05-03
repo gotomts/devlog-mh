@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\PostRequest;
+use App\Http\Requests\Admin\Post\PostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Services\AwsS3HandleUploadService;
+use App\Services\RequestErrorService;
 
 class PostController extends WebBaseController
 {
@@ -31,6 +32,7 @@ class PostController extends WebBaseController
      */
     public function showCreate()
     {
+        RequestErrorService::validateInsertError();
         return \View::make('admin.post.create');
     }
 
@@ -41,20 +43,42 @@ class PostController extends WebBaseController
      */
     public function exeCreate(PostRequest $request)
     {
-        // TODO:ファイルの登録処理作成
+        $file = $request->file('imagefile');
+        // 画像アップロードがあった場合
+        if (isset($file)) {
+            $path = AwsS3HandleUploadService::upload($file);
+            // アップロード確認
+            if (AwsS3HandleUploadService::checkUpload($path)) {
+                // アップロード先URL取得
+                $attrs['post_images_url'] = config('app.s3_url').$path;
+                $attrs['post_images_name'] = $file->getClientOriginalName();
+            } else {
+                flash(config('messages.error.file_upload'))->error();
+                \Log::error('Upload File Path:'.$path);
+                return redirect('admin/post');
+            }
+        }
+        $attrs = [];
         \DB::beginTransaction();
         try {
-            if (Post::insert($request)) {
+            if (isset($file)) {
+                $result = Post::insert($request, $attrs);
+            } else {
+                $result = Post::insertWithPostImage($request, $attrs);
+            }
+            if ($result) {
                 flash(config('messages.common.success'))->success();
             } else {
                 flash(config('messages.exception.insert'))->error();
                 return self::TOP;
             }
         } catch (\Throwable $th) {
+            \DB::rollBack();
             flash(config('messages.exception.insert'))->error();
             \Log::error($th);
             return self::TOP;
         }
+        \DB::commit();
         return \Redirect::to(self::TOP);
     }
 

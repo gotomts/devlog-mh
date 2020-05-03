@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\AuthorObservable;
 use Crypt;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -12,6 +13,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+    use AuthorObservable;
 
     /**
      * The attributes that are mass assignable.

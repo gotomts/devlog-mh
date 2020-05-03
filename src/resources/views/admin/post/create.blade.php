@@ -65,7 +65,7 @@
             ])
             @include('admin.components.select_new', [
                 'labelName'     => 'カテゴリーを選択',
-                'name'          => 'cateogry_id',
+                'name'          => 'category_id',
                 'id'            => 'inputCategory1',
                 'items'         => \CategoryTypeViewHelper::getSelectAll(),
                 'required'      => true
@@ -83,13 +83,6 @@
                 'id'            => 'inputFile1',
                 'class'         => 'form-control-file',
             ])
-            {{--  @include('admin.components.textarea_new', [
-                'labelName'     => '記事内容',
-                'id'            => 'note',
-                'name'          => 'content',
-                'rows'          => '3',
-                'required'          => true,
-            ])  --}}
             <div class="form-group">
                 <div class="tabs">
                     <input id="markdown" type="radio" name="tab-item" checked>

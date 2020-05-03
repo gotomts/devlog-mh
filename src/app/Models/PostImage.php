@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
-use App\Traits\AuthorObservable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Status extends Model
+class PostImage extends Model
 {
-    protected $table = 'statuses';
+    use SoftDeletes;
+
+    protected $table = 'posts_images';
 
     protected $fillable = [
         'name',
+        'url',
+        'title',
+        'alt',
     ];
 
     /**

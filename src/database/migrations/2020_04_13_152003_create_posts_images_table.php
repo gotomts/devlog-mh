@@ -15,7 +15,8 @@ class CreatePostsImagesTable extends Migration
     {
         Schema::create('posts_images', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->integer('post_id');
+            $table->string('name', 255);
             $table->string('url', 255);
             $table->string('title', 255);
             $table->string('alt', 255);
