@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Helper;
 
 /**
  * リクエストエラーサービス
  *
  * @author M.Goto
  */
-class RequestErrorService
+class RequestErrorServiceHelper
 {
     /**
      * 登録リクエストバリデーションエラー

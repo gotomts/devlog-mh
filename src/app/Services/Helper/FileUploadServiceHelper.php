@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Helper;
 
 /**
  * ファイルアップロード
  *
  * @author M.Goto
  */
-class FileUploadService
+class FileUploadServiceHelper
 {
     /**
      * 公開一時ファイルパス

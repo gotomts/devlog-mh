@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Helper;
 
 /**
  * 共通処理サービス
  *
  * @author M.Goto
  */
-class AwsS3HandleUploadService
+class AwsS3HandleUploadServiceHelper
 {
     /**
      * AWS S3へファイルをアップロード

@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Admin\Images\ImageRequest;
 use App\Http\Requests\Admin\Images\ImageUploadRequest;
 use App\Models\Image;
-use App\Services\AwsS3HandleUploadService;
-use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 
 class ImageController extends WebBaseController
@@ -32,7 +30,7 @@ class ImageController extends WebBaseController
     public function exeUpload(ImageUploadRequest $request)
     {
         $file = $request->file('imagefile');
-        session()->flash('tmpPath', FileUploadService::getPublicTmpPath($file));
+        session()->flash('tmpPath', \FileUploadServiceHelper::getPublicTmpPath($file));
         return redirect()->to('admin/image/upload');
     }
 
@@ -60,9 +58,9 @@ class ImageController extends WebBaseController
     public function exeCreate(ImageRequest $request)
     {
         $file = \Storage::disk('public')->path(session('tmpPath'));
-        $path = AwsS3HandleUploadService::upload($file);
+        $path = \AwsS3HandleUploadServiceHelper::upload($file);
         // アップロード確認
-        if (AwsS3HandleUploadService::checkUpload($path)) {
+        if (\AwsS3HandleUploadServiceHelper::checkUpload($path)) {
             // アップロード先URL取得
             $attrs['url'] = config('app.s3_url').$path;
         } else {

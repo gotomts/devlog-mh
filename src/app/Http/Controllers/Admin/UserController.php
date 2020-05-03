@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
-use App\Services\RequestErrorService;
-use Illuminate\Http\Request;
 
 class UserController extends WebBaseController
 {
@@ -32,7 +30,7 @@ class UserController extends WebBaseController
      */
     public function showCreate()
     {
-        RequestErrorService::validateInsertError();
+        \RequestErrorServiceHelper::validateInsertError();
         return \View::make('admin.user.create');
     }
 
@@ -66,7 +64,7 @@ class UserController extends WebBaseController
         if (is_null($user)) {
             return back()->with('error', config('messages.common.nodata'));
         }
-        RequestErrorService::validateUpdateError();
+        \RequestErrorServiceHelper::validateUpdateError();
         return \View::make('admin.user.edit')
             ->with('user', $user);
     }

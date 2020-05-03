@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\Post\PostRequest;
 use App\Models\Post;
-use App\Services\AwsS3HandleUploadService;
-use App\Services\RequestErrorService;
 
 class PostController extends WebBaseController
 {
@@ -32,7 +30,7 @@ class PostController extends WebBaseController
      */
     public function showCreate()
     {
-        RequestErrorService::validateInsertError();
+        \RequestErrorServiceHelper::validateInsertError();
         return \View::make('admin.post.create');
     }
 
@@ -44,11 +42,12 @@ class PostController extends WebBaseController
     public function exeCreate(PostRequest $request)
     {
         $file = $request->file('imagefile');
+        $attrs = [];
         // 画像アップロードがあった場合
         if (isset($file)) {
-            $path = AwsS3HandleUploadService::upload($file);
+            $path = \AwsS3HandleUploadServiceHelper::upload($file);
             // アップロード確認
-            if (AwsS3HandleUploadService::checkUpload($path)) {
+            if (\AwsS3HandleUploadServiceHelper::checkUpload($path)) {
                 // アップロード先URL取得
                 $attrs['post_images_url'] = config('app.s3_url').$path;
                 $attrs['post_images_name'] = $file->getClientOriginalName();
@@ -58,13 +57,12 @@ class PostController extends WebBaseController
                 return redirect('admin/post');
             }
         }
-        $attrs = [];
         \DB::beginTransaction();
         try {
             if (isset($file)) {
-                $result = Post::insert($request, $attrs);
-            } else {
                 $result = Post::insertWithPostImage($request, $attrs);
+            } else {
+                $result = Post::insert($request, $attrs);
             }
             if ($result) {
                 flash(config('messages.common.success'))->success();

@@ -44,6 +44,54 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Post
+ *
+ * @property int $id
+ * @property string $url
+ * @property string $title
+ * @property string $description
+ * @property string $keyword
+ * @property string $content
+ * @property int $status_id
+ * @property int $category_id
+ * @property int $created_by
+ * @property int $updated_by
+ * @property int|null $deleted_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\User $User
+ * @property-read \App\Models\Category $categories
+ * @property-read \App\Models\PostImage $postImages
+ * @property-read \App\Models\Status $statuses
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Post onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereDeletedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereKeyword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Post whereUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Post withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Post withoutTrashed()
+ */
+	class Post extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\User
  *
  * @property int $id
@@ -86,6 +134,21 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Status
+ *
+ * @property int $id
+ * @property string $name
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Status newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Status newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Status query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Status whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Status whereName($value)
+ */
+	class Status extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Image
  *
  * @property int $id
@@ -118,5 +181,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Image withoutTrashed()
  */
 	class Image extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\PostImage
+ *
+ * @property int $id
+ * @property int $post_id
+ * @property string $name
+ * @property string $url
+ * @property string $title
+ * @property string $alt
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\PostImage onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage whereAlt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage wherePostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PostImage whereUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\PostImage withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\PostImage withoutTrashed()
+ */
+	class PostImage extends \Eloquent {}
 }
 

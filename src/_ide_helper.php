@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 6.13.1 on 2020-04-22 02:55:57.
+ * Generated for Laravel 6.13.1 on 2020-05-03 21:48:23.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -16875,6 +16875,37 @@ namespace App\Facades\Helper {
      * 
      *
      */ 
+    class AwsS3HandleUploadServiceHelper {
+        
+        /**
+         * AWS S3へファイルをアップロード
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function upload($file)
+        {
+                        \App\Services\Helper\AwsS3HandleUploadServiceHelper::upload($file);
+        }
+        
+        /**
+         * S3から返却されたパスを元に、正しくアップロードできたか確認する
+         *
+         * @param \App\Services\Helper\[type] $path
+         * @return bool 
+         * @static 
+         */ 
+        public static function checkUpload($path)
+        {
+                        return \App\Services\Helper\AwsS3HandleUploadServiceHelper::checkUpload($path);
+        }
+         
+    }
+
+    /**
+     * 
+     *
+     */ 
     class CommonHelper {
         
         /**
@@ -16889,10 +16920,96 @@ namespace App\Facades\Helper {
         }
          
     }
+
+    /**
+     * 
+     *
+     */ 
+    class FileUploadServiceHelper {
+        
+        /**
+         * 公開一時ファイルパス
+         *
+         * @static 
+         */ 
+        public static function getPublicTmpPath($file)
+        {
+                        return \App\Services\Helper\FileUploadServiceHelper::getPublicTmpPath($file);
+        }
+         
+    }
+
+    /**
+     * 
+     *
+     */ 
+    class RequestErrorServiceHelper {
+        
+        /**
+         * 登録リクエストバリデーションエラー
+         *
+         * @static 
+         */ 
+        public static function validateInsertError()
+        {
+                        return \App\Services\Helper\RequestErrorServiceHelper::validateInsertError();
+        }
+        
+        /**
+         * 更新リクエストバリデーションエラー
+         *
+         * @static 
+         */ 
+        public static function validateUpdateError()
+        {
+                        return \App\Services\Helper\RequestErrorServiceHelper::validateUpdateError();
+        }
+         
+    }
  
 }
 
 namespace App\Facades\ViewHelper { 
+
+    /**
+     * 
+     *
+     */ 
+    class CategoryTypeViewHelper {
+        
+        /**
+         * プルダウン生成用
+         *
+         * @return \App\Services\ViewHelper\$roles array(key, value)
+         * @static 
+         */ 
+        public static function getSelectAll()
+        {
+                        /** @var \App\Services\ViewHelper\CategoryTypeViewHelper $instance */
+                        return $instance->getSelectAll();
+        }
+         
+    }
+
+    /**
+     * 
+     *
+     */ 
+    class StatusTypeViewHelper {
+        
+        /**
+         * プルダウン生成用
+         *
+         * @return \App\Services\ViewHelper\$roles array(key, value)
+         * @static 
+         */ 
+        public static function getSelectAll()
+        {
+                        /** @var \App\Services\ViewHelper\StatusTypeViewHelper $instance */
+                        return $instance->getSelectAll();
+        }
+         
+    }
 
     /**
      * 
@@ -19806,7 +19923,17 @@ namespace  {
 
     class Flash extends \Laracasts\Flash\Flash {}
 
+    class AwsS3HandleUploadServiceHelper extends \App\Facades\Helper\AwsS3HandleUploadServiceHelper {}
+
     class CommonHelper extends \App\Facades\Helper\CommonHelper {}
+
+    class FileUploadServiceHelper extends \App\Facades\Helper\FileUploadServiceHelper {}
+
+    class RequestErrorServiceHelper extends \App\Facades\Helper\RequestErrorServiceHelper {}
+
+    class CategoryTypeViewHelper extends \App\Facades\ViewHelper\CategoryTypeViewHelper {}
+
+    class StatusTypeViewHelper extends \App\Facades\ViewHelper\StatusTypeViewHelper {}
 
     class UserRoleTypeViewHelper extends \App\Facades\ViewHelper\UserRoleTypeViewHelper {}
  
