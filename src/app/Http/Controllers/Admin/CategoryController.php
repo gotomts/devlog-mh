@@ -25,8 +25,7 @@ class CategoryController extends WebBaseController
      */
     public function showList()
     {
-        $category = new Category;
-        $categories = $category->getAll();
+        $categories = Category::getAll();
         return \View::make('admin.category.list')
             ->with('categories', $categories);
     }

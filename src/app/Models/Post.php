@@ -28,7 +28,7 @@ class Post extends Model
         'deleted_at',
     ];
 
-    public function User()
+    public function user()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
@@ -46,6 +46,11 @@ class Post extends Model
     public function postImages()
     {
         return $this->hasOne(PostImage::class);
+    }
+
+    public static function getById($id)
+    {
+        return self::findOrFail($id);
     }
 
     /**

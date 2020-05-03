@@ -87,7 +87,14 @@ class PostController extends WebBaseController
      */
     public function showEdit($id=null)
     {
-        # code...
+        $post = Post::getById($id);
+        // 記事が見つからない場合
+        if (is_null($post)) {
+            return back()->with('error', config('messages.common.nodata'));
+        }
+        \RequestErrorServiceHelper::validateUpdateError();
+        return \View::make('admin.post.edit')
+            ->with('post', $post);
     }
 
     /**

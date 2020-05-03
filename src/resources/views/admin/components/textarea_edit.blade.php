@@ -3,18 +3,13 @@
         for="{{ $id }}">{{ $labelName }}
         @if(isset($required)) <span class="badge badge-danger">必須</span> @endif
     </label>
-    <input
-        name="{{ $name }}"
-        class="form-control @error($name) is-invalid @enderror"
+    <textarea
         id="{{ $id }}"
-        type="{{ $type }}"
+        name="{{ $name }}"
+        rows="{{ $rows }}"
         @if(isset($placeholder)) placeholder="{{ $placeholder }}" @endif
-        @if(isset($value) && is_null(old($name)))
-            value="{{ $value }}"
-        @elseif(!is_null(old($name)))
-            value="{{ old($name) }}"
-        @endif
+        class="form-control @error($name) is-invalid @enderror"
         @if(isset($required)) required @endif
-    >
+    >@if(isset($value)){{ $value }}@endif</textarea>
     @include('admin.components.validate_message', ['property' => $name])
 </div>

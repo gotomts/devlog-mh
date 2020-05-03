@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title'){{ config('titles.post.create') }}@endsection
+@section('title'){{ config('titles.post.edit') }}@endsection
 
 @section('header_js')
 @endsection
@@ -13,6 +13,13 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         $(function(){
+            // マークダウンに入力があった場合はHTMLを生成
+            let text = $('#content').text();
+            if ("" !== text) {
+                document.getElementById('html-preview').innerHTML =
+                marked(text);
+            }
+            // テキスト入力した場合にマークダウンからHTMLを生成
             $('#content').on('input', function(){
                 text = $('#content').val();
                 document.getElementById('html-preview').innerHTML =
@@ -29,56 +36,74 @@
             <a href="{{ url('admin/post') }}" class="d-block"><i class="fas fa-chevron-circle-left"></i> 前のページへ戻る</a>
             <h1 class="d-inline-block mb-0 mr-2 align-middle">{{ config('titles.post.create') }}</h1>
         </div>
-        {{ Form::open(['url' => 'admin/post/create', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
-            @include('admin.components.input_new', [
+        {{ Form::open(['url' => "admin/post/edit/$post->id", 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+            @include('admin.components.input_edit', [
                 'labelName'     => 'タイトル',
                 'name'          => 'title',
                 'type'          => 'text',
                 'id'            => 'inputTitle',
                 'placeholder'   => 'タイトル',
+                'value'         => $post->title,
                 'required'      => true,
             ])
-            @include('admin.components.input_prepend_new', [
+            @include('admin.components.input_prepend_edit', [
                 'labelName'     => 'URL',
                 'name'          => 'url',
                 'type'          => 'text',
                 'id'            => 'inputUrl',
+                'value'         => $post->url,
                 'required'      => true,
             ])
-            @include('admin.components.input_new', [
+            @include('admin.components.input_edit', [
                 'labelName'     => 'キーワード',
                 'name'          => 'keyword',
                 'type'          => 'text',
                 'id'            => 'inputKeyword',
                 'placeholder'   => 'keyword1, keyword2',
+                'value'         => $post->keyword,
             ])
-            @include('admin.components.textarea_new', [
+            @include('admin.components.textarea_edit', [
                 'labelName'     => 'ディスクリプション',
                 'id'            => 'textareaDescription',
                 'name'          => 'description',
                 'rows'          => '3',
                 'placeholder'   => 'ディスクリプション',
+                'value'         => $post->description,
             ])
-            @include('admin.components.select_new', [
+            @include('admin.components.select_edit', [
                 'labelName'     => 'カテゴリーを選択',
                 'name'          => 'category_id',
                 'id'            => 'inputCategory1',
                 'items'         => \CategoryTypeViewHelper::getSelectAll(),
-                'required'      => true
+                'value'         => $post->category_id,
+                'required'      => true,
             ])
-            @include('admin.components.select_new', [
+            @include('admin.components.select_edit', [
                 'labelName'     => 'ステータスを選択',
                 'name'          => 'status_id',
                 'id'            => 'inputStatus1',
                 'items'         => \StatusTypeViewHelper::getSelectAll(),
-                'required'      => true
+                'value'         => $post->status_id,
+                'required'      => true,
             ])
-            @include('admin.components.file_upload', [
-                'labelName'     => 'アイキャッチ画像',
-                'name'          => 'imagefile',
-                'id'            => 'inputFile1',
-                'class'         => 'form-control-file',
-            ])
+            @if (isset($post->postImages))
+                @include('admin.components.file_upload', [
+                    'labelName'     => 'アイキャッチ画像',
+                    'name'          => 'imagefile',
+                    'url'           => $post->postImages->url,
+                    'alt'           => $post->postImages->alt,
+                    'title'         => $post->postImages->title,
+                    'id'            => 'inputFile1',
+                    'class'         => 'form-control-file',
+                ])
+            @else
+                @include('admin.components.file_upload', [
+                    'labelName'     => 'アイキャッチ画像',
+                    'name'          => 'imagefile',
+                    'id'            => 'inputFile1',
+                    'class'         => 'form-control-file',
+                ])
+            @endif
             <div class="form-group">
                 <div class="tabs">
                     <input id="markdown" type="radio" name="tab-item" checked>
@@ -86,7 +111,7 @@
                     <input id="html" type="radio" name="tab-item" />
                     <label for="html" class="tab-item">HTML</label>
                     <div class="tab-content" id="markdown-content">
-                        <textarea name="content" class="markdown-area" id="content" placeholder="ここから記事を書き始めてください..."></textarea>
+                        <textarea name="content" class="markdown-area" id="content" placeholder="ここから記事を書き始めてください...">{{ $post->content }}</textarea>
                     </div>
                     <div class="tab-content" id="html-content">
                         <div id="html-preview"></div>

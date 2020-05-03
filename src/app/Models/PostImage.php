@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PostImage extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'posts_images';
 
     protected $fillable = [
