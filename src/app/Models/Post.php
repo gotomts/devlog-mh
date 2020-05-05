@@ -105,4 +105,73 @@ class Post extends Model
         }
         return $result;
     }
+
+    /**
+     * カテゴリー 更新処理
+     *
+     * @param $inputs
+     * @return bool
+     */
+    public static function updateById($id, $request)
+    {
+        $result = false;
+        $params = $request->all();
+        if (isset($params)) {
+            $post = self::findOrFail($id);
+            $post->title       = $params['title'];
+            $post->url         = $params['url'];
+            $post->keyword     = $params['keyword'];
+            $post->description = $params['description'];
+            $post->category_id = $params['category_id'];
+            $post->status_id   = $params['status_id'];
+            $post->content     = $params['content'];
+            return $post->save();
+        }
+        return $result;
+    }
+
+    /**
+     * カテゴリー 更新処理
+     *
+     * @param $inputs
+     * @return bool
+     */
+    public static function updateByIdWithPostImage($id, $request, $attrs)
+    {
+        $result = false;
+        $params = $request->all();
+        $attrs += isset($attrs) ? $attrs : null;
+        $postImagesAttrs = [];
+        $postImagesAttrs += [
+            'url'  => isset($attrs['post_images_url']) ? $attrs['post_images_url']  : null,
+            'name' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
+            'title' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
+            'alt' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
+        ];
+        if (isset($params)) {
+            $post = self::findOrFail($id);
+            $post->title       = $params['title'];
+            $post->url         = $params['url'];
+            $post->keyword     = $params['keyword'];
+            $post->description = $params['description'];
+            $post->category_id = $params['category_id'];
+            $post->status_id   = $params['status_id'];
+            $post->content     = $params['content'];
+            $resultPost = $post->save();
+            $postImage = PostImage::firstWhere('post_id', $id);
+            if (is_null($postImage)) {
+                $resultPostImage = $post->postImages()->create($postImagesAttrs);
+            } else {
+                $postImage->url   = $postImagesAttrs['url'];
+                $postImage->name  = $postImagesAttrs['name'];
+                $postImage->title = $postImagesAttrs['title'];
+                $postImage->alt   = $postImagesAttrs['alt'];
+                $resultPostImage  = $postImage->save();
+            }
+            if ($resultPost && $resultPostImage) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
 }
