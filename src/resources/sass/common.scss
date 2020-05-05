@@ -55,6 +55,12 @@
     }
 }
 
+.input-group {
+    ~ .invalid-feedback {
+        display: block;
+    }
+}
+
 // tab
 .tabs {
     margin-top: 50px;

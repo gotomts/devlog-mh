@@ -25,7 +25,7 @@ class PostRequest extends FormRequest
     {
         return [
             'title'         => 'bail|required|max:255',
-            'url'           => 'bail|required|max:255',
+            'url'           => "bail|required|max:255|unique:posts,url,$this->id",
             'keyword'       => 'bail|max:255',
             'description'   => 'bail|max:125',
             'category_id'   => 'bail|required',

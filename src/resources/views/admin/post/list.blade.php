@@ -44,7 +44,13 @@
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/post/edit/{$post->id}") }}'>編集</a></td>
                     <td class="text-center">{{ $post->title }}</td>
                     <td class="text-center">{{ $post->categories->name }}</td>
-                    <td class="text-center">{{ $post->statuses->name }}</td>
+                    <td class="text-center">
+                    @if ($post->statuses->name === "下書き")
+                        <span class="badge badge-secondary">{{ $post->statuses->name }}</span>
+                    @elseif ($post->statuses->name === "公開")
+                        <span class="badge badge-success">{{ $post->statuses->name }}</span>
+                    @endif
+                    </td>
                     <td class="text-center text-nowrap">{{ $post->user->name }}</td>
                     <td class="text-center text-nowrap">{{ $post->updated_at }}</td>
                 </tr>

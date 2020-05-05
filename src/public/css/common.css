@@ -47,6 +47,10 @@
   border-bottom-left-radius: 0;
 }
 
+.input-group ~ .invalid-feedback {
+  display: block;
+}
+
 .tabs {
   margin-top: 50px;
   background-color: #fff;
