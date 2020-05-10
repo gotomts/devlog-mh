@@ -5,7 +5,7 @@
 </head>
 <body>
 @include('front.layouts.header')
-<main class="container container-sm">
+<main class="container container-sm mb-10">
     @yield('content')
 </main>
 @include('front.layouts.footer')
