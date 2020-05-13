@@ -5,9 +5,9 @@
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse justify-content-md-center" id="navbar">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="">カテゴリー1</a></li>
-                <li class="nav-item"><a class="nav-link" href="">カテゴリー2</a></li>
-                <li class="nav-item"><a class="nav-link" href="">カテゴリー3</a></li>
+                @foreach ($navItems as $navItem)
+                    <li class="nav-item"><a class="nav-link" href="{{ url('category/'.$navItem->name) }}">{{ $navItem->name }}</a></li>
+                @endforeach
             </ul>
         </div>
     </nav>
