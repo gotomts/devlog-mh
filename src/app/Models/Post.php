@@ -111,6 +111,23 @@ class Post extends Model
     }
 
     /**
+     * カテゴリーを絞り込んだ記事を取得
+     *
+     * @param string $categoryName
+     * @return Post[] カテゴリーで絞り込んだ記事一覧
+     */
+    public static function getPostCategoryAll($categoryName)
+    {
+        $category = Category::where('name', '=', $categoryName)
+            ->first();
+
+        $posts = self::where('category_id', '=', $category->id)
+            ->orderBy('posts.updated_at', 'desc')
+            ->paginate(config('pagination.items'));
+        return $posts;
+    }
+
+    /**
      * 記事 登録処理
      *
      * @param  $request

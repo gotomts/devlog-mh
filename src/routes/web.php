@@ -16,11 +16,11 @@
 
 Route::group(['middleware' => ['web', 'front']], function () {
     // ブログトップ
-    Route::get('/', 'IndexController@showIndex');
+    Route::get('/', 'BlogController@showIndex');
     // ブログ詳細
     Route::get('blog/{url}', 'BlogController@showDetail');
     // カテゴリー絞り込み
-    // Route::get('category/{categoryName}', 'CategoryPostController@showIndex');
+    Route::get('category/{categoryName}', 'BlogController@showCategory');
     // ログアウト
     Route::post('admin/logout', 'Auth\LoginController@logout')->name('logout');
 });
