@@ -24,14 +24,15 @@
     @if (isset($post->postImages))
     <a href="{{ url($post->url) }}">
         <figure class="text-center">
-            <img class="img-fluid" src="{{ $post->postImages->url }}" title="{{ $post->postImages->title }}" alt="{{ $post->postImages->alt }}">
+            <img class="img-fluid" src="{{ $post->postImages->url }}" title="{{ $post->postImages->title }}"
+                alt="{{ $post->postImages->alt }}">
         </figure>
     </a>
     @endif
     {!! $post->html_content !!}
 
     @if ($prevLink || $nextLink)
-        <nav>
+    <nav>
         @if ($prevLink)
         <a href="{{ url('blog/'.$prevLink->url) }}" class="btn btn-outline-secondary">
             {{ $prevLink->title }}
@@ -39,10 +40,10 @@
         @endif
         @if ($nextLink)
         <a href="{{ url('blog/'.$nextLink->url) }}" class="btn btn-outline-primary">
-        {{ $nextLink->title }}
+            {{ $nextLink->title }}
         </a>
         @endif
-        </nav>
+    </nav>
     @endif
 </article>
 
