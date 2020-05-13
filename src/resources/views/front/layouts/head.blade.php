@@ -12,7 +12,6 @@
     @endif
 </title>
 
-<script src="{{ asset('js/app.js') }}" defer></script>
 @yield('header_js')
 
 <!-- Fonts -->

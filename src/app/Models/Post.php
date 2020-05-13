@@ -54,15 +54,53 @@ class Post extends Model
     }
 
     /**
+     * URLをキーに記事を取得します
+     *
+     * @param  $url url
+     * @return Post URLに該当する記事
+     */
+    public static function getByUrl($url)
+    {
+        return self::where('url', '=', $url)->first();
+    }
+
+    /**
      * 記事全件取得(削除以外)
      *
-     * @return Post[]
+     * @return Post[] 記事一覧
      */
     public static function getAll()
     {
         $posts = self::orderBy('posts.updated_at', 'desc')
         ->paginate(config('pagination.items'));
         return $posts;
+    }
+
+    /**
+     * 公開記事を全件取得(削除以外)
+     *
+     * @return Post[] 公開記事一覧
+     */
+    public static function getPublishingAll()
+    {
+        $posts = self::where('status_id', '=', config('const.statuses.publishing'))
+            ->orderBy('posts.updated_at', 'desc')
+            ->paginate(config('pagination.items'));
+        return $posts;
+    }
+
+    public static function getPageLinkUrl($id, $isPrev=false)
+    {
+        $link =  self::where('status_id', '=', config('const.statuses.publishing'))
+            ->orderBy('posts.updated_at', 'desc');
+        if ($isPrev) {
+            $link->orderBy('id', 'asc')
+                ->where('id', '>', $id);
+        } else {
+            $link->orderBy('id', 'desc')
+                ->where('id', '<', $id);
+        }
+        return $link->first();
     }
 
     /**
@@ -124,7 +162,8 @@ class Post extends Model
             $post->description = $params['description'];
             $post->category_id = $params['category_id'];
             $post->status_id   = $params['status_id'];
-            $post->content     = $params['content'];
+            $post->markdown_content = $params['markdown_content'];
+            $post->html_content     = $params['html_content'];
             return $post->save();
         }
         return $result;
@@ -156,7 +195,8 @@ class Post extends Model
             $post->description = $params['description'];
             $post->category_id = $params['category_id'];
             $post->status_id   = $params['status_id'];
-            $post->content     = $params['content'];
+            $post->markdown_content = $params['markdown_content'];
+            $post->html_content     = $params['html_content'];
             $resultPost = $post->save();
             $postImage = PostImage::firstWhere('post_id', $id);
             if (is_null($postImage)) {

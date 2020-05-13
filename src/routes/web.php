@@ -14,13 +14,13 @@
 
 
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'front']], function () {
     // ブログトップ
     Route::get('/', 'IndexController@showIndex');
     // ブログ詳細
-    // Route::get('{id}', 'BlogController@showDetail');
+    Route::get('blog/{url}', 'BlogController@showDetail');
     // カテゴリー絞り込み
-    // Route::get('category-post/{categoryName}', 'CategoryPostController@showIndex');
+    // Route::get('category/{categoryName}', 'CategoryPostController@showIndex');
     // ログアウト
     Route::post('admin/logout', 'Auth\LoginController@logout')->name('logout');
 });

@@ -11,22 +11,7 @@
 
 @section('footer_js')
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-        $(function(){
-            // マークダウンに入力があった場合はHTMLを生成
-            let text = $('#content').text();
-            if ("" !== text) {
-                document.getElementById('html-preview').innerHTML =
-                marked(text);
-            }
-            // テキスト入力した場合にマークダウンからHTMLを生成
-            $('#content').on('input', function(){
-                text = $('#content').val();
-                document.getElementById('html-preview').innerHTML =
-                marked(text);
-            });
-          });
-      </script>
+    <script src="{{ url('js/admin/custom-markdown.js') }}"></script>
 @endsection
 
 @section('content')
@@ -111,14 +96,15 @@
                     <input id="html" type="radio" name="tab-item" />
                     <label for="html" class="tab-item">HTML</label>
                     <div class="tab-content" id="markdown-content">
-                        <textarea name="content" class="markdown-area" id="content" placeholder="ここから記事を書き始めてください...">{{ $post->content }}</textarea>
+                        <textarea name="markdown_content" class="markdown-area" id="content" placeholder="ここから記事を書き始めてください...">{{ $post->markdown_content }}</textarea>
                     </div>
                     <div class="tab-content" id="html-content">
                         <div id="html-preview"></div>
+                        <input type="hidden" name="html_content" id="hidden-content">
                     </div>
                 </div>
             </div>
-            @include('admin.components.button_submit')
+            @include('admin.components.button_submit', ['class' => 'save'])
         {{ Form::close() }}
     </div>
 @endsection

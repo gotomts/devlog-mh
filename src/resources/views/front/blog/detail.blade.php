@@ -1,5 +1,7 @@
 @extends('front.layouts.app')
 
+@section('title'){{ $post->title }}@endsection
+
 @section('header_js')
 @endsection
 
@@ -10,10 +12,10 @@
 @endsection
 
 @section('content')
-@foreach ($posts as $post)
+@include('front/components/breadcrumb', ['post' => $post])
 <article class="blog-post">
     <header class="blog-post-header">
-        <h1 class="blog-post-title"><a class="text-dark" href="{{ url($post->url) }}">{{ $post->title }}</a></h1>
+        <h1 class="blog-post-title">{{ $post->title }}</h1>
         <p class="blog-post-meta">
             @include('front.components.date_formated', ['date' => $post->updated_at])
             <a href="{{ url('category/'.$post->categories->name) }}">{{ $post->categories->name }}</a>
@@ -26,11 +28,22 @@
         </figure>
     </a>
     @endif
-    <div>
-        {!! $post->html_content !!}
-        <p><a class="btn btn-primary" href="{{ url('blog/'.$post->url) }}">続きを読む</a></p>
-    </div>
+    {!! $post->html_content !!}
+
+    @if ($prevLink || $nextLink)
+        <nav>
+        @if ($prevLink)
+        <a href="{{ url('blog/'.$prevLink->url) }}" class="btn btn-outline-secondary">
+            {{ $prevLink->title }}
+        </a>
+        @endif
+        @if ($nextLink)
+        <a href="{{ url('blog/'.$nextLink->url) }}" class="btn btn-outline-primary">
+        {{ $nextLink->title }}
+        </a>
+        @endif
+        </nav>
+    @endif
 </article>
-@endforeach
-@include('front.components.pagilinks', ['property' => $posts])
+
 @endsection
