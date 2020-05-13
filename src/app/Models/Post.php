@@ -110,6 +110,12 @@ class Post extends Model
         return $link->first();
     }
 
+    /**
+     * カテゴリーを絞り込んだ記事を取得
+     *
+     * @param string $categoryName
+     * @return Post[] カテゴリーで絞り込んだ記事一覧
+     */
     public static function getPostCategoryAll($categoryName)
     {
         $category = Category::where('name', '=', $categoryName)

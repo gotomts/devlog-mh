@@ -38,7 +38,7 @@ class BlogController extends WebBaseController
     }
 
     /**
-     * カテゴリー絞り込み function
+     * カテゴリー絞り込み
      *
      * @param string $categoryName
      * @return void
