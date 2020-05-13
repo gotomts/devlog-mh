@@ -110,6 +110,17 @@ class Post extends Model
         return $link->first();
     }
 
+    public static function getPostCategoryAll($categoryName)
+    {
+        $category = Category::where('name', '=', $categoryName)
+            ->first();
+
+        $posts = self::where('category_id', '=', $category->id)
+            ->orderBy('posts.updated_at', 'desc')
+            ->paginate(config('pagination.items'));
+        return $posts;
+    }
+
     /**
      * 記事 登録処理
      *

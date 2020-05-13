@@ -7,6 +7,19 @@ use App\Models\Post;
 
 class BlogController extends WebBaseController
 {
+
+    /**
+     * トップページ
+     *
+     * @return void
+     */
+    public function showIndex()
+    {
+        $posts = Post::getPublishingAll();
+        return \View::make('front.blog.index')
+            ->with('posts', $posts);
+    }
+
     /**
      * 記事詳細
      *
@@ -22,5 +35,21 @@ class BlogController extends WebBaseController
             ->with('post', $post)
             ->with('prevLink', $prevLink)
             ->with('nextLink', $nextLink);
+    }
+
+    /**
+     * カテゴリー絞り込み function
+     *
+     * @param string $categoryName
+     * @return void
+     */
+    public function showCategory($categoryName=null)
+    {
+        if (is_null($categoryName)) {
+            return \Redirect::to('/');
+        }
+        $posts = Post::getPostCategoryAll($categoryName);
+        return \View::make('front.blog.index')
+            ->with('posts', $posts);
     }
 }
