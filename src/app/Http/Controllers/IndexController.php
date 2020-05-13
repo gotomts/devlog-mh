@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\WebBaseController;
 use App\Models\Post;
-use Illuminate\Http\Request;
 
 class IndexController extends WebBaseController
 {
+    /**
+     * トップページ
+     *
+     * @return void
+     */
     public function showIndex()
     {
-        $posts = Post::getAll();
+        $posts = Post::getPublishingAll();
         return \View::make('front.index.index')
             ->with('posts', $posts);
     }

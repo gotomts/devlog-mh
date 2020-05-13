@@ -26,10 +26,10 @@
         </figure>
     </a>
     @endif
-    <p>
-        {{ $post->content }}
-    </p>
-    <p><a class="btn btn-primary" href="{{ url($post->url) }}">続きを読む</a></p>
+    <div>
+        {!! $post->html_content !!}
+        <p><a class="btn btn-primary" href="{{ url('blog/'.$post->url) }}">続きを読む</a></p>
+    </div>
 </article>
 @endforeach
 @include('front.components.pagilinks', ['property' => $posts])
