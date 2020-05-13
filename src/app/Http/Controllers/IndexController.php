@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\WebBaseController;
-use App\Models\Category;
 use App\Models\Post;
 
 class IndexController extends WebBaseController

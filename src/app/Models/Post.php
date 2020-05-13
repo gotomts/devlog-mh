@@ -89,6 +89,13 @@ class Post extends Model
         return $posts;
     }
 
+    /**
+     * 前後ページのリンクを取得
+     *
+     * @param int|null $id
+     * @param boolean  $isPrev
+     * @return Post    前後ページの記事情報
+     */
     public static function getPageLinkUrl($id, $isPrev=false)
     {
         $link =  self::where('status_id', '=', config('const.statuses.publishing'))
@@ -121,6 +128,7 @@ class Post extends Model
         return $result;
     }
 
+    // TODO:コメントを書くこと！
     public static function insertWithPostImage($request, $attrs)
     {
         $result = false;
