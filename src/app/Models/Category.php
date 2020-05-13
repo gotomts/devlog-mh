@@ -74,6 +74,24 @@ class Category extends Model
     }
 
     /**
+     * 投稿記事の存在するカテゴリーを取得
+     *
+     * @return Category カテゴリー情報
+     */
+    public static function getPostCategory()
+    {
+        $category = self::distinct()
+        ->select(
+            'categories.id',
+            'categories.name'
+        )->join('posts', function ($join) {
+            $join->on('posts.category_id', '=', 'categories.id');
+        })->orderBy('categories.id', 'asc')
+        ->get();
+        return $category;
+    }
+
+    /**
      * カテゴリー登録処理
      *
      * @param $inputs
