@@ -40,7 +40,7 @@
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/category/edit/{$category->id}") }}'>編集</a></td>
                     <td class="text-nowrap">{{ $category->name }}</td>
                     <td class="text-center text-nowrap">{{ $category->updated_name }}</td>
-                    <td class="text-center text-nowrap">{{ $category->updated_at }}</td>
+                    <td class="text-center text-nowrap">{{ $category->updated_at->format('Y/m/d H:i:s') }}</td>
                 </tr>
                 @endforeach
                 </tbody>

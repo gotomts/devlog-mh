@@ -52,7 +52,7 @@
                     @endif
                     </td>
                     <td class="text-center text-nowrap">{{ $post->user->name }}</td>
-                    <td class="text-center text-nowrap">{{ $post->updated_at }}</td>
+                    <td class="text-center text-nowrap">{{ $post->updated_at->format('Y/m/d H:i:s') }}</td>
                 </tr>
                 @endforeach
                 </tbody>

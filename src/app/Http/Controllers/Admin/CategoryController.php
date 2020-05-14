@@ -37,7 +37,7 @@ class CategoryController extends WebBaseController
      */
     public function showCreate()
     {
-        RequestErrorService::validateInsertError();
+        \RequestErrorServiceHelper::validateInsertError();
         return \View::make('admin.category.create');
     }
 
@@ -72,7 +72,7 @@ class CategoryController extends WebBaseController
             flash(config('messages.common.noitem'))->error();
             return back();
         }
-        RequestErrorService::validateUpdateError();
+        \RequestErrorServiceHelper::validateUpdateError();
         return \View::make('admin.category.edit')
             ->with('category', $category);
     }
