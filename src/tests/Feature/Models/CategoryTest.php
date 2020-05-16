@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Mockery;
@@ -62,5 +63,26 @@ class CategoryTest extends TestCase
     {
         $data = Category::getAll();
         $this->assertInstanceOf(LengthAwarePaginator::class, $data);
+    }
+
+    /**
+     * getPostCategoryメソッドを利用でき、投稿記事が存在するか
+     *
+     * @test
+     * @return void
+     */
+    public function testGetPostCategory()
+    {
+        $user = factory(User::class)->create();
+        $category = factory(Category::class)->create([
+            'name' => 'category',
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ]);
+        $post = factory(Post::class)->create();
+        $this->assertCount(
+            1,
+            $category->getPostCategory($category->id)
+        );
     }
 }
