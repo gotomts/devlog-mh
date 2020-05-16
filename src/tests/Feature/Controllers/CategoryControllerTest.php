@@ -2,10 +2,14 @@
 
 namespace Tests\Feature\Controllers;
 
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CategoryControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * カテゴリー一覧表示テスト
      * @test
@@ -13,8 +17,10 @@ class CategoryControllerTest extends TestCase
      */
     public function textShowList()
     {
+        // ユーザー作成
+        $user = factory(User::class)->create();
         // 既存ユーザーでログイン
-        \Auth::loginUsingId(1);
+        \Auth::loginUsingId($user->id);
         // カテゴリーページをGET
         $request = $this->get('admin/category');
         // ステータスコードチェック
@@ -39,8 +45,10 @@ class CategoryControllerTest extends TestCase
      */
     public function testShowCreate()
     {
+        // ユーザー作成
+        $user = factory(User::class)->create();
         // 既存ユーザーでログイン
-        \Auth::loginUsingId(1);
+        \Auth::loginUsingId($user->id);
         // カテゴリー登録をGET
         $request = $this->get('admin/category/create');
         // ステータスコードチェック
