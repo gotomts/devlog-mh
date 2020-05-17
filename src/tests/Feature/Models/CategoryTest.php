@@ -9,17 +9,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Mockery;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Request;
 
 class CategoryTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * カテゴリが作成できるか
-     *
-     * @test
-     * @return void
-     */
+    /** @test */
     public function testCreateCategory()
     {
         $user = factory(User::class)->create();
@@ -34,11 +30,7 @@ class CategoryTest extends TestCase
         );
     }
 
-    /**
-     * getByIdメソッドは有効か
-     *
-     * @return void
-     */
+    /** @test */
     public function testGetById()
     {
         $user = factory(User::class)->create();
@@ -53,24 +45,14 @@ class CategoryTest extends TestCase
         );
     }
 
-    /**
-     * getAllメソッドを利用でき、ページャーの型で返ってくるか
-     *
-     * @test
-     * @return void
-     */
+    /** @test */
     public function testGetAll()
     {
         $data = Category::getAll();
         $this->assertInstanceOf(LengthAwarePaginator::class, $data);
     }
 
-    /**
-     * getPostCategoryメソッドを利用でき、投稿記事が存在するか
-     *
-     * @test
-     * @return void
-     */
+    /** @test */
     public function testGetPostCategory()
     {
         $user = factory(User::class)->create();
@@ -79,10 +61,38 @@ class CategoryTest extends TestCase
             'created_by' => $user->id,
             'updated_by' => $user->id,
         ]);
-        $post = factory(Post::class)->create();
+        $post = factory(Post::class)->create([
+            'category_id' => $category->id
+        ]);
         $this->assertCount(
             1,
-            $category->getPostCategory($category->id)
+            $category->getPostCategory($post->category_id)
         );
+    }
+
+    /** @test */
+    public function testInsert()
+    {
+        $user = factory(User::class)->create();
+        $params = [
+            'name' => 'カテゴリー',
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ];
+        $result = Category::insert($params);
+        $this->assertInstanceOf(Category::class, $result);
+    }
+
+    /** @test */
+    public function testUpdateById()
+    {
+        $user = factory(User::class)->create();
+        $category = factory(Category::class)->create();
+        $params = [
+            'name' => 'カテゴリー',
+            'updated_by' => $user->id,
+        ];
+        $result = Category::updateById($category->id, $params);
+        $this->assertTrue($result);
     }
 }
