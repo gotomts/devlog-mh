@@ -63,4 +63,40 @@ class CategoryControllerTest extends TestCase
             ->assertSee('必須')
             ->assertSee('保存する');
     }
+
+    /** @test */
+    public function testExeCreate()
+    {
+        $user = factory(User::class)->create();
+        \Auth::loginUsingId($user->id);
+        $params = [
+            'name' => 'カテゴリー',
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ];
+        $url = url('admin/category/create');
+        $response = $this->post($url, $params);
+        $response->assertStatus(302);
+
+        // DBに登録されたレコードの確認
+        $this->assertDatabaseHas('categories', $params);
+
+        // 表示確認
+        $response->assertRedirect('admin/category');
+        // リダイレクト先に登録成功のメッセージが表示されるか
+        $redirectResponse = $this->get('admin/category');
+        $redirectResponse->assertSee(config('messages.common.success'));
+    }
+
+    public function testShowEdit()
+    {
+        // FIXME:
+        $this->assertTrue(true);
+    }
+
+    public function testExeEdit()
+    {
+        // FIXME:
+        $this->assertTrue(true);
+    }
 }
