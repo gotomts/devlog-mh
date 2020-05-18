@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controllers;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -83,20 +84,52 @@ class CategoryControllerTest extends TestCase
 
         // 表示確認
         $response->assertRedirect('admin/category');
+
         // リダイレクト先に登録成功のメッセージが表示されるか
         $redirectResponse = $this->get('admin/category');
         $redirectResponse->assertSee(config('messages.common.success'));
     }
 
+    /** @test */
     public function testShowEdit()
     {
-        // FIXME:
-        $this->assertTrue(true);
+        $user = factory(User::class)->create();
+        \Auth::loginUsingId($user->id);
+        $category = factory(Category::class)->create();
+        $url = url("admin/category/edit/$category->id");
+        $response = $this->get($url);
+        $response->assertOk()
+            ->assertViewIs('admin.category.edit')
+            ->assertSee(config('title.category.edit') . ' | ' . config('app.name'))
+            ->assertSee('前のページへ戻る')
+            ->assertSee(config('title.category.edit'))
+            ->assertSee('カテゴリー名')
+            ->assertSee($category->name)
+            ->assertSee('必須')
+            ->assertSee('保存する');
     }
 
+    /** @test */
     public function testExeEdit()
     {
-        // FIXME:
-        $this->assertTrue(true);
+        $user = factory(User::class)->create();
+        \Auth::loginUsingId($user->id);
+        $category = factory(Category::class)->create();
+        // パラメータ作成
+        $url = url("admin/category/edit/$category->id");
+        $params = [
+            'name' => 'カテゴリー',
+            'updated_by' => $user->id,
+        ];
+        // 更新処理
+        $response = $this->post($url, $params);
+        $response->assertStatus(302);
+        // DBに登録されたレコードの確認
+        $this->assertDatabaseHas('categories', $params);
+        // 表示確認
+        $response->assertRedirect('admin/category');
+        // リダイレクト先に登録成功のメッセージが表示されるか
+        $redirectResponse = $this->get('admin/category');
+        $redirectResponse->assertSee(config('messages.common.success'));
     }
 }
