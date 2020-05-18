@@ -3,13 +3,15 @@
 namespace Tests\Feature\Models;
 
 use App\Models\Image;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Tests\TestCase;
 
 class ImageTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /** @test */
     public function testGetAll()
@@ -32,18 +34,47 @@ class ImageTest extends TestCase
     /** @test */
     public function testGetById()
     {
-        $this->assertTrue(true);
+        $Image = factory(Image::class)->create();
+        $this->assertEquals(
+            Image::getById($Image->id),
+            $Image->getById($Image->id)
+        );
     }
 
     /** @test */
     public function testInsert()
     {
-        $this->assertTrue(true);
+        $user = factory(User::class)->create();
+        $params = [
+            'url'           => $this->faker()->url,
+            'title'         => $this->faker()->word,
+            'alt'           => $this->faker()->word,
+            'created_by'    => $user->id,
+            'updated_by'    => $user->id,
+        ];
+        $result = Image::insert($params);
+        $this->assertInstanceOf(Image::class, $result);
+        $this->assertDatabaseHas('images', $params);
     }
 
     /** @test */
     public function testUpdateById()
     {
-        $this->assertTrue(true);
+        $user = factory(User::class)->create();
+        $image = factory(Image::class)->create();
+        $params = [
+            'title'         => 'タイトル変更テスト titleタグ',
+            'alt'           => 'タイトル変更テスト altタグ',
+            'updated_by'    => $user->id,
+        ];
+        $result = Image::updateById($image->id, $params);
+        $this->assertTrue($result);
+        $this->assertDatabaseHas('images', [
+            'url'           => $image->url,
+            'title'         => $params['title'],
+            'alt'           => $params['alt'],
+            'created_by'    => 1,
+            'updated_by'    => $user->id,
+        ]);
     }
 }
