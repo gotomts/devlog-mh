@@ -20,7 +20,7 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'password' => $faker->password($minLength=8, $maxLength=16),
         'role_type' => $faker->numberBetween($min=1, $max=2),
         'remember_token' => Str::random(10),
         'created_by' => 1,

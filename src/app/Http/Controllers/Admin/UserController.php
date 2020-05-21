@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\User\UserRequest;
+use App\Http\Requests\Admin\User\UserRequest;
 use App\Models\User;
+use Exception;
 
 class UserController extends WebBaseController
 {
@@ -42,12 +43,22 @@ class UserController extends WebBaseController
      */
     public function exeCreate(UserRequest $request)
     {
-        if (User::insert($request)) {
-            flash(config('messages.common.success'))->success();
-        } else {
+        $params = $request->all();
+        \DB::beginTransaction();
+        try {
+            $result = User::insert($params);
+            if (isset($result)) {
+                flash(config('messages.common.success'))->success();
+            } else {
+                throw new Exception(config('messages.exception.insert'));
+            }
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            \Log::error($th);
             flash(config('messages.exception.insert'))->error();
             return redirect(self::LIST);
         }
+        \DB::commit();
         return redirect(self::LIST);
     }
 
@@ -78,12 +89,22 @@ class UserController extends WebBaseController
     public function exeEdit(UserRequest $request, $id=null)
     {
         // 更新処理
-        if (User::updateById($id, $request)) {
-            flash(config('messages.common.success'))->success();
-        } else {
+        $params = $request->all();
+        \DB::beginTransaction();
+        try {
+            $result = User::updateById($id, $params);
+            if (isset($result)) {
+                flash(config('messages.common.success'))->success();
+            } else {
+                throw new Exception(config('messages.exception.update'));
+            }
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            \Log::error($th);
             flash(config('messages.exception.update'))->error();
             return redirect(self::LIST);
         }
+        \DB::commit();
         return redirect(self::LIST);
     }
 }
