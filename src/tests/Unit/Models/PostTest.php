@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -73,7 +75,22 @@ class PostTest extends TestCase
     /** @test */
     public function testGetPageLinkUrl()
     {
-        $this->assertTrue(true);
+        $user = factory(User::class)->create();
+        $category = factory(Category::class)->create();
+
+        $posts = factory(Post::class, 3)->create([
+            'status_id'   => config('const.statuses.publishing'),
+        ]);
+
+        $nextPost       = $posts[0];
+        $currentPost    = $posts[1];
+        $prevPost       = $posts[2];
+
+        $prevLink = Post::getPageLinkUrl($currentPost->id, true);
+        $nextLink = Post::getPageLinkUrl($currentPost->id, false);
+
+        $this->assertEquals($prevPost->url, $prevLink->url);
+        $this->assertEquals($nextPost->url, $nextLink->url);
     }
 
     /** @test */

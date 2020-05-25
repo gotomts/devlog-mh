@@ -18,7 +18,7 @@ class CreatePostsTable extends Migration
             $table->string('url', 255)->unique();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('keyword');
+            $table->string('keyword')->nullable();
             $table->text('markdown_content')->nullable();
             $table->text('html_content')->nullable();
             $table->integer('status_id');
