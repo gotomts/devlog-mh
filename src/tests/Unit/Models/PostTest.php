@@ -75,9 +75,6 @@ class PostTest extends TestCase
     /** @test */
     public function testGetPageLinkUrl()
     {
-        $user = factory(User::class)->create();
-        $category = factory(Category::class)->create();
-
         $posts = factory(Post::class, 3)->create([
             'status_id'   => config('const.statuses.publishing'),
         ]);
@@ -96,7 +93,20 @@ class PostTest extends TestCase
     /** @test */
     public function testGetPostCategoryAll()
     {
-        $this->assertTrue(true);
+        $category = factory(Category::class)->create();
+        $notCategory = factory(Category::class)->create();
+
+        factory(Post::class, 3)->create([
+            'category_id'   => $category->id,
+            'status_id'     => config('const.statuses.publishing'),
+        ]);
+
+        $categoryPosts = Post::getPostCategoryAll($category->name);
+
+        foreach ($categoryPosts as $categoryPost) {
+            $this->assertEquals($category->name, $categoryPost->categories->name);
+            $this->assertNotEquals($notCategory->name, $categoryPost->categories->name);
+        }
     }
 
     /** @test */
