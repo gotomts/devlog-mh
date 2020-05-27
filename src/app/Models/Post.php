@@ -18,8 +18,8 @@ class Post extends Model
         'title',
         'description',
         'keyword',
-        'content',
-        'post_image_id',
+        'markdown_content',
+        'html_content',
         'status_id',
         'category_id',
         'created_by',
@@ -133,11 +133,9 @@ class Post extends Model
      * @param  $request
      * @return bool
      */
-    public static function insert($request, $attrs)
+    public static function insert($params)
     {
         $result = false;
-        $params = $request->all();
-        $attrs += isset($attrs) ? $attrs : null;
         if (isset($params)) {
             $result = self::create($params);
             return $result;

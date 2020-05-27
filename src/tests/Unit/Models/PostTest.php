@@ -112,7 +112,22 @@ class PostTest extends TestCase
     /** @test */
     public function testInsert()
     {
-        $this->assertTrue(true);
+        $user = factory(User::class)->create();
+        $params = [
+            'url' => $this->faker()->unique()->word,
+            'title' => implode($this->faker()->words($nb=3, $asText=false)),
+            'description' => $this->faker()->text($maxNbChars=124),
+            'keyword' => implode($this->faker()->words($nb=5, $asText=false)),
+            'markdown_content' => implode($this->faker()->paragraphs($nb=3, $asText=false)),
+            'html_content' => '<p>'.implode($this->faker()->paragraphs($nb=3, $asText=false)).'</p>',
+            'status_id' => $this->faker()->numberBetween($min=1, $max=2),
+            'category_id' => $this->faker()->numberBetween($min=1, $max=5),
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ];
+        $result = Post::insert($params);
+        $this->assertInstanceOf(Post::class, $result);
+        $this->assertDatabaseHas('posts', $params);
     }
 
     /** @test */
