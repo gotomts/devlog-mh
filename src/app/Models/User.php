@@ -59,6 +59,29 @@ class User extends Authenticatable
         return $this->updated_at->format('Y/m/d h:m');
     }
 
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    /**
+     * パラメータの存在チェック
+     * 存在しない場合はnullを挿入
+     *
+     * @param array $params
+     * @return array $params
+     */
+    public static function paramsCheck($params)
+    {
+        $params['name']         = isset($params['name']) ? $params['name'] : null;
+        $params['email']        = isset($params['email']) ? $params['email'] : null;
+        $params['role_type']    = isset($params['role_type']) ? $params['role_type'] : null;
+        $params['password']     = isset($params['password']) ? $params['password'] : null;
+        $params['created_by']   = isset($params['created_by']) ? $params['created_by'] : null;
+        $params['updated_by']   = isset($params['updated_by']) ? $params['updated_by'] : null;
+        return $params;
+    }
+
     /**
     * idをキーにユーザー情報を取得
     *
@@ -101,19 +124,12 @@ class User extends Authenticatable
         * @param $request
         * @return bool
         */
-    public static function insert($request)
+    public static function insert($params)
     {
         $result = false;
-        $params = $request->all();
-        $params['password'] = bcrypt($params['password']);
+        $params = self::paramsCheck($params);
         if (isset($params)) {
-            try {
-                $result = \DB::transaction(function () use ($params) {
-                    return self::create($params);
-                });
-            } catch (\Throwable $th) {
-                \Log::error($th);
-            }
+            $result = self::create($params);
         }
         return $result;
     }
@@ -124,51 +140,31 @@ class User extends Authenticatable
      * @param $inputs
      * @return bool
      */
-    public static function updateById($id, $request)
+    public static function updateById($id, $params)
     {
         $result = false;
-        $params = $request->all();
+        self::paramsCheck($params);
         if (isset($params)) {
-            try {
-                $result = \DB::transaction(function () use ($id, $params) {
-                    $user = self::find($id);
-                    $user->name      = $params['name'];
-                    $user->email     = $params['email'];
-                    $user->role_type = $params['role_type'];
-                    $user->password  = bcrypt($params['password']);
-                    return $user->save();
-                });
-            } catch (\Throwable $th) {
-                \Log::error($th);
+            $user = self::find($id);
+            if (isset($params['name'])) {
+                $user->name = $params['name'];
             }
-        }
-        return $result;
-    }
-
-    /**
-     * プロフィール更新処理
-     *
-     * @param Request $request
-     * @return bool
-     */
-    public static function updateByProfile($request)
-    {
-        $result = false;
-        $params = $request->all();
-        if (isset($params)) {
-            try {
-                $result = \DB::transaction(function () use ($params) {
-                    $user = self::find(\Auth::guard()->user()->id);
-                    $user->name      = $params['name'];
-                    $user->email     = $params['email'];
-                    if (isset($params['password'])) {
-                        $user->password  = bcrypt($params['password']);
-                    }
-                    return $user->save();
-                });
-            } catch (\Throwable $th) {
-                \Log::error($th);
+            if (isset($params['email'])) {
+                $user->email = $params['email'];
             }
+            if (isset($params['role_type'])) {
+                $user->role_type = $params['role_type'];
+            }
+            if (isset($params['password'])) {
+                $user->password = $params['password'];
+            }
+            if (isset($params['created_by'])) {
+                $user->created_by = $params['created_by'];
+            }
+            if (isset($params['updated_by'])) {
+                $user->updated_by = $params['updated_by'];
+            }
+            $result = $user->save();
         }
         return $result;
     }

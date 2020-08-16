@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\WebBaseController;
-use App\Http\Requests\Category\CategoryRequest;
+use App\Http\Requests\Admin\Category\CategoryRequest;
 use App\Models\Category;
-use App\Services\RequestErrorService;
 use Illuminate\Http\Request;
 
 /**
@@ -49,7 +48,8 @@ class CategoryController extends WebBaseController
      */
     public function exeCreate(CategoryRequest $request)
     {
-        if (Category::insert($request)) {
+        $params = $request->all();
+        if (Category::insert($params)) {
             flash(config('messages.common.success'))->success();
         } else {
             flash(config('messages.exception.insert'))->error();
@@ -81,7 +81,7 @@ class CategoryController extends WebBaseController
      * カテゴリー詳細 更新
      *
      * @param CategoryRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return void
      */
     public function exeEdit($id=null, CategoryRequest $request)
     {

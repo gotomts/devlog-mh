@@ -57,3 +57,9 @@
     login_password: "{{ new_password }}"
     name: "{{ db_name }}"
     state: present
+- name: Create a new testing database with name {{ testing_db_name }}
+  mysql_db:
+    login_user: root
+    login_password: "{{ new_password }}"
+    name: "{{ testing_db_name }}"
+    state: present

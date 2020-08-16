@@ -97,10 +97,9 @@ class Category extends Model
      * @param $inputs
      * @return bool
      */
-    public static function insert($request)
+    public static function insert($params)
     {
         $result = false;
-        $params = $request->all();
         if (isset($params)) {
             try {
                 $result = \DB::transaction(function () use ($params) {
@@ -119,10 +118,9 @@ class Category extends Model
      * @param $inputs
      * @return bool
      */
-    public static function updateById($id, $request)
+    public static function updateById($id, $params)
     {
         $result = false;
-        $params = $request->all();
         if (isset($params)) {
             try {
                 $result = \DB::transaction(function () use ($id, $params) {
