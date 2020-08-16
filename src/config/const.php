@@ -1,19 +1,12 @@
 <?php
 
 return [
-    // paginate
-    'Paginate' => [
-        'NUM' => 10
+    'role_type' => [
+        'admin'   => 1,
+        'general' => 2,
     ],
-    'DELETE_FLG' => [
-        'none' => null,
-        'deleted' => 1
-    ],
-    // User
-    'USER' => [
-        'Role' => [
-            'admin' => 1,
-            'general' => 2,
-        ],
-    ],
+    'statuses' => [
+        'draft'      => 1,
+        'publishing' => 2,
+    ]
 ];

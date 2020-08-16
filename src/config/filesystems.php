@@ -64,6 +64,11 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'views' => [
+            'driver' => 'local',
+            'root' => resource_path('views'),
+        ],
+
     ],
 
 ];

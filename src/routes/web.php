@@ -14,22 +14,22 @@
 
 
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'front']], function () {
     // ブログトップ
-    Route::get('/', 'IndexController@showIndex');
+    Route::get('/', 'BlogController@showIndex');
     // ブログ詳細
-    // Route::get('{id}', 'BlogController@showDetail');
+    Route::get('blog/{url}', 'BlogController@showDetail');
     // カテゴリー絞り込み
-    // Route::get('category-post/{categoryName}', 'CategoryPostController@showIndex');
+    Route::get('category/{categoryName}', 'BlogController@showCategory');
     // ログアウト
     Route::post('admin/logout', 'Auth\LoginController@logout')->name('logout');
 });
 
 Route::group(['middleware' => 'guest'], function () {
-    // ログイン
-    Route::get('admin', 'Auth\LoginController@showLoginForm')->name('login');
-    Route::post('admin', 'Auth\LoginController@login');
     Route::group(['prefix' => 'admin'], function () {
+        // ログイン
+        Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
+        Route::post('/', 'Auth\LoginController@login');
         // パスワードリセット
         Route::get('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
         Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -41,45 +41,44 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'admin'], function () {
         // ログイン後TOP
-        Route::get('home', 'Admin\HomeController@showHome')->name('home');
-        // // 記事
-        // Route::group(['prefix' => 'post'], function () {
-        //     Route::get( '/',                'Admin\PostController@showIndex');
-        //     Route::get( 'create',           'Admin\PostController@showCreate');
-        //     Route::post('create',           'Admin\PostController@exeCreate');
-        //     Route::get( '{id}',             'Admin\PostController@showEdit');
-        //     Route::match(['put', 'patch'],  '{id}', 'Admin\PostController@exeEdit');
-        // });
+        Route::get('index', 'Admin\IndexController@showIndex');
+        // 記事
+        Route::group(['prefix' => 'post'], function () {
+            Route::get('/', 'Admin\PostController@showIndex');
+            Route::get('create', 'Admin\PostController@showCreate');
+            Route::post('create', 'Admin\PostController@exeCreate');
+            Route::get('edit/{id}', 'Admin\PostController@showEdit');
+            Route::post('edit/{id}', 'Admin\PostController@exeEdit');
+        });
         // カテゴリー
         Route::group(['prefix' => 'category'], function () {
             Route::get('/', 'Admin\CategoryController@showList');
             Route::get('create', 'Admin\CategoryController@showCreate');
             Route::post('create', 'Admin\CategoryController@exeCreate');
-            Route::get('{id}', 'Admin\CategoryController@showEdit');
-            Route::match(['put', 'patch'], '{id}', 'Admin\CategoryController@exeEdit');
+            Route::get('edit/{id}', 'Admin\CategoryController@showEdit');
+            Route::post('edit/{id}', 'Admin\CategoryController@exeEdit');
         });
         // ユーザ管理
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', 'Admin\UserController@showList');
             Route::get('create', 'Admin\UserController@showCreate');
             Route::post('create', 'Admin\UserController@exeCreate');
-            Route::get('{id}', 'Admin\UserController@showEdit');
-            Route::match(['put', 'patch'], '{id}', 'Admin\UserController@exeEdit');
+            Route::get('edit/{id}', 'Admin\UserController@showEdit');
+            Route::post('edit/{id}', 'Admin\UserController@exeEdit');
         });
-        /*
         // 画像管理
         Route::group(['prefix' => 'image'], function () {
-            Route::get( '/',                'Admin\ImageController@showList');
-            Route::get( 'create',           'Admin\ImageController@showCreate');
-            Route::post('create',           'Admin\ImageController@exeCreate');
-            Route::get( '{id}',             'Admin\ImageController@showEdit');
-            Route::match(['put', 'patch'],  '{id}', 'Admin\ImageController@exeEdit');
+            Route::get('/', 'Admin\ImageController@showList');
+            Route::post('upload', 'Admin\ImageController@exeUpload');
+            Route::get('upload', 'Admin\ImageController@showUpload');
+            Route::post('create', 'Admin\ImageController@exeCreate');
+            Route::get('edit/{id}', 'Admin\ImageController@showEdit');
+            Route::post('edit/{id}', 'Admin\ImageController@exeEdit');
         });
         // プロフィール編集
         Route::group(['prefix' => 'profile'], function () {
-            Route::get( '/', 'Admin\ProfileController@showEdit');
-            Route::match(['put', 'patch'],  '/', 'Admin\ProfileController@exeEdit');
+            Route::get('edit', 'Admin\ProfileController@showEdit');
+            Route::post('edit', 'Admin\ProfileController@exeEdit');
         });
-        */
     });
 });

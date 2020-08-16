@@ -13,3 +13,4 @@ yarn-error.log
 .DS_Store
 vagrant/.vagrant
 src/vendor
+node_modules

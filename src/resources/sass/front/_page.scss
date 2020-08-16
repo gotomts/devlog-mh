@@ -1,0 +1,135 @@
+
+// ベース
+body {
+  line-height: 1.8;
+}
+
+figure {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+strong {
+  background: linear-gradient(transparent 40%, rgba(255, 255, 0, 0.5) 0%);
+}
+
+// ヘッダー
+.logo {
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+  font-weight: bold;
+  a {
+    color: $textDark;
+    &:hover {
+      text-decoration: none;
+      opacity: 0.8;
+    }
+  }
+}
+
+// ナビゲーション
+.nav-text-black {
+  .navbar-nav {
+    .nav-link {
+      color: $textDark;
+    }
+  }
+}
+
+// コンテンツエリア
+.blog-post {
+  margin-bottom: 5rem;
+}
+
+.blog-post-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.blog-post h2 {
+  margin-top: 3.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.blog-post h3 {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.blog-post-meta {
+  margin-bottom: 0.5rem;
+  color: $textLight;
+}
+
+.img-fluid {
+    max-height: 152px;
+}
+
+@media (min-width: 1200px) {
+  .container-sm {
+    max-width: 670px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container-sm {
+    max-width: 670px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-sm {
+    max-width: 670px;
+  }
+}
+
+@media (min-width: 576px) {
+  .container-sm {
+    max-width: 670px;
+  }
+}
+
+// pagenation
+.mb-10 { margin-bottom: 8rem; }
+.around-pagination {
+  margin: 2rem 0;
+  font-size: 0.8rem;
+}
+
+// breadclumb
+.blog-breadcrumb {
+  margin: 2rem 0;
+}
+
+// card
+.card {
+  .btn-sm {
+    display: inline-block;
+  }
+  &:hover {
+    .btn-sm {
+      background: #0062cc;
+    }
+  }
+}
+
+.card-title {
+  line-height: 1.5;
+  font-size: 1.1rem;
+}
+
+.card-meta {
+  margin-bottom: 0.3rem;
+  color: $textLight;
+  font-size: 1rem;
+}
+
+// フッター
+.footer {
+  padding: 10px;
+  p {
+    margin: 0;
+  }
+}

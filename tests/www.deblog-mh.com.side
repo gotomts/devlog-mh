@@ -33,7 +33,7 @@
         ["xpath=//div[@id='app']/div/div/form/div/input", "xpath:idRelative"],
         ["xpath=//div/input", "xpath:position"]
       ],
-      "value": "develop@example.com"
+      "value": "admin@example.com"
     }, {
       "id": "92c97ac3-3835-4455-ae94-121a3baa9c47",
       "comment": "",
@@ -61,6 +61,211 @@
         ["xpath=//button[contains(.,'ログイン')]", "xpath:innerText"]
       ],
       "value": ""
+    }]
+  }, {
+    "id": "3d995246-65c6-4d91-ba68-37d76c0b4a79",
+    "name": "管理画面 ユーザ登録",
+    "commands": [{
+      "id": "7f7c1c88-459f-4e9a-aa07-759fdfd57597",
+      "comment": "",
+      "command": "open",
+      "target": "http://localdev/admin/index",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4e1ec8f2-079c-422d-bac1-f752df2be808",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1660x1007",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5f3b2ff1-5b2b-4eb1-901b-7b4e991c893a",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=ユーザー管理 »",
+      "targets": [
+        ["linkText=ユーザー管理 »", "linkText"],
+        ["css=.btn:nth-child(4)", "css:finder"],
+        ["xpath=//a[contains(text(),'ユーザー管理 »')]", "xpath:link"],
+        ["xpath=//div[@id='app']/div/div/a[3]", "xpath:idRelative"],
+        ["xpath=//a[@href='http://localdev/admin/user']", "xpath:href"],
+        ["xpath=//a[3]", "xpath:position"],
+        ["xpath=//a[contains(.,'ユーザー管理 »')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2897ba2a-3224-4b61-910c-21e764175377",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=新規作成",
+      "targets": [
+        ["linkText=新規作成", "linkText"],
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//a[contains(text(),'新規作成')]", "xpath:link"],
+        ["xpath=//div[@id='app']/div/div/a[2]", "xpath:idRelative"],
+        ["xpath=//a[@href='http://localdev/admin/user/create']", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'新規作成')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2348b397-7095-418f-8bf2-82b9bfa0e4cb",
+      "comment": "",
+      "command": "type",
+      "target": "id=inputName1",
+      "targets": [
+        ["id=inputName1", "id"],
+        ["name=name", "name"],
+        ["css=#inputName1", "css:finder"],
+        ["xpath=//input[@id='inputName1']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/form/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "一般ユーザー"
+    }, {
+      "id": "f8bc0e1f-ad3d-447e-8f95-161b9313f3cf",
+      "comment": "",
+      "command": "type",
+      "target": "id=inputEmail1",
+      "targets": [
+        ["id=inputEmail1", "id"],
+        ["name=email", "name"],
+        ["css=#inputEmail1", "css:finder"],
+        ["xpath=//input[@id='inputEmail1']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "sample@example.com"
+    }, {
+      "id": "455c2fe2-0a04-4cea-9487-a19c23063698",
+      "comment": "",
+      "command": "select",
+      "target": "id=inputRole1",
+      "targets": [],
+      "value": "label=一般ユーザー"
+    }, {
+      "id": "2e834cd1-2783-4651-809a-31a32f3d253a",
+      "comment": "",
+      "command": "type",
+      "target": "id=inputPassword1",
+      "targets": [
+        ["id=inputPassword1", "id"],
+        ["name=password", "name"],
+        ["css=#inputPassword1", "css:finder"],
+        ["xpath=//input[@id='inputPassword1']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": "Password!"
+    }, {
+      "id": "3bfb7204-ad38-4514-acaa-d2ab6e8affff",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/form/div[5]/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'保存する')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "7aeadece-914a-4e47-9a21-a9884296850a",
+    "name": "管理画面 記事投稿管理",
+    "commands": [{
+      "id": "3e622094-2ed0-4fd2-b648-3892ad647979",
+      "comment": "",
+      "command": "open",
+      "target": "admin/post/create",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "75a425ce-bb22-43f1-ae31-dbae35e0a9e6",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1057",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "bb86dd1f-2acc-4c66-b208-4b3f0b0854ce",
+      "comment": "",
+      "command": "type",
+      "target": "id=inputTitle",
+      "targets": [],
+      "value": "タイトル"
+    }, {
+      "id": "c07a1064-edad-4328-aac6-3844785fa52d",
+      "comment": "",
+      "command": "type",
+      "target": "id=inputUrl",
+      "targets": [
+        ["id=inputUrl", "id"],
+        ["name=url", "name"],
+        ["css=#inputUrl", "css:finder"],
+        ["xpath=//input[@id='inputUrl']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/form/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "test"
+    }, {
+      "id": "28148366-c22d-4ea5-9749-614fb786bcb7",
+      "comment": "",
+      "command": "type",
+      "target": "id=inputKeyword",
+      "targets": [
+        ["id=inputKeyword", "id"],
+        ["name=keyword", "name"],
+        ["css=#inputKeyword", "css:finder"],
+        ["xpath=//input[@id='inputKeyword']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "keyword1, keyword2"
+    }, {
+      "id": "5c00d307-ee85-420c-99ba-6d6c912a0048",
+      "comment": "",
+      "command": "type",
+      "target": "id=textareaDescription",
+      "targets": [
+        ["id=textareaDescription", "id"],
+        ["name=description", "name"],
+        ["css=#textareaDescription", "css:finder"],
+        ["xpath=//textarea[@id='textareaDescription']", "xpath:attributes"],
+        ["xpath=//div[@id='app']/div/form/div[4]/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "ディスクリプション"
+    }, {
+      "id": "1390bd7f-8322-44cd-9d6f-ffab65bee0f1",
+      "comment": "",
+      "command": "select",
+      "target": "id=inputCategory1",
+      "targets": [],
+      "value": "value=1"
+    }, {
+      "id": "d2eee68b-a3a4-4878-bc5f-9eaf49ec62ea",
+      "comment": "",
+      "command": "select",
+      "target": "id=inputStatus1",
+      "targets": [],
+      "value": "value=1"
+    }, {
+      "id": "7d852cbe-9695-4c80-bcec-bcac835e8e22",
+      "comment": "",
+      "command": "type",
+      "target": "id=content",
+      "targets": [
+        ["id=content", "id"],
+        ["name=content", "name"],
+        ["css=#content", "css:finder"],
+        ["xpath=//textarea[@id='content']", "xpath:attributes"],
+        ["xpath=//div[@id='markdown-content']/textarea", "xpath:idRelative"],
+        ["xpath=//div/div/textarea", "xpath:position"]
+      ],
+      "value": "テスト"
     }]
   }],
   "suites": [{

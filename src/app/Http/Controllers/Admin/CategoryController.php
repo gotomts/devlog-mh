@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\WebBaseController;
-use App\Http\Request\CategoryRequest;
-use App\Logic\CategoryLogic;
+use App\Http\Requests\Admin\Category\CategoryRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
+/**
+ * 管理側カテゴリーコントローラ
+ *
+ * @author mi-goto
+ */
 class CategoryController extends WebBaseController
 {
+    /** 一覧 */
+    private const LIST = 'admin/category';
+
     /**
      * カテゴリ一覧
      *
@@ -16,8 +24,8 @@ class CategoryController extends WebBaseController
      */
     public function showList()
     {
-        $categories = CategoryLogic::getCategories(config('const.DELETE_FLG.none'));
-        return \View::make('category.list')
+        $categories = Category::getAll();
+        return \View::make('admin.category.list')
             ->with('categories', $categories);
     }
 
@@ -28,7 +36,8 @@ class CategoryController extends WebBaseController
      */
     public function showCreate()
     {
-        return \View::make('category.create');
+        \RequestErrorServiceHelper::validateInsertError();
+        return \View::make('admin.category.create');
     }
 
     /**
@@ -39,21 +48,14 @@ class CategoryController extends WebBaseController
      */
     public function exeCreate(CategoryRequest $request)
     {
-        $inputs['category_name'] = $request->category_name;
-        \DB::beginTransaction();
-        try {
-            // ログイン確認
-            if (\Auth::check()) {
-                CategoryLogic::insert($inputs);
-            }
-        } catch (\Throwable $e) {
-            \DB::rollback();
-            return redirect('admin/category')
-                ->with('success', config('messages.error.insert'));
+        $params = $request->all();
+        if (Category::insert($params)) {
+            flash(config('messages.common.success'))->success();
+        } else {
+            flash(config('messages.exception.insert'))->error();
+            return redirect(self::LIST);
         }
-        \DB::commit();
-        return redirect('admin/category')
-            ->with('success', config('messages.success'));
+        return redirect(self::LIST);
     }
 
     /**
@@ -62,20 +64,16 @@ class CategoryController extends WebBaseController
      * @param Request $request
      * return View
      */
-    public function showEdit(Request $request)
+    public function showEdit($id=null)
     {
-        $inputs['id'] = $request->id;
-        $category = CategoryLogic::getCategoryById($inputs['id']);
-        // セッション切れ
-        if (!\Auth::check()) {
-            return redirect('login')
-                ->with('error', 'messages.error.session');
-        }
+        $category = Category::getById($id);
         // カテゴリーが見つからない場合
         if (is_null($category)) {
-            return back()->with('error', config('messages.nodata'));
+            flash(config('messages.common.noitem'))->error();
+            return back();
         }
-        return \View::make('category.edit')
+        \RequestErrorServiceHelper::validateUpdateError();
+        return \View::make('admin.category.edit')
             ->with('category', $category);
     }
 
@@ -83,33 +81,17 @@ class CategoryController extends WebBaseController
      * カテゴリー詳細 更新
      *
      * @param CategoryRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return void
      */
-    public function exeEdit(CategoryRequest $request)
+    public function exeEdit($id=null, CategoryRequest $request)
     {
-        $inputs['id'] = $request->id;
-        $inputs['category_name'] = $request->category_name;
-        // セッション切れ
-        if (!\Auth::check()) {
-            return redirect('login')
-                ->with('error', 'messages.session.error');
+        // 更新処理
+        if (Category::updateById($id, $request)) {
+            flash(config('messages.common.success'))->success();
+        } else {
+            flash(config('messages.exception.update'))->error();
+            return redirect(self::LIST);
         }
-        \DB::beginTransaction();
-        try {
-            $isUpdate = CategoryLogic::update($inputs);
-            // アップデート確認
-            if (!$isUpdate) {
-                \DB::rollback();
-                return redirect('admin/category')
-                    ->with('error', 'messages.error.update');
-            }
-        } catch (\Throwable $e) {
-            \DB::rollback();
-            return redirect('admin/category')
-                ->with('error', 'messages.error.update');
-        }
-        \DB::commit();
-        return redirect('admin/category')
-            ->with('success', config('messages.success'));
+        return redirect(self::LIST);
     }
 }

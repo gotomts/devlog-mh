@@ -37,18 +37,6 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-                @if (Route::has('password.request'))
-                    <a class="btn-link" href="{{ route('password.request') }}">
-                        {{ __('パスワードを忘れた方はこちら') }}
-                    </a>
-                @endif
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="remember"
-                        id="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="remember">
-                        {{ __('Remember Me') }}
-                    </label>
-                </div>
             </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="submit">ログイン</button>

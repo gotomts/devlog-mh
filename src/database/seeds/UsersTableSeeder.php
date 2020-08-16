@@ -14,12 +14,35 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             'name' => 'admin',
-            'email' => 'develop@example.com',
+            'email' => 'admin@example.com',
             'password' => bcrypt('Password!'),
-            'created_at' => new Carbon(),
-            'updated_at' => new Carbon(),
-            'user_id' => 1,
-            'role' => 1,
+            'role_type' => config('const.role_type.admin'),
+            'created_by' => 1,
+            'updated_by' => 1,
+            'created_at' => \CommonHelper::getNow(),
+            'updated_at' => \CommonHelper::getNow(),
+        ]);
+        DB::table('users')->insert([
+            'name' => 'user',
+            'email' => 'user@example.com',
+            'password' => bcrypt('Password!'),
+            'role_type' => config('const.role_type.general'),
+            'created_by' => 1,
+            'updated_by' => 2,
+            'created_at' => \CommonHelper::getNow(),
+            'updated_at' => \CommonHelper::getNow(),
+        ]);
+        DB::table('users')->insert([
+            'name' => 'delete_user',
+            'email' => 'delete_user@example.com',
+            'password' => bcrypt('Password!'),
+            'role_type' => config('const.role_type.general'),
+            'created_by' => 1,
+            'updated_by' => 1,
+            'deleted_by' => 2,
+            'created_at' => \CommonHelper::getNow(),
+            'updated_at' => \CommonHelper::getNow(),
+            'deleted_at' => \CommonHelper::getNow(),
         ]);
     }
 }

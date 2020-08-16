@@ -1,6 +1,8 @@
 <?php
 
 return [
-    'MsgHelper',
-    'IniHelper',
+    'AwsS3HandleUploadServiceHelper',
+    'CommonHelper',
+    'FileUploadServiceHelper',
+    'RequestErrorServiceHelper',
 ];

@@ -14,23 +14,16 @@
       php-gd,
       php-xml,
       php-zip,
+      php-pecl-xdebug,
     ]
     enablerepo: remi,remi-php74
-    state: latest
-
-- name: Install php-xdebug
-  yum:
-    name: [
-      php-pecl-xdebug
-    ]
-    enablerepo: epel
     state: latest
 
 - name: Copy php.ini
   copy:
     src: php.ini
     dest: /etc/php.ini
-    mode: 0600
+    mode: 0644
     owner: root
     group: root
 
@@ -38,9 +31,17 @@
   copy:
     src: 15-xdebug.ini
     dest: /etc/php.d/15-xdebug.ini
-    mode: 0600
+    mode: 0644
     owner: root
     group: root
+
+- name: create xdebug.log
+  copy:
+    src: xdebug.log
+    dest: /tmp/xdebug.log
+    mode: 0644
+    owner: vagrant
+    group: vagrant
 
 - name: Restart httpd
   service:

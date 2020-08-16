@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\UserRoleType;
-use App\Http\Request\UserRequest;
-use App\Http\Traits\ArrayConvertion;
-use App\Logic\UserLogic;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\User\UserRequest;
+use App\Models\User;
+use Exception;
 
 class UserController extends WebBaseController
 {
+
+    /** 一覧 */
+    private const LIST = 'admin/user';
+
     /**
      * ユーザ管理 一覧
      *
@@ -17,8 +19,8 @@ class UserController extends WebBaseController
      */
     public function showList()
     {
-        $users = UserLogic::getUsers(config('const.DELETE_FLG.none'));
-        return \View::make('user.list')
+        $users = User::getAll();
+        return \View::make('admin.user.list')
             ->with('users', $users);
     }
 
@@ -29,7 +31,8 @@ class UserController extends WebBaseController
      */
     public function showCreate()
     {
-        return \View::make('user.create');
+        \RequestErrorServiceHelper::validateInsertError();
+        return \View::make('admin.user.create');
     }
 
     /**
@@ -40,49 +43,68 @@ class UserController extends WebBaseController
      */
     public function exeCreate(UserRequest $request)
     {
-        // フォームから値を取得
-        $inputs['name']     = $request->name;
-        $inputs['email']    = $request->email;
-        $inputs['role']     = $request->role;
-        $inputs['password'] = $request->password;
+        $params = $request->all();
         \DB::beginTransaction();
         try {
-            // ログイン確認
-            if (\Auth::check()) {
-                $result = UserLogic::insert($inputs);
-                \DB::commit();
-                return redirect('admin/user')
-                    ->with('success', config('messages.success'))
-                    ->withInput();
+            $result = User::insert($params);
+            if (isset($result)) {
+                flash(config('messages.common.success'))->success();
+            } else {
+                throw new Exception(config('messages.exception.insert'));
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
             \DB::rollback();
-            return redirect('admin/user')
-                ->with('error', config('messages.error.insert'));
+            \Log::error($th);
+            flash(config('messages.exception.insert'))->error();
+            return redirect(self::LIST);
         }
         \DB::commit();
+        return redirect(self::LIST);
     }
 
     /**
      * ユーザ管理 編集画面表示
      *
-     * @param Request $request
+     * @param $id ユーザーID
      * return View
      */
-    public function showEdit(Request $request)
+    public function showEdit($id=null)
     {
-        $inputs['id'] = $request->id;
-        $user = UserLogic::getUserById($inputs['id']);
-        // セッション切れ
-        if (!\Auth::check()) {
-            return redirect('login')
-                ->with('error', 'messages.error.session');
-        }
+        $user = User::getById($id);
         // ユーザーが見つからない場合
         if (is_null($user)) {
-            return back()->with('error', config('messages.nodata'));
+            return back()->with('error', config('messages.common.nodata'));
         }
-        return \View::make('user.edit')
+        \RequestErrorServiceHelper::validateUpdateError();
+        return \View::make('admin.user.edit')
             ->with('user', $user);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param UserRequest $request
+     * @return void
+     */
+    public function exeEdit(UserRequest $request, $id=null)
+    {
+        // 更新処理
+        $params = $request->all();
+        \DB::beginTransaction();
+        try {
+            $result = User::updateById($id, $params);
+            if (isset($result)) {
+                flash(config('messages.common.success'))->success();
+            } else {
+                throw new Exception(config('messages.exception.update'));
+            }
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            \Log::error($th);
+            flash(config('messages.exception.update'))->error();
+            return redirect(self::LIST);
+        }
+        \DB::commit();
+        return redirect(self::LIST);
     }
 }
