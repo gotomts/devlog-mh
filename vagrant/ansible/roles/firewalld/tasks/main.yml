@@ -1,5 +1,0 @@
-- name: firewalld Disable
-  systemd:
-    name: firewalld
-    state: stopped
-    enabled: false
