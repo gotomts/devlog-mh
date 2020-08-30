@@ -14,3 +14,4 @@ yarn-error.log
 vagrant/.vagrant
 src/vendor
 node_modules
+src/docker/db-store
