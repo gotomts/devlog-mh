@@ -15,3 +15,4 @@ vagrant/.vagrant
 src/vendor
 node_modules
 src/docker/db-store
+docker/db-store
