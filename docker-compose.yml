@@ -13,28 +13,28 @@ services:
   db:
     image: mysql:8.0
     ports:
-      - 13306:${DB_PORT}
+      - 13306:3306
     volumes:
       - ./docker/db-store:/var/lib/mysql
       - ./docker/db/etc/mysql/conf.d:/etc/mysql/conf.d
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_DATABASE: devlog_mh_dev
+      MYSQL_USER: root
       TZ: Asia/Tokyo
 
   db-testing:
     image: mysql:8.0
     ports:
-      - 13307:${DB_PORT}
+      - 13307:3306
     volumes:
       - ./docker/db/etc/mysql/conf.d:/etc/mysql/conf.d
     env_file:
       - ./.env.testing
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_DATABASE: devlog_mh_test
+      MYSQL_USER: root
       TZ: Asia/Tokyo
 
   web:
