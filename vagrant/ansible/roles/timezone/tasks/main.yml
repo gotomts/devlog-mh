@@ -1,3 +1,0 @@
-- name: Setting Timezone
-  timezone:
-    name: Asia/Tokyo
