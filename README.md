@@ -1,54 +1,54 @@
 # 環境構築
 
-## ディレクトリ構成
-* src:Laravelプロジェクト
-* tests:SeleniumIDE用テストデータ
-* vagrant
-    * Vagrantfile:Vagrant設定ファイル
-    * ansible:環境構築用設定ファイル
+## バージョン
+* PHP 7.4
+* Laravel 6.*
+* MySQL 8.0
+* Nginx 1.19.2
 
 ## 環境構築手順
-### 1. 仮想環境起動
-ターミナルを開いてvagrantディレクトリへ移動してください。  
-下記のコマンドを入力し、Vagrantを起動します。  
-Vagrant起動時にansibleが動き、プロジェクトの環境が自動で構築されます。
+### 1. 初期設定
+
+画像アップロード先にAWS S3を使っています。
+S3のバケットを作成後、`.env.example`を修正してください。
 
 ```
-$ cd vagrant
-$ vagrant up
+AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXX
+AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXX
+AWS_DEFAULT_REGION=XXXXXXXXXXXXXXXXXXX
+AWS_BUCKET=XXXXXXXXXXXXXXXXXXX
+AWS_STORAGE_URL=XXXXXXXXXXXXXXXXXXX
 ```
 
-### 2. テストデータの挿入
-`vagrant ssh`で仮想環境内へアクセスし、 `/home/vagrant/www.devlog-mh.com` へ移動します。  
-マイグレーションとシーダーを流し、開発用にデータを準備します。
+`.env.example`の修正が完了後、ファイルをコピーしてください。
 
 ```
-$ vagrant ssh
-$ cd ~/www.devlog-mh.com
-$ php artisan migrate --seed
+$ cp .env.example .env
 ```
 
-### 3. hosts設定
-hostsファイルに下記の内容を記載します。  
-* Windows `C:\Windows\System32\drivers\etc\hosts`
-* Mac `/etc/hosts`
+### 2. 環境構築
 
-下記のURLでブラウザからアクセスし、画面が表示されれば環境構築完了です。  
-http://localdev/
 ```
-192.168.33.101 localdev
+$ docker-compose up -d
+$ docker exec wwwdevlog-mhcom_app_1 composer install
+$ docker exec wwwdevlog-mhcom_app_1 php artisan key:generate
+$ docker exec wwwdevlog-mhcom_app_1 php artisan key:generate --env=testing
 ```
 
-## ユニットテスト起動
+### 3. サンプルデータの挿入
 ```
-$ cd ~/www.devlog-mh.com
-$ ./vendor/bin/phpunit
+$ docker exec wwwdevlog-mhcom_app_1 php artisan migrate --seed
+```
+
+### 4. ユニットテスト
+```
+$ docker exec wwwdevlog-mhcom_app_1 ./vendor/bin/phpunit
 ```
 
 ## 管理画面へのアクセス
 管理画面URL  
 ```
-http://localdev/admin
+http://localhost:8080/admin
 ```
 
 開発用アカウント
