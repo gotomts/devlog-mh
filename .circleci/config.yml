@@ -67,6 +67,16 @@ jobs:
           failure_message: ':circleci-fail: $CIRCLE_BRANCH のテストが失敗しました\n:github_octocat: User：$CIRCLE_USERNAME'
           webhook: '${SLACK_WEBHOOK}'
 
+jobs:
+  deploy:
+    steps:
+      - run: ssh -p ${SSH_USER}@${SSH_HOST} "/var/www/test/bin/deploy.sh"
+
+      - slack/status:
+        success_message: ':circleci-pass: デプロイが成功しました\n:github_octocat: User：$CIRCLE_USERNAME'
+        failure_message: ':circleci-fail: デプロイが失敗しました\n:github_octocat: User：$CIRCLE_USERNAME'
+        webhook: '${SLACK_WEBHOOK}'
+
 orbs:
   slack: circleci/slack@3.4.2
 
@@ -78,3 +88,6 @@ workflows:
           filters:
             branches:
               only: develop
+  app-deploy:
+    jobs:
+      - deploy
