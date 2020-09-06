@@ -73,7 +73,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "SO:ME:FIN:G:ER:PR:IN:T"
+            - "bf:71:2e:86:e0:60:13:59:65:8a:2d:ba:02:00:a1:ff"
 
       - run: ssh ${SSH_USER}@${SSH_HOST} "/var/www/test/bin/deploy.sh"
 
