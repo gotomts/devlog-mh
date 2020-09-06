@@ -62,6 +62,9 @@ jobs:
       # run tests
       - run: ./vendor/bin/phpunit
 
+      - store_artifacts:
+          path: /tmp/dumps
+
       - slack/status:
           success_message: ':circleci-pass: $CIRCLE_BRANCH のテストが成功しました\n:github_octocat: User：$CIRCLE_USERNAME'
           failure_message: ':circleci-fail: $CIRCLE_BRANCH のテストが失敗しました\n:github_octocat: User：$CIRCLE_USERNAME'
@@ -89,10 +92,11 @@ workflows:
   version: 2
   app-test:
     jobs:
-      - test:
-          filters:
-            branches:
-              only: develop
+      - test
+      # - test:
+      #     filters:
+      #       branches:
+      #         only: develop
   app-deploy:
     jobs:
       - deploy
