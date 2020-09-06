@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/devlog-mh
+    working_dir: /var/www/devlog-mh
+
+  web:
+    image: nginx:1.19.2-alpine
+    volumes:
+      - .:/var/www/devlog-mh
+      - ./docker/web/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
