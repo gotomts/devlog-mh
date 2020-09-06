@@ -73,9 +73,9 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "bf:71:2e:86:e0:60:13:59:65:8a:2d:ba:02:00:a1:ff"
+            - '${FINGER_PRINTS}'
 
-      - run: ssh ${SSH_USER}@${SSH_HOST} "/var/www/test/bin/deploy.sh"
+      - run: ssh '${SSH_USER}'@'${SSH_HOST}' "/var/www/test/bin/deploy.sh"
 
       - slack/status:
           success_message: ':circleci-pass: デプロイが成功しました\n:github_octocat: User：$CIRCLE_USERNAME'
