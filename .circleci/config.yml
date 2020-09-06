@@ -71,6 +71,7 @@ jobs:
     machine:
       enabled: true
     steps:
+      - run: echo ${SSH_USER} && echo ${SSH_HOST}
       - run: ssh ${SSH_USER}@${SSH_HOST} "/var/www/test/bin/deploy.sh"
 
       - slack/status:
