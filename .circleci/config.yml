@@ -71,7 +71,10 @@ jobs:
     machine:
       enabled: true
     steps:
-      - run: echo ${SSH_USER} && echo ${SSH_HOST}
+      - add_ssh_keys:
+          fingerprints:
+            - "SO:ME:FIN:G:ER:PR:IN:T"
+
       - run: ssh ${SSH_USER}@${SSH_HOST} "/var/www/test/bin/deploy.sh"
 
       - slack/status:
