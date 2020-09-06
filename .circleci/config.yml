@@ -71,7 +71,7 @@ jobs:
     machine:
       enabled: true
     steps:
-      - run: ssh -p ${SSH_USER}@${SSH_HOST} "/var/www/test/bin/deploy.sh"
+      - run: ssh ${SSH_USER}@${SSH_HOST} "/var/www/test/bin/deploy.sh"
 
       - slack/status:
           success_message: ':circleci-pass: デプロイが成功しました\n:github_octocat: User：$CIRCLE_USERNAME'
