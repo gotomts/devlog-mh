@@ -64,6 +64,9 @@ jobs:
 
 workflows:
   version: 2
-  workflow:
+  app-test:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              only: master|develop
