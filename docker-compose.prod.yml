@@ -8,6 +8,10 @@ services:
     volumes:
       - .:/var/www/devlog-mh
     working_dir: /var/www/devlog-mh
+    environment:
+      VIRTUAL_HOST: devlog-mh.com
+      LETSENCRYPT_HOST: devlog-mh.com
+      LETSENCRYPT_EMAIL: mh.goto.web@gmail.com
 
   web:
     image: nginx:1.19.2-alpine

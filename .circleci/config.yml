@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  test:
+  build:
     docker:
       - image: circleci/php:7.4-node-browsers
         environment:
@@ -62,9 +62,6 @@ jobs:
       # run tests
       - run: ./vendor/bin/phpunit
 
-      - store_artifacts:
-          path: .
-
       - slack/status:
           success_message: ':circleci-pass: $CIRCLE_BRANCH のテストが成功しました\n:github_octocat: User：$CIRCLE_USERNAME'
           failure_message: ':circleci-fail: $CIRCLE_BRANCH のテストが失敗しました\n:github_octocat: User：$CIRCLE_USERNAME'
@@ -90,13 +87,17 @@ orbs:
 
 workflows:
   version: 2
-  app-test:
+  build:
     jobs:
-      - test
-      # - test:
+      - build
+      # - build:
       #     filters:
       #       branches:
       #         only: develop
-  app-deploy:
+  deploy:
     jobs:
       - deploy
+      # - deploy:
+          # filters:
+          #   branches:
+          #     only: master
