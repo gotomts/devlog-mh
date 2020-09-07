@@ -8,6 +8,8 @@ services:
     volumes:
       - .:/var/www/devlog-mh
     working_dir: /var/www/devlog-mh
+    ports:
+      - 9000:9000
 
   db:
     image: mysql:8.0

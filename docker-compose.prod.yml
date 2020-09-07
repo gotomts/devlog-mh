@@ -8,6 +8,8 @@ services:
     volumes:
       - .:/usr/share/nginx/html
     working_dir: /usr/share/nginx/html
+    ports:
+      - 9000:9000
     environment:
       VIRTUAL_HOST: devlog-mh.com
       LETSENCRYPT_HOST: devlog-mh.com
