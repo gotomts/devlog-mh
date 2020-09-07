@@ -15,7 +15,7 @@ services:
 
   web:
     image: nginx:1.19.2-alpine
-    port:
+    ports:
       - 8000:80
     volumes:
       - .:/usr/share/nginx/html
