@@ -24,3 +24,7 @@ services:
     depends_on:
       - app
 
+networks:
+  default:
+    external:
+      name: nginx-proxy
