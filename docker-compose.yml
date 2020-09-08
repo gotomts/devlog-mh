@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - .:/usr/share/nginx/html
+      - rootdir:/usr/share/nginx/html
     working_dir: /usr/share/nginx/html
 
   db:
@@ -41,9 +41,12 @@ services:
     ports:
       - 8080:80
     volumes:
-      - .:/usr/share/nginx/html
+      - rootdir:/usr/share/nginx/html
       - ./docker/web/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
       - db
       - db-testing
+
+volumes:
+  rootdir:

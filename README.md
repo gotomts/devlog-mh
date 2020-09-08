@@ -33,6 +33,7 @@ $ docker-compose up -d
 $ docker exec wwwdevlog-mhcom_app_1 composer install
 $ docker exec wwwdevlog-mhcom_app_1 php artisan key:generate
 $ docker exec wwwdevlog-mhcom_app_1 php artisan key:generate --env=testing
+$ docker exec wwwdevlog-mhcom_app_1 php artisan storage:link
 ```
 
 ### 3. サンプルデータの挿入
