@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - 19000:9000
     volumes:
       - .:/usr/share/nginx/html
     working_dir: /usr/share/nginx/html
@@ -43,7 +45,17 @@ services:
     volumes:
       - .:/usr/share/nginx/html
       - ./docker/web/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /usr/share/nginx/html
+    environment:
+      VIRTUAL_HOST: devlog-mh.com
+      # LETSENCRYPT_HOST: devlog-mh.com
+      # LETSENCRYPT_EMAIL: mh.goto.web@gmail.com
     depends_on:
       - app
       - db
       - db-testing
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
