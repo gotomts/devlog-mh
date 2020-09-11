@@ -1,13 +1,5 @@
 FROM php:7.4-fpm-alpine
 
-ARG PUID=1000
-ARG PGID=1000
-
-RUN echo "-> $PUID"
-RUN echo "-> $PGID"
-
-RUN groupmod -o -g $PGID www-data && \
-    usermod -o -u $PUID -g www-data www-data
 
 ARG TZ=Asia/Tokyo
 ENV TZ ${TZ}
@@ -17,3 +9,5 @@ RUN docker-php-ext-install pdo pdo_mysql
 
 # composer install
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+EXPOSE 9000
