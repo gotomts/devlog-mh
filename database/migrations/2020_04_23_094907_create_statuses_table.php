@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateStatusesTable extends Migration
 {
+    protected $table = 'statuses';
+
     /**
      * Run the migrations.
      *
@@ -13,10 +15,12 @@ class CreateStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('statuses', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-        });
+        if (!Schema::hasTable($this->table)) {
+            Schema::create($this->table, function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('name');
+            });
+        }
     }
 
     /**
@@ -26,6 +30,8 @@ class CreateStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('statuses');
+        if (Schema::hasTable($this->table)) {
+            Schema::dropIfExists($this->table);
+        }
     }
 }
