@@ -75,7 +75,7 @@ jobs:
           fingerprints:
             - '${FINGER_PRINTS}'
 
-      - run: ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "/var/www/devlog-mh/bin/deploy.sh"
+      - run: ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "ls -la"
 
       - slack/status:
           success_message: ':circleci-pass: デプロイが成功しました\n:github_octocat: User：$CIRCLE_USERNAME'
