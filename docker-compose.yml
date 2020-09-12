@@ -48,10 +48,6 @@ services:
       - .:/var/www/devlog-mh
       - ./docker/web/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
     working_dir: /var/www/devlog-mh
-    environment:
-      VIRTUAL_HOST: devlog-mh.com
-      # LETSENCRYPT_HOST: devlog-mh.com
-      # LETSENCRYPT_EMAIL: mh.goto.web@gmail.com
     depends_on:
       - app
       - db

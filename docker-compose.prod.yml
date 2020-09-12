@@ -26,14 +26,11 @@ services:
       - /etc/letsencrypt/live/devlog-mh.com:/etc/letsencrypt/live/devlog-mh.com
       - /etc/letsencrypt/archive/devlog-mh.com:/etc/letsencrypt/archive/devlog-mh.com
     working_dir: /var/www/devlog-mh
-    # environment:
-    #   VIRTUAL_HOST: devlog-mh.com
     networks:
       devlog-net:
         ipv4_address: 172.18.0.3
     depends_on:
       - app
-
 
 networks:
   devlog-net:
