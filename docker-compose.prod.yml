@@ -26,8 +26,3 @@ services:
       LETSENCRYPT_EMAIL: mh.goto.web@gmail.com
     depends_on:
       - app
-
-networks:
-  default:
-    external:
-      name: nginx-proxy

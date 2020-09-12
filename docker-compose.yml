@@ -56,8 +56,3 @@ services:
       - app
       - db
       - db-testing
-
-networks:
-  default:
-    external:
-      name: nginx-proxy
