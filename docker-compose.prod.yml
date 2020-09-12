@@ -30,7 +30,7 @@ services:
     #   VIRTUAL_HOST: devlog-mh.com
     networks:
       devlog-net:
-        ipv4_address: 172.18.0.2
+        ipv4_address: 172.18.0.3
     depends_on:
       - app
 
