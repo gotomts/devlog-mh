@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
-    protected $table = 'failed_jobs';
+    protected $table = 'users';
 
     /**
      * Run the migrations.
