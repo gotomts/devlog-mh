@@ -12,7 +12,7 @@ services:
       - .:/var/www/devlog-mh
     working_dir: /var/www/devlog-mh
     networks:
-      app_net:
+      devlog-net:
         ipv4_address: 172.18.0.2
 
   web:
@@ -29,7 +29,17 @@ services:
     # environment:
     #   VIRTUAL_HOST: devlog-mh.com
     networks:
-      app_net:
+      devlog-net:
         ipv4_address: 172.18.0.2
     depends_on:
       - app
+
+
+networks:
+  devlog-net:
+    name devlog-net
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/24
