@@ -11,7 +11,7 @@
 
 @section('footer_js')
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="{{ url('js/admin/custom-markdown.js') }}"></script>
+    <script src="{{ asset('js/admin/custom-markdown.js') }}"></script>
 @endsection
 
 @section('content')
