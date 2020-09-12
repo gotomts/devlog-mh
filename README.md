@@ -30,20 +30,20 @@ $ cp .env.example .env
 
 ```
 $ docker-compose up -d
-$ docker exec wwwdevlog-mhcom_app_1 composer install
-$ docker exec wwwdevlog-mhcom_app_1 php artisan key:generate
-$ docker exec wwwdevlog-mhcom_app_1 php artisan key:generate --env=testing
-$ docker exec wwwdevlog-mhcom_app_1 php artisan storage:link
+$ docker exec devlog-mh_app_1 composer install
+$ docker exec devlog-mh_app_1 php artisan key:generate
+$ docker exec devlog-mh_app_1 php artisan key:generate --env=testing
+$ docker exec devlog-mh_app_1 php artisan storage:link
 ```
 
 ### 3. サンプルデータの挿入
 ```
-$ docker exec wwwdevlog-mhcom_app_1 php artisan migrate --seed
+$ docker exec devlog-mh_app_1 php artisan migrate:refresh --seed
 ```
 
 ### 4. ユニットテスト
 ```
-$ docker exec wwwdevlog-mhcom_app_1 ./vendor/bin/phpunit
+$ docker exec devlog-mh_app_1 ./vendor/bin/phpunit
 ```
 
 ## 管理画面へのアクセス
