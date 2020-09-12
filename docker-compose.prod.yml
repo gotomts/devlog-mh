@@ -20,6 +20,7 @@ services:
       - .:/var/www/devlog-mh
       - ./docker/web/etc/nginx/conf.d/default-ssl.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt/live/devlog-mh.com:/etc/letsencrypt/live/devlog-mh.com
+      - /etc/letsencrypt/archive/devlog-mh.com:/etc/letsencrypt/archive/devlog-mh.com
     working_dir: /var/www/devlog-mh
     environment:
       VIRTUAL_HOST: devlog-mh.com
