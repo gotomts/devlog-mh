@@ -4,12 +4,13 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
     user: ${UID}:${GID}
     ports:
       - 19000:9000
     volumes:
       - .:/var/www/devlog-mh
+      - ./docker/app/php.ini:/usr/local/etc/php/php.ini
     working_dir: /var/www/devlog-mh
 
   db:

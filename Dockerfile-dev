@@ -1,0 +1,19 @@
+FROM php:7.4-fpm-alpine
+
+RUN apk --update add curl
+RUN set -ex \
+  && apk --no-cache add \
+  autoconf build-base
+
+ARG TZ=Asia/Tokyo
+ENV TZ ${TZ}
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN pecl install xdebug
+RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-enable xdebug
+
+# composer install
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+EXPOSE 9000
