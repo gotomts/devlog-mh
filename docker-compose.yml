@@ -12,7 +12,7 @@ services:
     working_dir: /usr/share/nginx/html
 
   db:
-    image: mysql:8.0
+    image: mariadb:10.3
     ports:
       - 13306:3306
     volumes:
@@ -25,7 +25,7 @@ services:
       TZ: Asia/Tokyo
 
   db-testing:
-    image: mysql:8.0
+    image: mariadb:10.3
     ports:
       - 13307:3306
     volumes:
