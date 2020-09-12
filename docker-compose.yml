@@ -4,14 +4,17 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/var/www/html
+      dockerfile: Dockerfile-dev
+    user: ${UID}:${GID}
     ports:
-      - 9000:9000
+      - 19000:9000
+    volumes:
+      - .:/var/www/devlog-mh
+      - ./docker/app/php.ini:/usr/local/etc/php/php.ini
+    working_dir: /var/www/devlog-mh
 
   db:
-    image: mysql:8.0
+    image: mariadb:10.3
     ports:
       - 13306:3306
     volumes:
@@ -24,7 +27,7 @@ services:
       TZ: Asia/Tokyo
 
   db-testing:
-    image: mysql:8.0
+    image: mariadb:10.3
     ports:
       - 13307:3306
     volumes:
@@ -42,8 +45,9 @@ services:
     ports:
       - 8080:80
     volumes:
-      - .:/var/www/html
+      - .:/var/www/devlog-mh
       - ./docker/web/etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /var/www/devlog-mh
     depends_on:
       - app
       - db

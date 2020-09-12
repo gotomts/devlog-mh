@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  test:
+  build:
     docker:
       - image: circleci/php:7.4-node-browsers
         environment:
@@ -67,14 +67,37 @@ jobs:
           failure_message: ':circleci-fail: $CIRCLE_BRANCH のテストが失敗しました\n:github_octocat: User：$CIRCLE_USERNAME'
           webhook: '${SLACK_WEBHOOK}'
 
+  deploy:
+    machine:
+      enabled: true
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - '${FINGER_PRINTS}'
+
+      - run: ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "sh deploy.sh"
+
+      - slack/status:
+          success_message: ':circleci-pass: デプロイが成功しました\n:github_octocat: User：$CIRCLE_USERNAME'
+          failure_message: ':circleci-fail: デプロイが失敗しました\n:github_octocat: User：$CIRCLE_USERNAME'
+          webhook: '${SLACK_WEBHOOK}'
+
 orbs:
   slack: circleci/slack@3.4.2
 
 workflows:
   version: 2
-  app-test:
+  build:
     jobs:
-      - test:
+      - build:
           filters:
             branches:
-              only: develop
+              only:
+                - develop
+                - master
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master

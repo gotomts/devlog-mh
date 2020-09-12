@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreatePostsImagesTable extends Migration
 {
+    protected $table = 'posts_images';
+
     /**
      * Run the migrations.
      *
@@ -13,14 +15,16 @@ class CreatePostsImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts_images', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('post_id');
-            $table->string('name', 255);
-            $table->string('url', 255);
-            $table->string('title', 255);
-            $table->string('alt', 255);
-        });
+        if (!Schema::hasTable($this->table)) {
+            Schema::create($this->table, function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->integer('post_id');
+                $table->string('name', 255);
+                $table->string('url', 255);
+                $table->string('title', 255);
+                $table->string('alt', 255);
+            });
+        }
     }
 
     /**
@@ -30,6 +34,8 @@ class CreatePostsImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts_images');
+        if (Schema::hasTable($this->table)) {
+            Schema::dropIfExists($this->table);
+        }
     }
 }
