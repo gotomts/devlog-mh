@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\Status;
 
-class ProductionReleaserSeeder extends Seeder
+class ProductionReleaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
