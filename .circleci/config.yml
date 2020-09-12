@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  unittest:
     docker:
       - image: circleci/php:7.4-node-browsers
         environment:
@@ -87,9 +87,9 @@ orbs:
 
 workflows:
   version: 2
-  build:
+  unittest:
     jobs:
-      - build:
+      - unittest:
           filters:
             branches:
               only:
