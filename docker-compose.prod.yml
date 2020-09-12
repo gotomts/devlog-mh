@@ -37,7 +37,7 @@ services:
 
 networks:
   devlog-net:
-    name devlog-net
+    name: devlog-net
     driver: bridge
     ipam:
       driver: default
