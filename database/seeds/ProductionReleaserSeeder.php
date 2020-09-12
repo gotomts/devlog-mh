@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
+use App\Models\Status;
 
 class ProductionReleaserSeeder extends Seeder
 {
