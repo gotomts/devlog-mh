@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    user: ${UID}:${GID}
+    user: ${USER_ID}:${GROUP_ID}
     ports:
       - 19000:9000
     volumes:
