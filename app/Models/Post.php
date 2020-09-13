@@ -122,6 +122,7 @@ class Post extends Model
             ->first();
 
         $posts = self::where('category_id', '=', $category->id)
+            ->where('status_id', '=', config('const.statuses.publishing'))
             ->orderBy('posts.updated_at', 'desc')
             ->paginate(config('pagination.items'));
         return $posts;
@@ -144,17 +145,16 @@ class Post extends Model
     }
 
     // TODO:コメントを書くこと！
-    public static function insertWithPostImage($request, $attrs)
+    public static function insertWithPostImage($params)
     {
         $result = false;
-        $params = $request->all();
-        $attrs += isset($attrs) ? $attrs : null;
+        $params += isset($params) ? $params : null;
         $postImagesAttrs = [];
         $postImagesAttrs += [
-            'url'  => isset($attrs['post_images_url']) ? $attrs['post_images_url']  : null,
-            'name' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
-            'title' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
-            'alt' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
+            'url'  => isset($params['post_images_url']) ? $params['post_images_url']  : null,
+            'name' => isset($params['post_images_name']) ? $params['post_images_name'] : null,
+            'title' => isset($params['post_images_name']) ? $params['post_images_name'] : null,
+            'alt' => isset($params['post_images_name']) ? $params['post_images_name'] : null,
         ];
         if (isset($params)) {
             $post = self::create($params);

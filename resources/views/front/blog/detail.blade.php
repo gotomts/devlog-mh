@@ -9,6 +9,7 @@
 @endsection
 
 @section('footer_js')
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?lang=css&skin=desert"></script>
 @endsection
 
 @section('content')

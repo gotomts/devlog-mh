@@ -42,15 +42,15 @@ class PostController extends WebBaseController
     public function exeCreate(PostRequest $request)
     {
         $file = $request->file('imagefile');
-        $attrs = [];
+        $params = $request->all();
         // 画像アップロードがあった場合
         if (isset($file)) {
             $path = \AwsS3HandleUploadServiceHelper::upload($file);
             // アップロード確認
             if (\AwsS3HandleUploadServiceHelper::checkUpload($path)) {
                 // アップロード先URL取得
-                $attrs['post_images_url'] = config('app.s3_url').$path;
-                $attrs['post_images_name'] = $file->getClientOriginalName();
+                $params['post_images_url'] = config('app.s3_url').$path;
+                $params['post_images_name'] = $file->getClientOriginalName();
             } else {
                 flash(config('messages.error.file_upload'))->error();
                 \Log::error('Upload File Path:'.$path);
@@ -60,24 +60,24 @@ class PostController extends WebBaseController
         \DB::beginTransaction();
         try {
             if (isset($file)) {
-                $result = Post::insertWithPostImage($request, $attrs);
+                $result = Post::insertWithPostImage($params);
             } else {
-                $result = Post::insert($request, $attrs);
+                $result = Post::insert($params);
             }
             if ($result) {
                 flash(config('messages.common.success'))->success();
             } else {
                 flash(config('messages.exception.insert'))->error();
-                return self::TOP;
+                return redirect(self::TOP);
             }
         } catch (\Throwable $th) {
             \DB::rollBack();
             flash(config('messages.exception.insert'))->error();
             \Log::error($th);
-            return self::TOP;
+            return redirect(self::TOP);
         }
         \DB::commit();
-        return \Redirect::to(self::TOP);
+        return redirect(self::TOP);
     }
 
     /**
@@ -132,15 +132,15 @@ class PostController extends WebBaseController
                 flash(config('messages.common.success'))->success();
             } else {
                 flash(config('messages.exception.insert'))->error();
-                return self::TOP;
+                return redirect(self::TOP);
             }
         } catch (\Throwable $th) {
             \DB::rollback();
             flash(config('messages.exception.update'))->error();
             \Log::error($th);
-            return self::TOP;
+            return redirect(self::TOP);
         }
         \DB::commit();
-        return \Redirect::to(self::TOP);
+        return redirect(self::TOP);
     }
 }

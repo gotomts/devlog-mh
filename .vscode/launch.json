@@ -9,9 +9,9 @@
       "type": "php",
       "request": "launch",
       "port": 9001,
-    //   "ignore": [
-    //     "**/vendor/**/*.php"
-    //   ],
+      "ignore": [
+        "**/vendor/**/*.php"
+      ],
       "pathMappings": {
         "/var/www/devlog-mh": "${workspaceRoot}"
       }
