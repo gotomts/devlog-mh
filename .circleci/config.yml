@@ -89,12 +89,7 @@ workflows:
   version: 2
   unittest:
     jobs:
-      - unittest:
-          filters:
-            branches:
-              only:
-                - develop
-                - master
+      - unittest
   deploy:
     jobs:
       - deploy:
