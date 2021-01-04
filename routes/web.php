@@ -35,9 +35,16 @@ Route::group(['middleware' => 'front'], function () {
             // ログイン
             Route::get('/', 'MemberController@showLoginForm');
             Route::post('/', 'MemberController@login');
-            // 会員仮登録
-            Route::get('advance-register', 'MemberController@showAdvanceRegister');
-            // Route::post('advance-register', 'MemberController@exeAdvanceRegister');
+            // 仮会員登録
+            Route::get('verify', 'MemberController@showVerifyRegister');
+            // 仮会員登録確認
+            Route::post('verify/confirm', 'MemberController@exeVerifyRegisterConfirm');
+            Route::get('verify/confirm', 'MemberController@showVerifyRegisterConfirm');
+            // 仮会員登録完了
+            Route::post('verify/complete', 'MemberController@exeVerifyRegisterComplete');
+            Route::get('verify/complete', 'MemberController@showVerifyRegisterComplete');
+            // 会員登録
+            Route::get('register/{token}', 'MemberController@showRegister');
         });
 
         // 会員限定機能

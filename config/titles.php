@@ -4,7 +4,8 @@ return [
     'front' => [
         'member' => [
             'login' => 'ログイン',
-            'advance_register' => '会員仮登録',
+            'verify_register' => '仮会員登録',
+            'verify_register_complete' => '仮会員登録完了',
             'register' => '会員登録',
             'edit' => '会員情報編集',
             'password_reminder' => 'パスワードを忘れた方へ',

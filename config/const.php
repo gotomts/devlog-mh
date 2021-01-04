@@ -8,5 +8,11 @@ return [
     'statuses' => [
         'draft'      => 1,
         'publishing' => 2,
-    ]
+    ],
+    'member_statuses' => [
+        'pre_register' => 0,
+        'register'  => 1,
+        'authed'  => 2,
+        'deactivated' => 9,
+    ],
 ];

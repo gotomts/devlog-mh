@@ -3,7 +3,7 @@
 @guest('member')
 <p>
     <a href="{{ url('member') }}">ログイン</a>
-    <a href="{{ url('member/advance-register') }}">会員登録</a>
+    <a href="{{ url('member/verify') }}">会員登録</a>
 </p>
 @endguest
 @auth('member')

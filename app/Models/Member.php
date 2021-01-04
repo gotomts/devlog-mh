@@ -20,11 +20,14 @@ class Member extends Authenticatable
      *
      * @var array
      */
-    protected $fiilable = [
+    protected $fillable = [
         'name',
         'email',
         'password',
         'remember_token',
+        'status',
+        'email_verified',
+        'email_verify_token',
         'created_by',
         'updated_by',
         'deleted_by',
@@ -47,16 +50,5 @@ class Member extends Authenticatable
     public function update_at()
     {
         return $this->updated_at->format('Y/m/d h:m');
-    }
-
-    /**
-     * 暗号化したパスワードをセット
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
     }
 }
