@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class RedirectIfAuthenticated
 {
     /**
-     * Handle an incoming request.
+     * ログイン後にログインページへアクセスした場合のリダイレクト先を設定
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -17,8 +17,19 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        switch ($guard) {
+            case 'admin':
+                $redirectPath = '/admin/index';
+                break;
+            case 'member':
+                $redirectPath = '/';
+                break;
+            default:
+                $redirectPath = '/admin/index';
+                break;
+        }
         if (Auth::guard($guard)->check()) {
-            return redirect('admin/index');
+            return redirect($redirectPath);
         }
 
         return $next($request);

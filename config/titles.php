@@ -1,6 +1,16 @@
 <?php
 
 return [
+    'front' => [
+        'member' => [
+            'login' => 'ログイン',
+            'advance_register' => '会員仮登録',
+            'register' => '会員登録',
+            'edit' => '会員情報編集',
+            'password_reminder' => 'パスワードを忘れた方へ',
+            'password_reset' => 'パスワード再設定',
+        ],
+    ],
     'login' => [
         'top' => 'ログイン',
     ],

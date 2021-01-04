@@ -21,11 +21,33 @@ Route::group(['middleware' => ['web', 'front']], function () {
     Route::get('blog/{url}', 'BlogController@showDetail');
     // カテゴリー絞り込み
     Route::get('category/{categoryName}', 'BlogController@showCategory');
-    // ログアウト
+    // コンテンツ側ログアウト
+    Route::post('member/logout', 'MemberController@logout')->name('logout');
+    // 管理画面側ログアウト
     Route::post('admin/logout', 'Auth\LoginController@logout')->name('logout');
 });
 
-Route::group(['middleware' => 'guest'], function () {
+
+Route::group(['middleware' => 'front'], function () {
+    Route::group(['prefix' => 'member'], function () {
+        // 会員限定機能
+        Route::group(['middleware' => 'guest:member'], function () {
+            // ログイン
+            Route::get('/', 'MemberController@showLoginForm');
+            Route::post('/', 'MemberController@login');
+            // 会員仮登録
+            Route::get('advance-register', 'MemberController@showAdvanceRegister');
+            // Route::post('advance-register', 'MemberController@exeAdvanceRegister');
+        });
+
+        // 会員限定機能
+        Route::group(['middleware' => 'auth:member'], function () {
+        });
+    });
+});
+
+
+Route::group(['middleware' => 'guest:admin'], function () {
     Route::group(['prefix' => 'admin'], function () {
         // ログイン
         Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
@@ -38,7 +60,7 @@ Route::group(['middleware' => 'guest'], function () {
     });
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth:admin'], function () {
     Route::group(['prefix' => 'admin'], function () {
         // ログイン後TOP
         Route::get('index', 'Admin\IndexController@showIndex');
