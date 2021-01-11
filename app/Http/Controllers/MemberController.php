@@ -86,7 +86,11 @@ class MemberController extends WebBaseController
         Member::insert($member);
 
         \Mail::to($request->email)->send(new MemberRegisterMail($member));
-        return \Redirect::to('member/verify/complete');
+
+        // リダイレクト時に渡さないキーを削除
+        unset($member['password']);
+        unset($member['email_verify_token']);
+        return \Redirect::to('member/verify/complete')->with('member', $member);
     }
 
     /**
@@ -96,7 +100,8 @@ class MemberController extends WebBaseController
      */
     public function showVerifyRegisterComplete()
     {
-        return \View::make('front.member.verify_register_complete');
+        $member = session('member');
+        return \View::make('front.member.verify_register_complete')->with('member', $member);
     }
 
     /**

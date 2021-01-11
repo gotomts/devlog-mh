@@ -15,5 +15,18 @@
 
 @section('content')
 <h1 class="text-center h2">{{ config('titles.front.member.verify_register_complete') }}</h1>
-仮会員登録が完了しました。
+@if (isset($member))
+<p>{{$member['name']}}さん</p>
+<p>
+    {{$member['email']}}にメールを送信しました。<br>
+    メールに記載のURLをクリックし、登録を完了してください。
+</p>
+<p class="text-center">
+    <a href="member-top.html" class="btn btn-primary">
+        続ける
+    </a>
+</p>
+@else
+<p>無効なURLです。</p>
+@endif
 @endsection
