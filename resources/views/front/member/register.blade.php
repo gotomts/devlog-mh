@@ -1,6 +1,6 @@
 @extends('front.layouts.app')
 
-@section('title'){{ config('titles.front.member.register') }}@endsection
+@section('title'){{ config('titles.front.member.register_complete') }}@endsection
 
 @section('header_js')
 @endsection
@@ -14,10 +14,24 @@
 @endsection
 
 @section('content')
-<h1 class="text-center h2">{{ config('titles.front.member.register') }}</h1>
+<h1 class="text-center h2">{{ config('titles.front.member.register_complete') }}</h1>
 @isset($message)
 <p>
     {{$message}}
 </p>
 @endisset
+@auth
+<p>
+    {{$name}}さん
+</p>
+<p>
+    会員登録が完了しました。
+    引き続き、Devlogをご利用ください。
+</p>
+<p class="text-center">
+    <a href="member-top.html" class="btn btn-primary">
+        続ける
+    </a>
+</p>
+@endauth
 @endsection

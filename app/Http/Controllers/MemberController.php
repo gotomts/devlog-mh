@@ -123,7 +123,8 @@ class MemberController extends WebBaseController
             $member->email_verify_token = null;
             if ($member->save()) {
                 \Auth::login($member);
-                return \View::make('front.member.register')->with('message', '会員登録完了');
+                return \View::make('front.member.register')
+                    ->with('name', $member->name);
             } else {
                 return \View::make('front.member.register')->with('message', 'メール認証に失敗しました。再度、メールからリンクをクリックしてください。');
             }
