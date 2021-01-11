@@ -25,7 +25,7 @@ class RedirectIfAuthenticated
                 $redirectPath = '/';
                 break;
             default:
-                $redirectPath = '/admin/index';
+                $redirectPath = '/';
                 break;
         }
         if (Auth::guard($guard)->check()) {

@@ -32,7 +32,7 @@ class MemberController extends WebBaseController
     /**
      * 返却するguard
      *
-     * @return void
+     * @return string|null guard名
      */
     protected function guard()
     {
