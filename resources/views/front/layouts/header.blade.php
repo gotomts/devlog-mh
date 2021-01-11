@@ -1,27 +1,25 @@
 {{ Form::open(['url' => 'member/logout', 'method' => 'POST', 'id' => 'logout-form', 'class' => 'hidden']) }}
 {{ Form::close() }}
-@guest('member')
-<p>
-    <a href="{{ url('member') }}">ログイン</a>
-    <a href="{{ url('member/verify') }}">会員登録</a>
-</p>
-@endguest
-@auth('member')
-<p><a id="logout-btn" href="#">ログアウト</a></p>
-@endauth
-<header>
-    <h1 class="logo text-center"><a href="/">{{ config('app.name') }}</a></h1>
-    <p class=" text-center">Webデザイナーから転職してWeb系エンジニアとして働いています。日々の技術ログとして使いたい。</p>
-    <nav class="navbar navbar-expand-lg border-top border-bottom navbar-light nav-text-black mb-5">
-        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar"
-            aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse justify-content-md-center" id="navbar">
-            <ul class="navbar-nav">
-                @foreach ($navItems as $navItem)
-                <li class="nav-item"><a class="nav-link"
-                        href="{{ url('category/'.$navItem->name) }}">{{ $navItem->name }}</a></li>
-                @endforeach
-            </ul>
+<header class="blog-header py-3">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+        <div class="col-7">
+            <a class="blog-header-logo text-dark" href="index.html">Devlog</a>
         </div>
-    </nav>
+        <div class="col-5 d-flex justify-content-end align-items-center">
+            @guest('member')
+            <a class="text-muted mr-3" href="{{ url('member/verify') }}">登録</a>
+            <a class="btn btn-sm btn-outline-secondary" href="{{ url('member') }}">ログイン</a>
+            @endguest
+            @auth('member')
+            <a id="logout-btn" class="btn btn-sm btn-outline-secondary" href="#">ログアウト</a>
+            @endauth
+        </div>
+    </div>
 </header>
+<div class="nav-scroller py-1 mb-5">
+    <nav class="nav d-flex justify-content-between">
+        @foreach ($navItems as $navItem)
+            <a class="p-2 text-muted" href="{{ url('category/'.$navItem->name) }}">{{ $navItem->name }}</a>
+        @endforeach
+    </nav>
+</div>

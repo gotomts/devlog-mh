@@ -6,10 +6,12 @@
 </head>
 
 <body>
-    @include('front.layouts.header')
-    <main class="container container-sm mb-10">
-        @yield('content')
-    </main>
+    <div class="container">
+        @include('front.layouts.header')
+        <main class="mb-10">
+            @yield('content')
+        </main>
+    </div>
     @include('front.layouts.footer')
     <script src="{{ asset('js/common.js') }}" defer></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
