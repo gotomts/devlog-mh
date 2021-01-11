@@ -31,8 +31,9 @@ class MemberRegisterMail extends Mailable
     public function build()
     {
         return $this
-            ->subject('仮登録が完了しました')
+            ->subject('登録を完了してください。')
             ->text('emails.front.member_register')
+            ->with(['name' => $this->member['name']])
             ->with(['token' => $this->member['email_verify_token']]);
     }
 }

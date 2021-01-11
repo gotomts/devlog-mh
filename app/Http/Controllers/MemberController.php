@@ -62,25 +62,12 @@ class MemberController extends WebBaseController
 
     /**
      * 仮会員登録画面表示
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function showVerifyRegister()
     {
         return \View::make('front.member.verify_register');
-    }
-
-    /**
-     * 仮会員登録確認
-     */
-    public function exeVerifyRegisterConfirm(Request $request)
-    {
-    }
-
-    /**
-     * 仮登録確認表示
-     */
-    public function showVerifyRegisterConfirm()
-    {
-        return \View::make('front.member.verify_register_complete');
     }
 
     /**
@@ -89,12 +76,14 @@ class MemberController extends WebBaseController
     public function exeVerifyRegisterComplete(Request $request)
     {
         $member = [
+            'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'email_verify_token' => base64_encode($request->email),
         ];
 
-        Member::create($member);
+        // 会員登録処理
+        Member::insert($member);
 
         \Mail::to($request->email)->send(new MemberRegisterMail($member));
         return \Redirect::to('member/verify/complete');
@@ -102,6 +91,8 @@ class MemberController extends WebBaseController
 
     /**
      * 仮会員登録完了
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function showVerifyRegisterComplete()
     {

@@ -45,6 +45,27 @@ class Member extends Authenticatable
     ];
 
     /**
+     * 会員登録処理
+     *
+     * @param $params
+     * @return bool
+     */
+    public static function insert($params)
+    {
+        $result = false;
+        if (isset($params)) {
+            try {
+                $result = \DB::transaction(function () use ($params) {
+                    return self::create($params);
+                });
+            } catch (\Throwable $th) {
+                \Log::error($th);
+            }
+        }
+        return $result;
+    }
+
+    /**
      * @return mixed
      */
     public function update_at()
