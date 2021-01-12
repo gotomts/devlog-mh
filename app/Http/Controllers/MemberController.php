@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Admin\WebBaseController;
+use App\Http\Requests\Front\Member\MemberVerifyRequest;
 use App\Mail\MemberRegisterCompleteMail;
 use App\Mail\MemberVerifyMail;
 use App\Models\Member;
@@ -68,17 +69,17 @@ class MemberController extends WebBaseController
      */
     public function showVerifyRegister()
     {
+        \RequestErrorServiceHelper::validateInsertError();
         return \View::make('front.member.verify_register');
     }
 
     /**
      * 仮会員登録実行
-     *
+     * @param MemberVerifyRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function exeVerifyRegisterComplete(Request $request)
+    public function exeVerifyRegisterComplete(MemberVerifyRequest $request)
     {
-        //TODO:会員登録時、バリデーションを入れる
         $member = [
             'name' => $request->name,
             'email' => $request->email,
