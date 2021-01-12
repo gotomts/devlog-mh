@@ -5,9 +5,11 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Member;
 
-class MemberRegisterMail extends Mailable
+/**
+ * 仮会員登録完了メール
+ */
+class MemberVerifyMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,7 +34,7 @@ class MemberRegisterMail extends Mailable
     {
         return $this
             ->subject('登録を完了してください。')
-            ->text('emails.front.member_register')
+            ->text('emails.front.member_verify')
             ->with(['name' => $this->member['name']])
             ->with(['token' => $this->member['email_verify_token']]);
     }

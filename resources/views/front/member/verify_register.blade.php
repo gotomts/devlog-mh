@@ -29,7 +29,7 @@
 </div>
 <div class="form-group">
     <label for="inputEmail1">メールアドレスを入力</label>
-    <input type="text" class="form-control @error('email') is-invalid @enderror" id="inputEmail1"
+    <input type="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail1"
         aria-describedby="emailHelp" name="email" value="{{ old('email') }}" required autocomplete="email"
         placeholder="メールアドレス">
     @error('email')

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Admin\WebBaseController;
-use App\Mail\MemberRegisterMail;
+use App\Mail\MemberRegisterCompleteMail;
+use App\Mail\MemberVerifyMail;
 use App\Models\Member;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -72,9 +73,12 @@ class MemberController extends WebBaseController
 
     /**
      * 仮会員登録実行
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function exeVerifyRegisterComplete(Request $request)
     {
+        //TODO:会員登録時、バリデーションを入れる
         $member = [
             'name' => $request->name,
             'email' => $request->email,
@@ -85,7 +89,7 @@ class MemberController extends WebBaseController
         // 会員登録処理
         Member::insert($member);
 
-        \Mail::to($request->email)->send(new MemberRegisterMail($member));
+        \Mail::to($request->email)->send(new MemberVerifyMail($member));
 
         // リダイレクト時に渡さないキーを削除
         unset($member['password']);
@@ -121,7 +125,11 @@ class MemberController extends WebBaseController
             // ステータスの更新
             $member->status = config('const.member_statuses.register');
             $member->email_verify_token = null;
+            // 会員登録実行
             if ($member->save()) {
+                // 登録完了メール
+                \Mail::to($member->email)->send(new MemberRegisterCompleteMail($member));
+                // ログイン
                 \Auth::login($member);
                 return \View::make('front.member.register')
                     ->with('name', $member->name);
