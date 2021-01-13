@@ -1,5 +1,3 @@
-{{ Form::open(['url' => 'member/logout', 'method' => 'POST', 'id' => 'logout-form', 'class' => 'hidden']) }}
-{{ Form::close() }}
 <header class="blog-header py-3">
     <div class="row flex-nowrap justify-content-between align-items-center">
         <div class="col-7">
@@ -11,7 +9,9 @@
             <a class="btn btn-sm btn-outline-secondary" href="{{ url('member') }}">ログイン</a>
             @endguest
             @auth('member')
-            <a id="logout-btn" class="btn btn-sm btn-outline-secondary" href="#">ログアウト</a>
+            {{ Form::open(['url' => 'member/logout', 'method' => 'POST', 'id' => 'logout-form', 'class' => 'hidden']) }}
+            {{ Form::close() }}
+            <a class="btn btn-sm btn-outline-secondary logout-btn" href="#">ログアウト</a>
             @endauth
         </div>
     </div>

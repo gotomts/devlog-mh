@@ -49,26 +49,4 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
-
-    /**
-     * ログインしていない場合にリダイレクトさせる
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param AuthenticationException $exception
-     * @return void
-     */
-    public function unauthenticated($request, AuthenticationException $exception)
-    {
-        if ($request->expectsJson()) {
-            return response()->json(['message' => $exception->getMessage()], 401);
-        }
-
-        // コンテンツ側のリダイレクト先
-        if (in_array('member', $exception->guards(), true)) {
-            return redirect()->guest('member');
-        }
-
-        // 管理画面側のリダイレクト先
-        return redirect()->guest('admin');
-    }
 }

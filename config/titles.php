@@ -7,6 +7,7 @@ return [
             'verify_register' => '仮会員登録',
             'verify_register_complete' => '仮会員登録完了',
             'register_complete' => '会員登録完了',
+            'top' => '会員情報トップ',
             'edit' => '会員情報編集',
             'password_reminder' => 'パスワードを忘れた方へ',
             'password_reset' => 'パスワード再設定',

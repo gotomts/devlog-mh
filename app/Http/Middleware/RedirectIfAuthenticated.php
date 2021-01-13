@@ -22,10 +22,10 @@ class RedirectIfAuthenticated
                 $redirectPath = '/admin/index';
                 break;
             case 'member':
-                $redirectPath = '/';
+                $redirectPath = '/member/index';
                 break;
             default:
-                $redirectPath = '/';
+                $redirectPath = '/member/index';
                 break;
         }
         if (Auth::guard($guard)->check()) {

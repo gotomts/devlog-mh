@@ -24,25 +24,27 @@ Route::group(['middleware' => 'web'], function () {
 
         Route::group(['prefix' => 'member'], function () {
             // コンテンツ側ログアウト
-            Route::post('logout', 'MemberController@logout')->name('logout');
+            Route::post('logout', 'AuthController@exeLogout');
             // 会員限定機能 未ログイン
             Route::group(['middleware' => 'guest:member'], function () {
                 // ログイン
-                Route::get('/', 'MemberController@showLoginForm');
-                Route::post('/', 'MemberController@login');
+                Route::get('/', 'AuthController@showLogin');
+                Route::post('/', 'AuthController@exeLogin');
                 // 仮会員登録
-                Route::get('verify', 'MemberController@showVerifyRegister');
+                Route::get('verify', 'AuthController@showVerifyRegister');
                 // 仮会員登録確認
-                Route::post('verify/confirm', 'MemberController@exeVerifyRegisterConfirm');
-                Route::get('verify/confirm', 'MemberController@showVerifyRegisterConfirm');
+                Route::post('verify/confirm', 'AuthController@exeVerifyRegisterConfirm');
+                Route::get('verify/confirm', 'AuthController@showVerifyRegisterConfirm');
                 // 仮会員登録完了
-                Route::post('verify/complete', 'MemberController@exeVerifyRegisterComplete');
-                Route::get('verify/complete', 'MemberController@showVerifyRegisterComplete');
+                Route::post('verify/complete', 'AuthController@exeVerifyRegisterComplete');
+                Route::get('verify/complete', 'AuthController@showVerifyRegisterComplete');
                 // 会員登録
-                Route::get('register/{token}', 'MemberController@showRegister');
+                Route::get('register/{token}', 'AuthController@showRegister');
             });
             // 会員限定機能 ログイン済み
             Route::group(['middleware' => 'auth:member'], function () {
+                // 会員情報TOP
+                Route::get('index', 'MemberController@showIndex');
             });
         });
     });
@@ -50,12 +52,12 @@ Route::group(['middleware' => 'web'], function () {
     // 管理画面
     Route::group(['prefix' => 'admin'], function () {
         // 管理画面側ログアウト
-        Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+        Route::post('logout', 'Admin\AuthController@exeLogout');
         // 管理画面 未ログイン
         Route::group(['middleware' => 'guest:admin'], function () {
             // ログイン
-            Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
-            Route::post('/', 'Auth\LoginController@login');
+            Route::get('/', 'Admin\AuthController@showLogin')->name('login');
+            Route::post('/', 'Admin\AuthController@exeLogin');
             // パスワードリセット
             Route::get('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
             Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');

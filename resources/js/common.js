@@ -1,5 +1,5 @@
 $(function(){
-  var $logoutBtn  = $('#logout-btn');
+  var $logoutBtn  = $('.logout-btn');
   var $logoutForm = $('#logout-form');
   // ログアウトフォームをsubmit
   $logoutBtn.on('click', function(e){
