@@ -45,6 +45,9 @@ Route::group(['middleware' => 'web'], function () {
             Route::group(['middleware' => 'auth:member'], function () {
                 // 会員情報TOP
                 Route::get('index', 'MemberController@showIndex');
+                // 会員情報編集
+                Route::get('edit', 'MemberController@showEdit');
+                Route::post('edit', 'MemberController@exeEdit');
             });
         });
     });

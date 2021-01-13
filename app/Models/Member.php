@@ -45,6 +45,22 @@ class Member extends Authenticatable
     ];
 
     /**
+     * 会員情報をIDで検索
+     *
+     * @param string $id
+     * @return Member
+     */
+    public static function getById($id)
+    {
+        $result = null;
+        $isId = isset($id) ? true : false;
+        if ($isId) {
+            $result = self::find($id);
+        }
+        return $result;
+    }
+
+    /**
      * 会員登録処理
      *
      * @param $params

@@ -1,6 +1,6 @@
 @extends('front.layouts.app')
 
-@section('title'){{ config('titles.front.member.login') }}@endsection
+@section('title'){{ config('titles.front.member.top') }}@endsection
 
 @section('header_js')
 @endsection
@@ -23,7 +23,7 @@
         <a href="member-post.html" class="btn btn-lg btn-primary btn-block">会員限定ページ一覧</a>
     </p>
     <p>
-        <a href="member-edit.html" class="btn btn-lg btn-primary btn-block">会員情報を編集</a>
+        <a href="{{ url('member/edit') }}" class="btn btn-lg btn-primary btn-block">会員情報を編集</a>
     </p>
     <p class="text-center mt-3">
         <a href="#" class="logout-btn">ログアウト</a>
