@@ -15,9 +15,7 @@
 
 @section('content')
 <h1 class="text-center h2">{{ config('titles.front.member.top') }}</h1>
-<p class="alert alert-success text-center">
-    会員情報の編集が完了しました。
-</p>
+@include('front.components.flash_message')
 <div>
     <p>
         <a href="member-post.html" class="btn btn-lg btn-primary btn-block">会員限定ページ一覧</a>

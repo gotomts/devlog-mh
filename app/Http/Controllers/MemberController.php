@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Admin\WebBaseController;
+use App\Http\Requests\Front\Member\MemberRequest;
 use App\Models\Member;
 
 class MemberController extends WebBaseController
 {
+    private const TOP = 'member/index';
+    private const EDIT = 'member/edit';
+
     /**
      * 会員情報TOP
      *
@@ -31,7 +35,39 @@ class MemberController extends WebBaseController
             flash(config('messages.common.noitem'))->error();
             return back();
         }
+        // バリデーションエラーが存在した場合
+        \RequestErrorServiceHelper::validateUpdateError();
+
         return view('front.member.edit')
             ->with('member', $member);
+    }
+
+    /**
+     * 会員情報編集 更新処理
+     *
+     * @param $request
+     * @param $id
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     */
+    public function exeEdit(MemberRequest $request, $id)
+    {
+        $params = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'new_password' => $request->new_password,
+        ];
+        try {
+            $result = Member::updateById($id, $params);
+            if ($result) {
+                flash(config('messages.front.member.update'))->success();
+            } else {
+                throw new Exception(config('messages.exception.update'));
+            }
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            flash(config('messages.exception.update'))->error();
+            return redirect(self::EDIT);
+        }
+        return redirect(self::TOP);
     }
 }

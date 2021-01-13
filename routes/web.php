@@ -47,7 +47,7 @@ Route::group(['middleware' => 'web'], function () {
                 Route::get('index', 'MemberController@showIndex');
                 // 会員情報編集
                 Route::get('edit', 'MemberController@showEdit');
-                Route::post('edit', 'MemberController@exeEdit');
+                Route::post('edit/{id}', 'MemberController@exeEdit');
             });
         });
     });

@@ -15,6 +15,7 @@
 
 @section('content')
 <h1 class="text-center h2">{{ config('titles.front.member.edit') }}</h1>
+@include('front.components.flash_message')
 {{ Form::open(['url' => url("member/edit/{$member->id}"), 'method' => 'POST']) }}
 @include('front.components.input_edit', [
 'labelName' => 'ニックネーム',
@@ -35,7 +36,7 @@
 'required' => true,
 'value' => $member->email
 ])
-<p>パスワードを変更する場合は下記を入力</p>
+<p>パスワードを変更する場合のみ下記を入力してください。</p>
 @include('front.components.input_edit', [
 'labelName' => '古いパスワードを入力',
 'name' => 'old_password',
@@ -52,7 +53,7 @@
 ])
 @include('front.components.input_edit', [
 'labelName' => '新しいパスワードを再度入力',
-'name' => 'new_password',
+'name' => 'new_password_confirmation',
 'type' => 'password',
 'id' => 'inputNewPasswordConfirm',
 'placeholder' => '新しいパスワードを再度入力'

@@ -74,6 +74,7 @@ return [
     'timezone'             => ':attributeは正しいタイムゾーンをしていしてください。',
     'unique'               => ':attributeは既に存在します。',
     'url'                  => ':attributeを正しい書式にしてください。',
+    'password'                  => ':attributeが正しくありません。',
 
     /*
     |--------------------------------------------------------------------------
@@ -107,6 +108,9 @@ return [
         'name' => 'カテゴリー名',
         'email'         => 'メールアドレス',
         'password'      => 'パスワード',
+        'old_password'  => '古いパスワード',
+        'new_password'  => '新しいパスワード',
+        'new_password_confirmation' => '新しいパスワード',
         'imagefile'     => '画像ファイル',
         'title'         => 'title属性',
         'alt'           => 'alt属性',

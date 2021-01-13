@@ -82,6 +82,34 @@ class Member extends Authenticatable
     }
 
     /**
+     * 会員情報 更新処理
+     *
+     * @param $id
+     * @param $params
+     * @return bool
+     */
+    public static function updateById($id, $params)
+    {
+        $result = false;
+        if (isset($params)) {
+            try {
+                $result = \DB::transaction(function () use ($id, $params) {
+                    $member = self::find($id);
+                    $member->name = $params['name'];
+                    $member->email = $params['email'];
+                    if (isset($params['new_password'])) {
+                        $member->password = bcrypt($params['new_password']);
+                    }
+                    return $member->save();
+                });
+            } catch (\Throwable $th) {
+                \Log::error($th);
+            }
+        }
+        return $result;
+    }
+
+    /**
      * @return mixed
      */
     public function update_at()
