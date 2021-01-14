@@ -11,6 +11,7 @@
             @auth('member')
             {{ Form::open(['url' => 'member/logout', 'method' => 'POST', 'id' => 'logout-form', 'class' => 'hidden']) }}
             {{ Form::close() }}
+            <a class="text-muted mr-3" href="{{ url('member/index') }}">会員情報</a>
             <a class="btn btn-sm btn-outline-secondary logout-btn" href="#">ログアウト</a>
             @endauth
         </div>
@@ -19,7 +20,7 @@
 <div class="nav-scroller py-1 mb-5">
     <nav class="nav d-flex justify-content-between">
         @foreach ($navItems as $navItem)
-            <a class="p-2 text-muted" href="{{ url('category/'.$navItem->name) }}">{{ $navItem->name }}</a>
+        <a class="p-2 text-muted" href="{{ url('category/'.$navItem->name) }}">{{ $navItem->name }}</a>
         @endforeach
     </nav>
 </div>
