@@ -7,7 +7,8 @@
 @endsection
 
 @section('footer_js')
-<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?lang=css&skin=desert"></script>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?lang=css&skin=desert">
+</script>
 @endsection
 
 @section('content')
@@ -16,7 +17,7 @@
     <header class="blog-post-header">
         <h1 class="blog-post-title"><a class="text-dark" href="{{ url('blog/'.$post->url) }}">{{ $post->title }}</a></h1>
         <p class="blog-post-meta">
-            @include('front.components.date_formated', ['date' => $post->updated_at])
+            @include('front.components.date_formated', ['date' => $post->created_at])
             <a href="{{ url('category/'.$post->categories->name) }}">{{ $post->categories->name }}</a>
         </p>
     </header>

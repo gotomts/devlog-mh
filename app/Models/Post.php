@@ -84,7 +84,7 @@ class Post extends Model
     public static function getPublishingAll()
     {
         $posts = self::where('status_id', '=', config('const.statuses.publishing'))
-            ->orderBy('posts.updated_at', 'desc')
+            ->orderBy('posts.created_at', 'desc')
             ->paginate(config('pagination.items'));
         return $posts;
     }

@@ -18,7 +18,7 @@
     <header class="blog-post-header">
         <h1 class="blog-post-title">{{ $post->title }}</h1>
         <p class="blog-post-meta">
-            @include('front.components.date_formated', ['date' => $post->updated_at])
+            @include('front.components.date_formated', ['date' => $post->created_at])
             <a href="{{ url('category/'.$post->categories->name) }}">{{ $post->categories->name }}</a>
         </p>
     </header>
