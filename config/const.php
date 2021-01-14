@@ -8,6 +8,7 @@ return [
     'statuses' => [
         'draft'      => 1,
         'publishing' => 2,
+        'member_limitation' => 3,
     ],
     'member_statuses' => [
         'pre_register' => 0,

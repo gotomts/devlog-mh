@@ -90,6 +90,19 @@ class Post extends Model
     }
 
     /**
+     * 会員限定公開記事を全件取得(削除以外)
+     *
+     * @return Post[] 会員限定記事一覧
+     */
+    public static function getMemberLimitationAll()
+    {
+        $posts = self::where('status_id', '=', config('const.statuses.member_limitation'))
+            ->orderBy('posts.created_at', 'desc')
+            ->paginate(config('pagination.items'));
+        return $posts;
+    }
+
+    /**
      * 前後ページのリンクを取得
      *
      * @param int|null $id

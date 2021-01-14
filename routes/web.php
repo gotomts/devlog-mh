@@ -48,6 +48,8 @@ Route::group(['middleware' => 'web'], function () {
                 // 会員情報編集
                 Route::get('edit', 'MemberController@showEdit');
                 Route::post('edit/{id}', 'MemberController@exeEdit');
+                // 会員限定一覧ページ
+                Route::get('post', 'MemberController@showPost');
             });
         });
     });

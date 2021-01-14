@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Admin\WebBaseController;
 use App\Http\Requests\Front\Member\MemberRequest;
 use App\Models\Member;
+use App\Models\Post;
 
 class MemberController extends WebBaseController
 {
@@ -69,5 +70,17 @@ class MemberController extends WebBaseController
             return redirect(self::EDIT);
         }
         return redirect(self::TOP);
+    }
+
+    /**
+     * 会員限定ページ一覧 表示
+     *
+     * @return View
+     */
+    public function showPost()
+    {
+        $posts = Post::getMemberLimitationAll();
+        return view('front.member.post')
+            ->with('posts', $posts);
     }
 }

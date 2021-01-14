@@ -18,7 +18,7 @@
 @include('front.components.flash_message')
 <div>
     <p>
-        <a href="member-post.html" class="btn btn-lg btn-primary btn-block">会員限定ページ一覧</a>
+        <a href="{{ url('member/post') }}" class="btn btn-lg btn-primary btn-block">会員限定ページ一覧</a>
     </p>
     <p>
         <a href="{{ url('member/edit') }}" class="btn btn-lg btn-primary btn-block">会員情報を編集</a>
