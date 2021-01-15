@@ -83,4 +83,37 @@ class MemberController extends WebBaseController
         return view('front.member.post')
             ->with('posts', $posts);
     }
+
+    /**
+     * 会員限定ページ詳細 表示
+     *
+     * @param string $url
+     * @return View
+     */
+    public function showPostDetail($url=null)
+    {
+        $post = Post::getByUrl($url);
+        $prevLink = Post::getPageLinkUrl($post->created_at, true, config('const.statuses.member_limitation'));
+        $nextLink = Post::getPageLinkUrl($post->created_at, false, config('const.statuses.member_limitation'));
+        return view('front.member.post_detail')
+            ->with('post', $post)
+            ->with('prevLink', $prevLink)
+            ->with('nextLink', $nextLink);
+    }
+
+    /**
+     * カテゴリー絞り込み
+     *
+     * @param string $categoryName
+     * @return View
+     */
+    public function showCategory($categoryName=null)
+    {
+        if (is_null($categoryName)) {
+            return \Redirect::to('/');
+        }
+        $posts = Post::getPostCategoryAll($categoryName, config('const.statuses.member_limitation'));
+        return view('front.member.post')
+            ->with('posts', $posts);
+    }
 }

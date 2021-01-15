@@ -13,13 +13,17 @@
 @endsection
 
 @section('content')
-@include('front/components/breadcrumb', ['post' => $post])
+<h1 class="text-center h2">
+    <a href="{{ url('member/post') }}">
+        {{ config('titles.front.member.post') }}
+    </a>
+</h1>
 <article class="blog-post">
     <header class="blog-post-header">
         <h1 class="blog-post-title">{{ $post->title }}</h1>
         <p class="blog-post-meta">
             @include('front.components.date_formated', ['date' => $post->created_at])
-            <a href="{{ url('category/'.$post->categories->name) }}">{{ $post->categories->name }}</a>
+            <a href="{{ url('member/post/category/'.$post->categories->name) }}">{{ $post->categories->name }}</a>
         </p>
     </header>
     @if (isset($post->postImages))
@@ -33,7 +37,7 @@
     {!! $post->html_content !!}
 
     @include('front.components.pagination', [
-        'page' => 'blog',
+        'page' => 'member/post',
         'prevLink' => $prevLink,
         'nextLink' => $nextLink,
     ])

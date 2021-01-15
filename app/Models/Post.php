@@ -107,18 +107,19 @@ class Post extends Model
      *
      * @param int|null $id
      * @param boolean  $isPrev
+     * @param int      $statusId
      * @return Post    前後ページの記事情報
      */
-    public static function getPageLinkUrl($id, $isPrev=false)
+    public static function getPageLinkUrl($createdAt, $isPrev=false, $statusId)
     {
-        $link =  self::where('status_id', '=', config('const.statuses.publishing'))
-            ->orderBy('posts.updated_at', 'desc');
+        $link =  self::where('status_id', '=', $statusId);
+
         if ($isPrev) {
-            $link->orderBy('id', 'asc')
-                ->where('id', '>', $id);
+            $link->where('created_at', '>', $createdAt)
+                ->orderBy('created_at', 'asc');
         } else {
-            $link->orderBy('id', 'desc')
-                ->where('id', '<', $id);
+            $link->where('created_at', '<', $createdAt)
+               ->orderBy('created_at', 'desc');
         }
         return $link->first();
     }
@@ -127,16 +128,17 @@ class Post extends Model
      * カテゴリーを絞り込んだ記事を取得
      *
      * @param string $categoryName
+     * @param string $statusId
      * @return Post[] カテゴリーで絞り込んだ記事一覧
      */
-    public static function getPostCategoryAll($categoryName)
+    public static function getPostCategoryAll($categoryName, $statusId)
     {
         $category = Category::where('name', '=', $categoryName)
             ->first();
 
         $posts = self::where('category_id', '=', $category->id)
-            ->where('status_id', '=', config('const.statuses.publishing'))
-            ->orderBy('posts.updated_at', 'desc')
+            ->where('status_id', '=', $statusId)
+            ->orderBy('posts.created_at', 'desc')
             ->paginate(config('pagination.items'));
         return $posts;
     }
