@@ -16,4 +16,7 @@ return [
         'authed'  => 2,
         'deactivated' => 9,
     ],
+    'member_types' => [
+        'general' => 1,
+    ],
 ];

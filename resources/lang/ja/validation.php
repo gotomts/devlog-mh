@@ -114,6 +114,7 @@ return [
         'imagefile'     => '画像ファイル',
         'title'         => 'title属性',
         'alt'           => 'alt属性',
+        'member_types'  => '会員種別',
     ],
 
 ];
