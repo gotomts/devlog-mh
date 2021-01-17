@@ -61,6 +61,26 @@ class Member extends Authenticatable
     }
 
     /**
+     * 会員全件取得(削除以外)
+     *
+     * @return Member[]
+     */
+    public static function getAll()
+    {
+        $members = Member::select(
+            'members.id',
+            'members.name',
+            'members.updated_by',
+            'members.updated_at',
+            'updated_by.name as updated_name'
+        )->leftjoin('members as updated_by', function ($join) {
+            $join->on('updated_by.id', '=', 'members.updated_by');
+        })->orderBy('members.updated_at', 'desc')
+        ->paginate(config('pagination.items'));
+        return $members;
+    }
+
+    /**
      * 会員登録処理
      *
      * @param $params

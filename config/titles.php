@@ -1,5 +1,10 @@
 <?php
 
+$create  = ' 新規登録';
+$edit    = ' 編集';
+
+$members = '会員マスタ';
+
 return [
     'front' => [
         'member' => [
@@ -42,5 +47,10 @@ return [
     ],
     'profile' => [
         'edit'      => 'プロフィール編集',
+    ],
+    'member' => [
+        'list'      => $members,
+        'create'    => $members . $create,
+        'edit'      => $members . $edit,
     ],
 ];

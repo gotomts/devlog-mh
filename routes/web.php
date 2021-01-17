@@ -111,6 +111,14 @@ Route::group(['middleware' => 'web'], function () {
                 Route::get('edit/{id}', 'Admin\ImageController@showEdit');
                 Route::post('edit/{id}', 'Admin\ImageController@exeEdit');
             });
+            // 会員マスタ
+            Route::group(['prefix' => 'member'], function () {
+                Route::get('/', 'Admin\MemberController@showList');
+                // Route::get('create', 'Admin\MemberController@showCreate');
+                // Route::post('create', 'Admin\MemberController@exeCreate');
+                // Route::get('edit/{id}', 'Admin\MemberController@showEdit');
+                // Route::post('edit/{id}', 'Admin\MemberController@exeEdit');
+            });
             // プロフィール編集
             Route::group(['prefix' => 'profile'], function () {
                 Route::get('edit', 'Admin\ProfileController@showEdit');
