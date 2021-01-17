@@ -28,7 +28,7 @@ class MemberController extends WebBaseController
     }
 
     /**
-     * 会員マスタ 作成
+     * 会員マスタ 新規登録
      *
      * @return View
      */
