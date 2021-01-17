@@ -10,12 +10,13 @@
                     <input
                         class="form-check-input"
                         type="checkbox"
-                        id="{{ 'inlineCheckbox' . $item->id }}"
+                        id="{{ $id . $item->id }}"
                         name="{{$name}}"
                         value="{{ $item->id }}"
                         checked>
                     <label
-                        class="d-inline-block mb-0">
+                        class="d-inline-block mb-0"
+                        for="{{ $id . $item->id }}">
                         {{ $item->name }}
                     </label>
                 </div>
@@ -25,11 +26,12 @@
                     <input
                         class="form-check-input"
                         type="checkbox"
-                        id="{{ 'inlineCheckbox' . $item->id }}"
+                        id="{{ $id . $item->id }}"
                         name="{{$name}}"
                         value="{{ $item->id }}">
                     <label
-                        class="d-inline-block mb-0">
+                        class="d-inline-block mb-0"
+                        for="{{ $id . $item->id }}">
                         {{ $item->name }}
                     </label>
                 </div>
