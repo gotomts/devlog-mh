@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\WebBaseController;
 use App\Models\Member;
 use App\Models\MemberTypes;
+use App\Repositories\MemberRepository;
 use App\Http\Requests\Admin\Member\MemberCreateRequest;
 
 /**
@@ -14,6 +15,13 @@ class MemberController extends WebBaseController
 {
     /** 一覧 */
     private const LIST = 'admin/member';
+
+    protected $memberRepository;
+
+    public function __construct()
+    {
+        $this->memberRepository = new MemberRepository();
+    }
 
     /**
      * 会員マスタ 一覧
@@ -53,23 +61,21 @@ class MemberController extends WebBaseController
     public function exeCreate(MemberCreateRequest $request)
     {
         $params = $request->all();
+        \Log::info('Start Create Member.');
         \DB::beginTransaction();
         try {
-            // TODO:処理未実装
-            //     $result = User::insert($params);
-            //     if (isset($result)) {
-            //         flash(config('messages.common.success'))->success();
-            //     } else {
-            //         throw new Exception(config('messages.exception.insert'));
-            //     }
+            $result = $this->memberRepository->createMemberAndMemberTypes($params, \Auth::guard('admin')->id());
+            if (!$result) {
+                throw new Exception("Create Member Unexpected.");
+            }
         } catch (\Throwable $th) {
-            // TODO:処理未実装
-            //     \DB::rollback();
-            //     \Log::error($th);
-            //     flash(config('messages.exception.insert'))->error();
-            //     return redirect(self::LIST);
+            \DB::rollback();
+            \Log::error($th);
+            flash(config('messages.exception.insert'))->error();
+            return redirect(self::LIST);
         }
         \DB::commit();
+        \Log::info('End Create Member.');
         return redirect(self::LIST);
     }
 }
