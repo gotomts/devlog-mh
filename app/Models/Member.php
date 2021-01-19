@@ -72,9 +72,9 @@ class Member extends Authenticatable
             'members.name',
             'members.updated_by',
             'members.updated_at',
-            'updated_by.name as updated_name'
-        )->leftjoin('members as updated_by', function ($join) {
-            $join->on('updated_by.id', '=', 'members.updated_by');
+            'users.name as updated_name'
+        )->leftjoin('users as users', function ($join) {
+            $join->on('users.id', '=', 'members.updated_by');
         })->orderBy('members.updated_at', 'desc')
         ->paginate(config('pagination.items'));
         return $members;

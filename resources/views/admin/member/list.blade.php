@@ -39,7 +39,11 @@
                 <tr>
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/member/edit/{$member->id}") }}'>編集</a></td>
                     <td class="text-nowrap">{{ $member->name }}</td>
-                    <td class="text-center text-nowrap">{{ $member->updated_name }}</td>
+                    @if (is_null($member->updated_name))
+                        <td class="text-center text-nowrap">会員による登録</td>
+                    @else
+                        <td class="text-center text-nowrap">{{ $member->updated_name }}</td>
+                    @endif
                     <td class="text-center text-nowrap">{{ $member->updated_at->format('Y/m/d H:i:s') }}</td>
                 </tr>
                 @endforeach
