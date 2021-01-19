@@ -58,27 +58,30 @@ class MemberController extends WebBaseController
      * 会員マスタ 登録処理
      *
      * @param MemberCreateRequest $request
-     * @return void
+     * @return redirect
      */
     public function exeCreate(MemberCreateRequest $request)
     {
+        // フォームから送信された値を取得
         $params = $request->all();
-        \Log::info('Start Create Member.');
         \DB::beginTransaction();
         try {
+            \Log::info('Start Create Member.');
+            // 会員登録と会員種別の登録
             $result = $this->memberRepository->createMemberAndMemberTypes($params, \Auth::guard('admin')->id());
             if (!$result) {
                 throw new Exception("Create Member Unexpected.");
             }
+            \DB::commit();
+            \Log::info('End Create Member.');
+            return redirect(self::LIST);
         } catch (\Throwable $th) {
             \DB::rollback();
             \Log::error($th);
             flash(config('messages.exception.insert'))->error();
             return redirect(self::LIST);
         }
-        \DB::commit();
-        \Log::info('End Create Member.');
-        return redirect(self::LIST);
+    }
 
     /**
      * 会員マスタ 編集画面
