@@ -4,12 +4,26 @@ namespace App\Repositories;
 
 use App\Models\Member;
 use App\Models\MembersMemberTypes;
+use App\Models\MemberTypes;
 
 /**
  * 会員のDBに関する処理を記述するクラス
  */
 class MemberRepository
 {
+
+    /**
+     * 会員情報の取得
+     *
+     * @param string $id
+     * @return Member
+     */
+    public function getById($id)
+    {
+        $member = Member::find($id);
+        return $member;
+    }
+
     /**
      * 会員と会員種別の登録
      *

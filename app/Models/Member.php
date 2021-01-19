@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\AuthorObservable;
+use App\Models\MembersMemberTypes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -43,6 +44,16 @@ class Member extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * 会員と会員種別の関係を取得
+     *
+     * @return HasMany
+     */
+    public function membersMemberTypes()
+    {
+        return $this->hasMany(MembersMemberTypes::class, 'members_id', 'id');
+    }
 
     /**
      * 会員情報をIDで検索

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\WebBaseController;
 use App\Models\Member;
 use App\Models\MemberTypes;
 use App\Repositories\MemberRepository;
+use App\Repositories\MemberTypesRepository;
 use App\Http\Requests\Admin\Member\MemberCreateRequest;
 
 /**
@@ -21,6 +22,7 @@ class MemberController extends WebBaseController
     public function __construct()
     {
         $this->memberRepository = new MemberRepository();
+        $this->MemberTypesRepository = new MemberTypesRepository();
     }
 
     /**
@@ -77,5 +79,35 @@ class MemberController extends WebBaseController
         \DB::commit();
         \Log::info('End Create Member.');
         return redirect(self::LIST);
+
+    /**
+     * 会員マスタ 編集画面
+     *
+     * @param string $id
+     * @return View
+     */
+    public function showEdit($id)
+    {
+        try {
+            // 会員種別の一覧を取得
+            $memberTypes = $this->MemberTypesRepository->getAll();
+            // 会員情報の取得
+            \Log::info('Start Get Member By ID.');
+            $member = $this->memberRepository->getById($id);
+
+            unset($member->password);
+            \Log::info('Success Get Member By ID.');
+
+            // バリデーションエラーでリダイレクトしたときのエラーメッセージ表示
+            \RequestErrorServiceHelper::validateInsertError();
+            // 会員マスタ編集画面を表示
+            return view('admin.member.edit')
+                ->with('member', $member)
+                ->with('memberTypes', $memberTypes);
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            flash(config('messages.exception.select'))->error();
+            return redirect(self::LIST);
+        }
     }
 }

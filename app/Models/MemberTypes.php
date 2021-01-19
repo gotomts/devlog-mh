@@ -22,7 +22,7 @@ class MemberTypes extends Model
     /**
      * 会員種別名を種痘
      *
-     * @return void
+     * @return array
      */
     public static function getAll()
     {

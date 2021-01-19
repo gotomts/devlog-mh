@@ -116,7 +116,7 @@ Route::group(['middleware' => 'web'], function () {
                 Route::get('/', 'Admin\MemberController@showList');
                 Route::get('create', 'Admin\MemberController@showCreate');
                 Route::post('create', 'Admin\MemberController@exeCreate');
-                // Route::get('edit/{id}', 'Admin\MemberController@showEdit');
+                Route::get('edit/{id}', 'Admin\MemberController@showEdit');
                 // Route::post('edit/{id}', 'Admin\MemberController@exeEdit');
             });
             // プロフィール編集

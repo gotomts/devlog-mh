@@ -37,6 +37,16 @@
                 'value'         => $member->email,
                 'required'      => true,
             ])
+            @include('admin.components.checkbox_edit', [
+                'labelName' => '閲覧可能な会員種別を選択',
+                'name' => 'member_types[]',
+                'checkboxList' => $memberTypes,
+                'items' => $member->membersMemberTypes,
+                'types' => config('const.member_types.general'),
+                'id' => 'inlineCheckbox',
+                'messageProperty' => 'member_types',
+                'required' => true
+            ])
             @include('admin.components.input_edit', [
                 'labelName'     => 'パスワード',
                 'name'          => 'password',
