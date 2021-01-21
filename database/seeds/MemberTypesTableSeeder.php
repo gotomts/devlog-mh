@@ -21,10 +21,13 @@ class MemberTypesTableSeeder extends Seeder
         \DB::table($this->tableName)->truncate();
         // member_typesテーブルへ値を登録
         MemberTypes::create([
-            'name'  => '一般会員'
+            'name'  => '一般'
         ]);
         MemberTypes::create([
-            'name'  => '特別会員'
+            'name'  => '特別'
+        ]);
+        MemberTypes::create([
+            'name'  => 'ブロック'
         ]);
 
         // FK制約を戻す
