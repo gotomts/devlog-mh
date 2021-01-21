@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Traits\AuthorObservable;
-use App\Models\MembersMemberTypes;
+use App\Models\MemberTypes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,13 +46,19 @@ class Member extends Authenticatable
     ];
 
     /**
-     * 会員と会員種別の関係を取得
+     * 会員種別とのリレーションを定義
      *
-     * @return HasMany
+     * @return BelongsToMany
      */
-    public function membersMemberTypes()
+    public function memberTypes()
     {
-        return $this->hasMany(MembersMemberTypes::class, 'members_id', 'id');
+        return $this
+            ->belongsToMany(
+                MemberTypes::class,
+                'members_member_types',
+                'members_id',
+                'member_types_id'
+            );
     }
 
     /**

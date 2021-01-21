@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class MembersMemberTypes extends Model
+class MembersMemberTypes extends Pivot
 {
-    protected $table = 'members_member_types';
-
     protected $fillable = [
         'members_id',
         'member_types_id',
