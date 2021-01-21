@@ -27,7 +27,7 @@ class MemberTypesTableSeeder extends Seeder
             'name'  => '特別'
         ]);
         MemberTypes::create([
-            'name'  => 'ブロック'
+            'name'  => '制限中'
         ]);
 
         // FK制約を戻す
