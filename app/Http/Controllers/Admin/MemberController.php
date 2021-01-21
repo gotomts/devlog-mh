@@ -18,11 +18,12 @@ class MemberController extends WebBaseController
     private const LIST = 'admin/member';
 
     protected $memberRepository;
+    protected $memberTypesRepository;
 
     public function __construct()
     {
         $this->memberRepository = new MemberRepository();
-        $this->MemberTypesRepository = new MemberTypesRepository();
+        $this->memberTypesRepository = new MemberTypesRepository();
     }
 
     /**
@@ -93,7 +94,7 @@ class MemberController extends WebBaseController
     {
         try {
             // 会員種別の一覧を取得
-            $memberTypes = $this->MemberTypesRepository->getAll();
+            $memberTypes = $this->memberTypesRepository->getAll();
             // 会員情報の取得
             \Log::info('Start Get Member By ID.');
             $member = $this->memberRepository->getById($id);
