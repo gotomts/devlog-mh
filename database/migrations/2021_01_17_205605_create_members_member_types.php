@@ -17,12 +17,10 @@ class CreateMembersMemberTypes extends Migration
     {
         if (!Schema::hasTable($this->tableName)) {
             Schema::create($this->tableName, function (Blueprint $table) {
-                $table->bigIncrements('id');
                 $table->unsignedBigInteger('members_id');
                 $table->unsignedBigInteger('member_types_id');
 
-                $table->foreign('members_id')->references('id')->on('members');
-                $table->foreign('member_types_id')->references('id')->on('member_types');
+                $table->primary(['members_id', 'member_types_id']);
             });
         }
     }
