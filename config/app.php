@@ -183,7 +183,7 @@ return [
 
         App\Providers\Helper\HelperServiceProvider::class,
         App\Providers\ViewHelper\ViewHelperServiceProvider::class,
-
+        App\Providers\DataBaseQueryServiceProvider::class,
     ],
 
     /*
