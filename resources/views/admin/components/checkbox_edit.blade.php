@@ -3,7 +3,7 @@
         {{ $labelName }}
         @if(isset($required)) <span class="badge badge-danger">必須</span> @endif
     </label>
-    @foreach ($checkboxList as $i => $checkbox)
+    @foreach ($checkboxList as $checkbox)
         <div class="form-check form-check-inline">
             <input
                 class="form-check-input"
@@ -11,9 +11,11 @@
                 id="{{ $id . $checkbox->id }}"
                 name="{{$name}}"
                 value="{{ $checkbox->id }}"
-                @if (isset($items[$i]->member_types_id))
-                    checked
-                @endif
+                @foreach ($items as $i => $item)
+                    @if ($checkbox->id === $items[$i]->id)
+                        checked
+                    @endif
+                @endforeach
                 >
             <label
                 class="d-inline-block mb-0"

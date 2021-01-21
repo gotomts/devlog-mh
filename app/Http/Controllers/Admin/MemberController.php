@@ -8,6 +8,7 @@ use App\Models\MemberTypes;
 use App\Repositories\MemberRepository;
 use App\Repositories\MemberTypesRepository;
 use App\Http\Requests\Admin\Member\MemberCreateRequest;
+use App\Http\Requests\Admin\Member\MemberUpdateRequest;
 
 /**
  * 管理画面 会員マスタ
@@ -103,7 +104,7 @@ class MemberController extends WebBaseController
             \Log::info('Success Get Member By ID.');
 
             // バリデーションエラーでリダイレクトしたときのエラーメッセージ表示
-            \RequestErrorServiceHelper::validateInsertError();
+            \RequestErrorServiceHelper::validateUpdateError();
             // 会員マスタ編集画面を表示
             return view('admin.member.edit')
                 ->with('member', $member)
@@ -111,6 +112,43 @@ class MemberController extends WebBaseController
         } catch (\Throwable $th) {
             \Log::error($th);
             flash(config('messages.exception.select'))->error();
+            return redirect(self::LIST);
+        }
+    }
+
+    /**
+     * 会員マスタ 編集画面
+     *
+     * @param MemberUpdateRequest $request
+     * @param string $id
+     * @return redirect
+     */
+    public function exeEdit(MemberUpdateRequest $request, $id)
+    {
+        // フォームから送信された値を取得
+        $params = $request->all();
+        \DB::beginTransaction();
+        try {
+            \Log::info('Start Update Member.', [
+                'id' => $id,
+            ]);
+            // 会員種別の取得
+            $memberTypes = $this->memberTypesRepository->getAll();
+            // 会員登録と会員種別の更新
+            $result = $this->memberRepository->updateMemberAndMemberTypes($id, $params, \Auth::guard('admin')->id(), $memberTypes);
+            if (!$result) {
+                throw new Exception("Update Member Unexpected.");
+            }
+            \DB::commit();
+            \Log::info('End Update Member.', [
+                'id' => $id,
+            ]);
+            flash(config('messages.common.success'))->success();
+            return redirect(self::LIST);
+        } catch (\Throwable $th) {
+            \DB::rollback();
+            \Log::error($th);
+            flash(config('messages.exception.update'))->error();
             return redirect(self::LIST);
         }
     }

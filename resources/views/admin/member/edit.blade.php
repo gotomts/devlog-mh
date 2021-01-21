@@ -41,7 +41,7 @@
                 'labelName' => '閲覧可能な会員種別を選択',
                 'name' => 'member_types[]',
                 'checkboxList' => $memberTypes,
-                'items' => $member->membersMemberTypes,
+                'items' => $member->memberTypes,
                 'types' => config('const.member_types.general'),
                 'id' => 'inlineCheckbox',
                 'messageProperty' => 'member_types',
@@ -52,7 +52,6 @@
                 'name'          => 'password',
                 'type'          => 'password',
                 'id'            => 'inputPassword1',
-                'required'      => true,
             ])
             @include('admin.components.button_submit')
         {{ Form::close() }}

@@ -9,6 +9,11 @@ class MemberTypes extends Model
 {
     protected $table = 'member_types';
 
+    /**
+     * 親モデルのタイムスタンプ更新
+     */
+    protected $touches = ['members'];
+
     protected $fillable = [
         'name',
     ];
