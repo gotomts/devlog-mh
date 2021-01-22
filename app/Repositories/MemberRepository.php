@@ -88,10 +88,9 @@ class MemberRepository
      * @param string $id
      * @param array $params
      * @param int $updatedBy
-     * @param Collection $memberTypes
      * @return bool|MembersMemberTypes
      */
-    public function updateMemberAndMemberTypes($id, $params, $updatedBy, $memberTypes)
+    public function updateMemberAndMemberTypes($id, $params, $updatedBy)
     {
         try {
             // 処理結果の変数
@@ -102,8 +101,7 @@ class MemberRepository
 
             // 会員種別の更新
             // 一旦リセットした上で改めてチェックボックスのチェック分を登録
-            $memberTypesIds = $memberTypes->pluck('id');
-            $member->memberTypes()->detach($memberTypesIds);
+            $member->memberTypes()->detach();
             $member->memberTypes()->attach($params['member_types']);
 
             // 会員情報の更新
