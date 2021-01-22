@@ -98,9 +98,10 @@ class MemberRepository
             }
             $member->updated_by = $updatedBy;
             $result = $member->save();
+
             // 会員情報の更新に失敗した場合
             if (!$result) {
-                throw new Exception("Update Member is Null.");
+                throw new Exception("Update Member Unexpected.");
             }
 
             return $result;

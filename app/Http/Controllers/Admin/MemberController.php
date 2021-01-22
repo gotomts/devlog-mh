@@ -130,10 +130,7 @@ class MemberController extends WebBaseController
                 'id' => $id,
             ]);
             // 会員登録と会員種別の更新
-            $result = $this->memberRepository->updateMemberAndMemberTypes($id, $params, \Auth::guard('admin')->id());
-            if (!$result) {
-                throw new Exception("Update Member Unexpected.");
-            }
+            $this->memberRepository->updateMemberAndMemberTypes($id, $params, \Auth::guard('admin')->id());
             \DB::commit();
             \Log::info('End Update Member.', [
                 'id' => $id,
