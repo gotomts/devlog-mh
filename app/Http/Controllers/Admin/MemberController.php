@@ -70,10 +70,7 @@ class MemberController extends WebBaseController
         try {
             \Log::info('Start Create Member.');
             // 会員登録と会員種別の登録
-            $result = $this->memberRepository->createMemberAndMemberTypes($params, \Auth::guard('admin')->id());
-            if (!$result) {
-                throw new Exception("Create Member Unexpected.");
-            }
+            $this->memberRepository->createMemberAndMemberTypes($params, \Auth::guard('admin')->id());
             \DB::commit();
             \Log::info('End Create Member.');
             return redirect(self::LIST);
