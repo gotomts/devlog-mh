@@ -257,13 +257,6 @@ class Post extends Model
         // 記事情報を取得
         $post = self::findOrFail($id);
 
-        // 会員種別はチェックの有無に関わらず一旦リセット
-        $post->memberTypes()->detach();
-        if (isset($params['member_types'])) {
-            // 会員種別の選択がある場合は会員種別の更新処理を行う
-            $post->memberTypes()->attach($params['member_types']);
-        }
-
         if (isset($params)) {
             $post->title       = $params['title'];
             $post->url         = $params['url'];
@@ -273,8 +266,16 @@ class Post extends Model
             $post->status_id   = $params['status_id'];
             $post->markdown_content = $params['markdown_content'];
             $post->html_content     = $params['html_content'];
-            return $post->save();
+            $result = $post->save();
         }
+
+        // 会員種別はチェックの有無に関わらず一旦リセット
+        $post->memberTypes()->detach();
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の更新処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         return $result;
     }
 
