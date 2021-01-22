@@ -297,7 +297,9 @@ class Post extends Model
             'alt' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
         ];
         if (isset($params)) {
+            // 記事情報の取得
             $post = self::findOrFail($id);
+            // 記事情報の更新
             $post->title       = $params['title'];
             $post->url         = $params['url'];
             $post->keyword     = $params['keyword'];
@@ -307,6 +309,7 @@ class Post extends Model
             $post->markdown_content = $params['markdown_content'];
             $post->html_content     = $params['html_content'];
             $resultPost = $post->save();
+            // アイキャッチ画像の更新
             $postImage = PostImage::firstWhere('post_id', $id);
             if (is_null($postImage)) {
                 $resultPostImage = $post->postImages()->create($postImagesAttrs);
@@ -321,6 +324,14 @@ class Post extends Model
                 $result = true;
             }
         }
+
+        // 会員種別はチェックの有無に関わらず一旦リセット
+        $post->memberTypes()->detach();
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の更新処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         return $result;
     }
 }
