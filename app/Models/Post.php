@@ -169,10 +169,27 @@ class Post extends Model
     public static function insert($params)
     {
         $result = false;
+
+        // 記事モデルをインスタンス化
+        $post = new Post();
+
         if (isset($params)) {
-            $result = self::create($params);
-            return $result;
+            $post->title       = $params['title'];
+            $post->url         = $params['url'];
+            $post->keyword     = $params['keyword'];
+            $post->description = $params['description'];
+            $post->category_id = $params['category_id'];
+            $post->status_id   = $params['status_id'];
+            $post->markdown_content = $params['markdown_content'];
+            $post->html_content     = $params['html_content'];
+            $result = $post->save();
         }
+
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の登録処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         return $result;
     }
 

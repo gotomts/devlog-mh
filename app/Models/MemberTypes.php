@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Member;
+use App\Models\Post;
 
 class MemberTypes extends Model
 {
@@ -41,6 +42,22 @@ class MemberTypes extends Model
                 'members_member_types',
                 'member_types_id',
                 'members_id'
+            );
+    }
+
+    /**
+     * Postモデルとのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
+    public function posts()
+    {
+        return $this
+            ->belongsToMany(
+                Post::class,
+                'posts_member_types',
+                'member_types_id',
+                'posts_id'
             );
     }
 

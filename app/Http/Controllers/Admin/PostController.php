@@ -26,6 +26,7 @@ class PostController extends WebBaseController
      */
     public function showIndex()
     {
+        // 記事情報の取得
         $posts = Post::getAll();
         return \View::make('admin.post.list')
             ->with('posts', $posts);
@@ -38,8 +39,11 @@ class PostController extends WebBaseController
      */
     public function showCreate()
     {
+        // 会員種別の取得
+        $memberTypes = $this->memberTypesRepository->getAll();
         \RequestErrorServiceHelper::validateInsertError();
-        return \View::make('admin.post.create');
+        return \View::make('admin.post.create')
+            ->with('memberTypes', $memberTypes);
     }
 
     /**

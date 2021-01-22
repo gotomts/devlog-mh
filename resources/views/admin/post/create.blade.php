@@ -66,6 +66,14 @@
                 'items'         => \StatusTypeViewHelper::getSelectAll(),
                 'required'      => true
             ])
+            @include('admin.components.checkbox_new', [
+                'labelName' => '閲覧可能な会員種別を選択',
+                'name' => 'member_types[]',
+                'items' => $memberTypes,
+                'checked' => "",
+                'id' => 'inlineCheckbox',
+                'messageProperty' => 'member_types',
+            ])
             @include('admin.components.file_upload', [
                 'labelName'     => 'アイキャッチ画像',
                 'name'          => 'imagefile',
