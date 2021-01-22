@@ -5,7 +5,7 @@
     </label>
     @foreach ($items as $item)
         @switch($item->id)
-            @case($types)
+            @case($checked)
                 <div class="form-check form-check-inline">
                     <input
                         class="form-check-input"
@@ -13,7 +13,8 @@
                         id="{{ $id . $item->id }}"
                         name="{{$name}}"
                         value="{{ $item->id }}"
-                        checked>
+                        checked
+                    >
                     <label
                         class="d-inline-block mb-0"
                         for="{{ $id . $item->id }}">

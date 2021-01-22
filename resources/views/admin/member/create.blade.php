@@ -39,11 +39,11 @@
         'labelName' => '閲覧可能な会員種別を選択',
         'name' => 'member_types[]',
         'items' => $memberTypes,
-        'types' => config('const.member_types.general'),
+        'checked' => config('const.member_types.general'),
         'id' => 'inlineCheckbox',
         'messageProperty' => 'member_types',
         'required' => true
-        ])
+    ])
     @include('admin.components.input_new', [
     'labelName' => 'パスワード',
     'name' => 'password',
