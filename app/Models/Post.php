@@ -193,7 +193,12 @@ class Post extends Model
         return $result;
     }
 
-    // TODO:コメントを書くこと！
+    /**
+     * 記事 登録処理 画像あり
+     *
+     * @param  $request
+     * @return bool
+     */
     public static function insertWithPostImage($params)
     {
         $result = false;
@@ -205,14 +210,33 @@ class Post extends Model
             'title' => isset($params['post_images_name']) ? $params['post_images_name'] : null,
             'alt' => isset($params['post_images_name']) ? $params['post_images_name'] : null,
         ];
+
+        // 記事モデルをインスタンス化
+        $post = new Post();
+
         if (isset($params)) {
-            $post = self::create($params);
+            // 記事情報の登録
+            $post->title       = $params['title'];
+            $post->url         = $params['url'];
+            $post->keyword     = $params['keyword'];
+            $post->description = $params['description'];
+            $post->category_id = $params['category_id'];
+            $post->status_id   = $params['status_id'];
+            $post->markdown_content = $params['markdown_content'];
+            $post->html_content     = $params['html_content'];
+            $result = $post->save();
+            // 画像の登録
             $postImage = $post->postImages()->create($postImagesAttrs);
             if (isset($post) && isset($postImage)) {
                 $result = true;
             }
-            return $result;
         }
+
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の登録処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         return $result;
     }
 
