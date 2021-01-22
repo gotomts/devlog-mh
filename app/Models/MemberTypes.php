@@ -12,7 +12,10 @@ class MemberTypes extends Model
     /**
      * 親モデルのタイムスタンプ更新
      */
-    protected $touches = ['members'];
+    protected $touches = [
+        'posts',
+        'members',
+    ];
 
     protected $fillable = [
         'name',

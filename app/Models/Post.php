@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\AuthorObservable;
+use App\Models\MemberTypes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -46,6 +47,22 @@ class Post extends Model
     public function postImages()
     {
         return $this->hasOne(PostImage::class);
+    }
+
+    /**
+     * 会員種別とのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
+    public function memberTypes()
+    {
+        return $this
+            ->belongsToMany(
+                MemberTypes::class,
+                'posts_member_types',
+                'posts_id',
+                'member_types_id'
+            );
     }
 
     public static function getById($id)
@@ -190,10 +207,23 @@ class Post extends Model
      */
     public static function updateById($id, $request)
     {
+        // 結果の変数を初期化
         $result = false;
+
+        // リクエストの値をすべて取得
         $params = $request->all();
+
+        // 記事情報を取得
+        $post = self::findOrFail($id);
+
+        // 会員種別はチェックの有無に関わらず一旦リセット
+        $post->memberTypes()->detach();
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の更新処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         if (isset($params)) {
-            $post = self::findOrFail($id);
             $post->title       = $params['title'];
             $post->url         = $params['url'];
             $post->keyword     = $params['keyword'];

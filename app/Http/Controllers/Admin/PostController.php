@@ -4,12 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\Post\PostRequest;
 use App\Models\Post;
+use App\Repositories\MemberTypesRepository;
 
 class PostController extends WebBaseController
 {
 
     /** 編集トップ */
     private const TOP = 'admin/post';
+
+    protected $memberTypesRepository;
+
+    public function __construct()
+    {
+        $this->memberTypesRepository = new MemberTypesRepository();
+    }
 
     /**
      * 投稿管理 一覧表示
@@ -87,14 +95,18 @@ class PostController extends WebBaseController
      */
     public function showEdit($id=null)
     {
+        // 記事の取得
         $post = Post::getById($id);
+        // 会員種別の取得
+        $memberTypes = $this->memberTypesRepository->getAll();
         // 記事が見つからない場合
         if (is_null($post)) {
             return back()->with('error', config('messages.common.nodata'));
         }
         \RequestErrorServiceHelper::validateUpdateError();
         return \View::make('admin.post.edit')
-            ->with('post', $post);
+            ->with('post', $post)
+            ->with('memberTypes', $memberTypes);
     }
 
     /**
