@@ -77,7 +77,6 @@
                 'name' => 'member_types[]',
                 'checkboxList' => $memberTypes,
                 'items' => $post->memberTypes,
-                'types' => config('const.member_types.general'),
                 'id' => 'inlineCheckbox',
                 'messageProperty' => 'member_types',
             ])
