@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\AuthorObservable;
-use App\Models\MemberTypes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -113,9 +112,20 @@ class Post extends Model
      */
     public static function getMemberLimitationAll()
     {
+        // $posts = self::with(['statuses' => function ($query) {
+        //     $query->where('id', '=', config('const.statuses.member_limitation'));
+        // },
+        // 'categories',
+        // 'postImages'])
+        //     ->orderBy('posts.created_at', 'desc')
+        //     ->paginate(config('pagination.items'));
+
         $posts = self::where('status_id', '=', config('const.statuses.member_limitation'))
             ->orderBy('posts.created_at', 'desc')
             ->paginate(config('pagination.items'));
+
+        $posts->load(['statuses', 'categories', 'postImages']);
+
         return $posts;
     }
 
