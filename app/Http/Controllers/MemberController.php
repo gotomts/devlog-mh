@@ -79,6 +79,7 @@ class MemberController extends WebBaseController
      */
     public function showPost()
     {
+        // 記事情報を取得
         $posts = Post::getMemberLimitationAll();
         return view('front.member.post')
             ->with('posts', $posts);

@@ -35,7 +35,7 @@ class Post extends Model
 
     public function statuses()
     {
-        return $this->belongsTo(Status::class, 'status_id');
+        return $this->belongsTo(Status::class, 'status_id', 'id');
     }
 
     public function categories()
@@ -108,23 +108,27 @@ class Post extends Model
     /**
      * 会員限定公開記事を全件取得(削除以外)
      *
+     * @param MemberTypes $memberTypes
      * @return Post[] 会員限定記事一覧
      */
     public static function getMemberLimitationAll()
     {
-        // $posts = self::with(['statuses' => function ($query) {
-        //     $query->where('id', '=', config('const.statuses.member_limitation'));
-        // },
-        // 'categories',
-        // 'postImages'])
-        //     ->orderBy('posts.created_at', 'desc')
-        //     ->paginate(config('pagination.items'));
+        // 会員種別からIDのみ種痘
+        $memberTypesId = \Auth::user()->memberTypes->pluck('id');
 
-        $posts = self::where('status_id', '=', config('const.statuses.member_limitation'))
-            ->orderBy('posts.created_at', 'desc')
+        // 記事情報の取得
+        $posts = self::with([
+                'categories',
+                'postImages',
+            ])
+            ->whereHas('statuses', function ($query) {
+                $query->where('id', '=', config('const.statuses.member_limitation'));
+            })
+            ->whereHas('memberTypes', function ($query) use ($memberTypesId) {
+                $query->whereIn('id', $memberTypesId);
+            })
+            ->orderBy('created_at', 'desc')
             ->paginate(config('pagination.items'));
-
-        $posts->load(['statuses', 'categories', 'postImages']);
 
         return $posts;
     }
@@ -142,12 +146,15 @@ class Post extends Model
         $link =  self::where('status_id', '=', $statusId);
 
         if ($isPrev) {
+            // 前ページ
             $link->where('created_at', '>', $createdAt)
                 ->orderBy('created_at', 'asc');
         } else {
+            // 次ページ
             $link->where('created_at', '<', $createdAt)
                ->orderBy('created_at', 'desc');
         }
+
         return $link->first();
     }
 
