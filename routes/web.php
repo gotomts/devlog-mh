@@ -24,12 +24,12 @@ Route::group(['middleware' => 'web'], function () {
 
         Route::group(['prefix' => 'member'], function () {
             // コンテンツ側ログアウト
-            Route::post('logout', 'AuthController@exeLogout');
+            Route::post('logout', 'AuthController@logout');
             // 会員限定機能 未ログイン
             Route::group(['middleware' => 'guest:member'], function () {
                 // ログイン
-                Route::get('/', 'AuthController@showLogin');
-                Route::post('/', 'AuthController@exeLogin');
+                Route::get('/', 'AuthController@showLoginForm')->name('login');
+                Route::post('/', 'AuthController@login');
                 // 仮会員登録
                 Route::get('verify', 'AuthController@showVerifyRegister');
                 // 仮会員登録確認
@@ -61,12 +61,12 @@ Route::group(['middleware' => 'web'], function () {
     // 管理画面
     Route::group(['prefix' => 'admin'], function () {
         // 管理画面側ログアウト
-        Route::post('logout', 'Admin\AuthController@exeLogout');
+        Route::post('logout', 'Admin\AuthController@logout');
         // 管理画面 未ログイン
         Route::group(['middleware' => 'guest:admin'], function () {
             // ログイン
-            Route::get('/', 'Admin\AuthController@showLogin')->name('login');
-            Route::post('/', 'Admin\AuthController@exeLogin');
+            Route::get('/', 'Admin\AuthController@showLoginForm')->name('login');
+            Route::post('/', 'Admin\AuthController@login');
             // パスワードリセット
             Route::get('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
             Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');

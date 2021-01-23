@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\WebBaseController;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
 /**
@@ -10,42 +11,66 @@ use Illuminate\Http\Request;
  */
 class AuthController extends WebBaseController
 {
+    // 認証用のtraitをインポート
+    use AuthenticatesUsers;
+
+    /**
+     * ログイン後のリダイレクト先
+     *
+     * @var string
+     */
+    protected $redirectTo = 'admin/index';
+
+    /**
+     * ログアウト後のリダイレクト先
+     * @var string
+     */
+    protected $loggedOutRedirectTo = 'admin';
+
+    /**
+     * 返却するguard
+     *
+     * @return string|null guard名
+     */
+    protected function guard()
+    {
+        return \Auth::guard('admin');
+    }
+
+    /**
+     * ログアウト リダイレクト先
+     *
+     * @return Redirect
+     */
+    protected function loggedOut()
+    {
+        return redirect(url($this->loggedOutRedirectTo));
+    }
+
+    /**
+     * 認証を処理する
+     *
+     * @param  Request $request
+     *
+     * @return Response
+     */
+    public function authenticated(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (\Auth::attempt($credentials)) {
+            // 認証に成功した
+            return redirect()->intended($this->redirectTo);
+        }
+    }
+
     /**
      * ログイン画面表示
      *
      * @return View
      */
-    public function showLogin()
+    public function showLoginForm()
     {
         return \View::make('auth.login');
-    }
-
-    /**
-     * ログイン実行
-     *
-     * @param Request $request
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
-     */
-    public function exeLogin(Request $request)
-    {
-        // ログイン情報取得
-        $input['email'] = $request->email;
-        $input['password'] = $request->password;
-        // ログイン
-        if (\Auth::guard('admin')->attempt($input)) {
-            return redirect('/admin/index');
-        }
-        return redirect('/');
-    }
-
-    /**
-     * ログアウト
-     *
-     * @param Request $request
-     */
-    public function exeLogout()
-    {
-        \Auth::guard('admin')->logout();
-        return redirect('/admin');
     }
 }
