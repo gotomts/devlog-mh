@@ -116,6 +116,8 @@ class AuthController extends WebBaseController
             // ステータスの更新
             $member->status = config('const.member_statuses.register');
             $member->email_verify_token = null;
+            // 会員種別を登録
+            $member->memberTypes()->attach([config('const.member_types.general')]);
             // 会員登録実行
             if ($member->save()) {
                 // 登録完了メール
