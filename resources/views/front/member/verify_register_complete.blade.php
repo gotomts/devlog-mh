@@ -22,7 +22,7 @@
     メールに記載のURLをクリックし、登録を完了してください。
 </p>
 <p class="text-center">
-    <a href="member-top.html" class="btn btn-primary">
+    <a href="{{ url('member/index') }}" class="btn btn-primary">
         続ける
     </a>
 </p>
