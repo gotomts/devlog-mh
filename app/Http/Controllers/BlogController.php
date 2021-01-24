@@ -29,8 +29,8 @@ class BlogController extends WebBaseController
     public function showDetail($url=null)
     {
         $post = Post::getByUrl($url);
-        $prevLink = Post::getPageLinkUrl($post->id, true);
-        $nextLink = Post::getPageLinkUrl($post->id, false);
+        $prevLink = Post::getPageLinkUrl($post->created_at, true, config('const.statuses.publishing'));
+        $nextLink = Post::getPageLinkUrl($post->created_at, false, config('const.statuses.publishing'));
         return \View::make('front.blog.detail')
             ->with('post', $post)
             ->with('prevLink', $prevLink)
@@ -48,7 +48,7 @@ class BlogController extends WebBaseController
         if (is_null($categoryName)) {
             return \Redirect::to('/');
         }
-        $posts = Post::getPostCategoryAll($categoryName);
+        $posts = Post::getPostCategoryAll($categoryName, config('const.statuses.publishing'));
         return \View::make('front.blog.index')
             ->with('posts', $posts);
     }

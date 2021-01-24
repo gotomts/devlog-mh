@@ -45,11 +45,20 @@
                     <td class="text-center">{{ $post->title }}</td>
                     <td class="text-center">{{ $post->categories->name }}</td>
                     <td class="text-center">
-                    @if ($post->statuses->name === "下書き")
-                        <span class="badge badge-secondary">{{ $post->statuses->name }}</span>
-                    @elseif ($post->statuses->name === "公開")
-                        <span class="badge badge-success">{{ $post->statuses->name }}</span>
-                    @endif
+                    @switch($post->statuses->id)
+                        @case($post->statuses->id === config('const.statuses.draft'))
+                            <span class="badge badge-secondary">{{ $post->statuses->name }}</span>
+                            @break
+                        @case($post->statuses->id === config('const.statuses.publishing'))
+                            <span class="badge badge-success">{{ $post->statuses->name }}</span>
+                            @break
+                        @case($post->statuses->id === config('const.statuses.member_limitation'))
+                            <span class="badge badge-info">{{ $post->statuses->name }}</span>
+                            @break
+                        @default
+                            <span class="badge badge-secondary">{{ $post->statuses->name }}</span>
+                            @break
+                    @endswitch
                     </td>
                     <td class="text-center text-nowrap">{{ $post->user->name }}</td>
                     <td class="text-center text-nowrap">{{ $post->updated_at->format('Y/m/d H:i:s') }}</td>

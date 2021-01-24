@@ -19,6 +19,7 @@
             <a class="btn btn-secondary btn-lg btn-block" href="{{ url('admin/image') }}">{{ config('titles.image.list') }}  &raquo;</a>
             <a class="btn btn-secondary btn-lg btn-block" href="{{ url('admin/user') }}">{{ config('titles.user.list') }} &raquo;</a>
             <a class="btn btn-secondary btn-lg btn-block" href="{{ url('admin/category') }}">{{ config('titles.category.list') }} &raquo;</a>
+            <a class="btn btn-secondary btn-lg btn-block" href="{{ url('admin/member') }}">{{ config('titles.member.list') }} &raquo;</a>
         </div>
     </div>
 @endsection

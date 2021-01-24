@@ -35,7 +35,7 @@ class Post extends Model
 
     public function statuses()
     {
-        return $this->belongsTo(Status::class, 'status_id');
+        return $this->belongsTo(Status::class, 'status_id', 'id');
     }
 
     public function categories()
@@ -48,6 +48,22 @@ class Post extends Model
         return $this->hasOne(PostImage::class);
     }
 
+    /**
+     * 会員種別とのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
+    public function memberTypes()
+    {
+        return $this
+            ->belongsToMany(
+                MemberTypes::class,
+                'posts_member_types',
+                'posts_id',
+                'member_types_id'
+            );
+    }
+
     public static function getById($id)
     {
         return self::findOrFail($id);
@@ -56,12 +72,26 @@ class Post extends Model
     /**
      * URLをキーに記事を取得します
      *
-     * @param  $url url
-     * @return Post URLに該当する記事
+     * @param  string $url
+     * @param  Member|null   $member
+     * @return Post   URLに該当する記事
      */
-    public static function getByUrl($url)
+    public static function getByUrl($url, $member=null)
     {
-        return self::where('url', '=', $url)->first();
+        // URLから記事を取得
+        $posts = self::where('url', '=', $url);
+
+        // 記事に紐づく会員種別と会員の持つ会員種別が一致するかを確認する
+        if (isset($member)) {
+            // 会員の持つ会員種別のIDのみを配列として取得
+            $memberTypesId = $member->memberTypes->pluck('id');
+            //
+            $posts->whereHas('memberTypes', function ($query) use ($memberTypesId) {
+                $query->whereIn('id', $memberTypesId);
+            });
+        }
+
+        return $posts->first();
     }
 
     /**
@@ -84,8 +114,36 @@ class Post extends Model
     public static function getPublishingAll()
     {
         $posts = self::where('status_id', '=', config('const.statuses.publishing'))
-            ->orderBy('posts.updated_at', 'desc')
+            ->orderBy('posts.created_at', 'desc')
             ->paginate(config('pagination.items'));
+        return $posts;
+    }
+
+    /**
+     * 会員限定公開記事を全件取得(削除以外)
+     *
+     * @param MemberTypes $memberTypes
+     * @return Post[] 会員限定記事一覧
+     */
+    public static function getMemberLimitationAll()
+    {
+        // 会員種別からIDのみ種痘
+        $memberTypesId = \Auth::user()->memberTypes->pluck('id');
+
+        // 記事情報の取得
+        $posts = self::with([
+                'categories',
+                'postImages',
+            ])
+            ->whereHas('statuses', function ($query) {
+                $query->where('id', '=', config('const.statuses.member_limitation'));
+            })
+            ->whereHas('memberTypes', function ($query) use ($memberTypesId) {
+                $query->whereIn('id', $memberTypesId);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(config('pagination.items'));
+
         return $posts;
     }
 
@@ -94,19 +152,32 @@ class Post extends Model
      *
      * @param int|null $id
      * @param boolean  $isPrev
+     * @param int      $statusId
+     * @param boolean  $isMemberLimitation
      * @return Post    前後ページの記事情報
      */
-    public static function getPageLinkUrl($id, $isPrev=false)
+    public static function getPageLinkUrl($createdAt, $isPrev=false, $statusId)
     {
-        $link =  self::where('status_id', '=', config('const.statuses.publishing'))
-            ->orderBy('posts.updated_at', 'desc');
-        if ($isPrev) {
-            $link->orderBy('id', 'asc')
-                ->where('id', '>', $id);
-        } else {
-            $link->orderBy('id', 'desc')
-                ->where('id', '<', $id);
+        $link =  self::where('status_id', '=', $statusId);
+
+        if ($statusId === config('const.statuses.member_limitation')) {
+            // 記事のステータスが会員限定の場合は会員が持つ会員種別と同じ記事情報のみを取得する
+            $memberTypesId = \Auth::user()->memberTypes->pluck('id');
+            $link->whereHas('memberTypes', function ($query) use ($memberTypesId) {
+                $query->whereIn('id', $memberTypesId);
+            });
         }
+
+        if ($isPrev) {
+            // 前ページ
+            $link->where('created_at', '>', $createdAt)
+                ->orderBy('created_at', 'asc');
+        } else {
+            // 次ページ
+            $link->where('created_at', '<', $createdAt)
+               ->orderBy('created_at', 'desc');
+        }
+
         return $link->first();
     }
 
@@ -114,16 +185,17 @@ class Post extends Model
      * カテゴリーを絞り込んだ記事を取得
      *
      * @param string $categoryName
+     * @param string $statusId
      * @return Post[] カテゴリーで絞り込んだ記事一覧
      */
-    public static function getPostCategoryAll($categoryName)
+    public static function getPostCategoryAll($categoryName, $statusId)
     {
         $category = Category::where('name', '=', $categoryName)
             ->first();
 
         $posts = self::where('category_id', '=', $category->id)
-            ->where('status_id', '=', config('const.statuses.publishing'))
-            ->orderBy('posts.updated_at', 'desc')
+            ->where('status_id', '=', $statusId)
+            ->orderBy('posts.created_at', 'desc')
             ->paginate(config('pagination.items'));
         return $posts;
     }
@@ -137,14 +209,36 @@ class Post extends Model
     public static function insert($params)
     {
         $result = false;
+
+        // 記事モデルをインスタンス化
+        $post = new Post();
+
         if (isset($params)) {
-            $result = self::create($params);
-            return $result;
+            $post->title       = $params['title'];
+            $post->url         = $params['url'];
+            $post->keyword     = $params['keyword'];
+            $post->description = $params['description'];
+            $post->category_id = $params['category_id'];
+            $post->status_id   = $params['status_id'];
+            $post->markdown_content = $params['markdown_content'];
+            $post->html_content     = $params['html_content'];
+            $result = $post->save();
         }
+
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の登録処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         return $result;
     }
 
-    // TODO:コメントを書くこと！
+    /**
+     * 記事 登録処理 画像あり
+     *
+     * @param  $request
+     * @return bool
+     */
     public static function insertWithPostImage($params)
     {
         $result = false;
@@ -156,14 +250,33 @@ class Post extends Model
             'title' => isset($params['post_images_name']) ? $params['post_images_name'] : null,
             'alt' => isset($params['post_images_name']) ? $params['post_images_name'] : null,
         ];
+
+        // 記事モデルをインスタンス化
+        $post = new Post();
+
         if (isset($params)) {
-            $post = self::create($params);
+            // 記事情報の登録
+            $post->title       = $params['title'];
+            $post->url         = $params['url'];
+            $post->keyword     = $params['keyword'];
+            $post->description = $params['description'];
+            $post->category_id = $params['category_id'];
+            $post->status_id   = $params['status_id'];
+            $post->markdown_content = $params['markdown_content'];
+            $post->html_content     = $params['html_content'];
+            $result = $post->save();
+            // 画像の登録
             $postImage = $post->postImages()->create($postImagesAttrs);
             if (isset($post) && isset($postImage)) {
                 $result = true;
             }
-            return $result;
         }
+
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の登録処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         return $result;
     }
 
@@ -175,10 +288,16 @@ class Post extends Model
      */
     public static function updateById($id, $request)
     {
+        // 結果の変数を初期化
         $result = false;
+
+        // リクエストの値をすべて取得
         $params = $request->all();
+
+        // 記事情報を取得
+        $post = self::findOrFail($id);
+
         if (isset($params)) {
-            $post = self::findOrFail($id);
             $post->title       = $params['title'];
             $post->url         = $params['url'];
             $post->keyword     = $params['keyword'];
@@ -187,8 +306,16 @@ class Post extends Model
             $post->status_id   = $params['status_id'];
             $post->markdown_content = $params['markdown_content'];
             $post->html_content     = $params['html_content'];
-            return $post->save();
+            $result = $post->save();
         }
+
+        // 会員種別はチェックの有無に関わらず一旦リセット
+        $post->memberTypes()->detach();
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の更新処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         return $result;
     }
 
@@ -211,7 +338,9 @@ class Post extends Model
             'alt' => isset($attrs['post_images_name']) ? $attrs['post_images_name'] : null,
         ];
         if (isset($params)) {
+            // 記事情報の取得
             $post = self::findOrFail($id);
+            // 記事情報の更新
             $post->title       = $params['title'];
             $post->url         = $params['url'];
             $post->keyword     = $params['keyword'];
@@ -221,6 +350,7 @@ class Post extends Model
             $post->markdown_content = $params['markdown_content'];
             $post->html_content     = $params['html_content'];
             $resultPost = $post->save();
+            // アイキャッチ画像の更新
             $postImage = PostImage::firstWhere('post_id', $id);
             if (is_null($postImage)) {
                 $resultPostImage = $post->postImages()->create($postImagesAttrs);
@@ -235,6 +365,14 @@ class Post extends Model
                 $result = true;
             }
         }
+
+        // 会員種別はチェックの有無に関わらず一旦リセット
+        $post->memberTypes()->detach();
+        if (isset($params['member_types'])) {
+            // 会員種別の選択がある場合は会員種別の更新処理を行う
+            $post->memberTypes()->attach($params['member_types']);
+        }
+
         return $result;
     }
 }

@@ -17,6 +17,7 @@
         "laravelcollective/html": "^6.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "myclabs/php-enum": "^1.7",
+        "olssonm/l5-very-basic-auth": "^6.5",
         "predis/predis": "^1.1"
     },
     "require-dev": {

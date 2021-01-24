@@ -11,7 +11,7 @@
 
 @section('footer_js')
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="{{ asset('js/admin/custom-markdown.js') }}"></script>
+    <script src="{{ asset('js/admin/post.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?lang=css&skin=desert"></script>
 @endsection
 
@@ -71,6 +71,14 @@
                 'items'         => \StatusTypeViewHelper::getSelectAll(),
                 'value'         => $post->status_id,
                 'required'      => true,
+            ])
+            @include('admin.components.checkbox_edit', [
+                'labelName' => '閲覧可能な会員種別を選択',
+                'name' => 'member_types[]',
+                'checkboxList' => $memberTypes,
+                'items' => $post->memberTypes,
+                'id' => 'inlineCheckbox',
+                'messageProperty' => 'member_types',
             ])
             @if (isset($post->postImages))
                 @include('admin.components.file_upload', [
