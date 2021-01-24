@@ -139,11 +139,20 @@ class Post extends Model
      * @param int|null $id
      * @param boolean  $isPrev
      * @param int      $statusId
+     * @param boolean  $isMemberLimitation
      * @return Post    前後ページの記事情報
      */
     public static function getPageLinkUrl($createdAt, $isPrev=false, $statusId)
     {
         $link =  self::where('status_id', '=', $statusId);
+
+        if ($statusId === config('const.statuses.member_limitation')) {
+            // 記事のステータスが会員限定の場合は会員が持つ会員種別と同じ記事情報のみを取得する
+            $memberTypesId = \Auth::user()->memberTypes->pluck('id');
+            $link->whereHas('memberTypes', function ($query) use ($memberTypesId) {
+                $query->whereIn('id', $memberTypesId);
+            });
+        }
 
         if ($isPrev) {
             // 前ページ

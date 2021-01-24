@@ -93,7 +93,9 @@ class MemberController extends WebBaseController
      */
     public function showPostDetail($url=null)
     {
+        // 記事情報を取得
         $post = Post::getByUrl($url);
+        // ページネーションの取得
         $prevLink = Post::getPageLinkUrl($post->created_at, true, config('const.statuses.member_limitation'));
         $nextLink = Post::getPageLinkUrl($post->created_at, false, config('const.statuses.member_limitation'));
         return view('front.member.post_detail')
