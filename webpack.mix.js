@@ -13,6 +13,7 @@ const mix = require('laravel-mix');
 
 mix.browserSync().
     js('resources/js/app.js', 'public/js')
-    .js('resources/js/common.js', 'public/js')
+    .js('resources/js/bundle.js', 'public/js')
+    .js('resources/js/admin/post.js', 'public/js/admin')
     .sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/common.scss', 'public/css');

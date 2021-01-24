@@ -23,7 +23,7 @@ class LoginController extends WebBaseController
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * ログイン後のリダイレクト先
      *
      * @var string
      */
@@ -36,7 +36,17 @@ class LoginController extends WebBaseController
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest:admin')->except('logout');
+    }
+
+    /**
+     * 返却するguard
+     *
+     * @return string|null guard名
+     */
+    protected function guard()
+    {
+        return \Auth::guard('admin');
     }
 
     /**
@@ -48,5 +58,22 @@ class LoginController extends WebBaseController
     protected function loggedOut(Request $request)
     {
         return redirect(url($this->redirectTo));
+    }
+
+    /**
+     * 認証を処理する
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return Response
+     */
+    public function authenticated(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (\Auth::attempt($credentials)) {
+            // 認証に成功した
+            return redirect()->intended('admin/index');
+        }
     }
 }

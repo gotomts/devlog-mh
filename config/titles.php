@@ -1,6 +1,24 @@
 <?php
 
+$create  = ' 新規登録';
+$edit    = ' 編集';
+
+$members = '会員マスタ';
+
 return [
+    'front' => [
+        'member' => [
+            'login' => 'ログイン',
+            'verify_register' => '仮会員登録',
+            'verify_register_complete' => '仮会員登録完了',
+            'register_complete' => '会員登録完了',
+            'top' => '会員情報トップ',
+            'edit' => '会員情報編集',
+            'post' => '会員限定ページ',
+            'password_reminder' => 'パスワードを忘れた方へ',
+            'password_reset' => 'パスワード再設定',
+        ],
+    ],
     'login' => [
         'top' => 'ログイン',
     ],
@@ -29,5 +47,10 @@ return [
     ],
     'profile' => [
         'edit'      => 'プロフィール編集',
+    ],
+    'member' => [
+        'list'      => $members,
+        'create'    => $members . $create,
+        'edit'      => $members . $edit,
     ],
 ];

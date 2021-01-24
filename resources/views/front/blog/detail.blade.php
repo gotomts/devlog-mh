@@ -18,7 +18,7 @@
     <header class="blog-post-header">
         <h1 class="blog-post-title">{{ $post->title }}</h1>
         <p class="blog-post-meta">
-            @include('front.components.date_formated', ['date' => $post->updated_at])
+            @include('front.components.date_formated', ['date' => $post->created_at])
             <a href="{{ url('category/'.$post->categories->name) }}">{{ $post->categories->name }}</a>
         </p>
     </header>
@@ -32,20 +32,11 @@
     @endif
     {!! $post->html_content !!}
 
-    @if ($prevLink || $nextLink)
-    <nav>
-        @if ($prevLink)
-        <a href="{{ url('blog/'.$prevLink->url) }}" class="btn btn-outline-secondary">
-            {{ $prevLink->title }}
-        </a>
-        @endif
-        @if ($nextLink)
-        <a href="{{ url('blog/'.$nextLink->url) }}" class="btn btn-outline-primary">
-            {{ $nextLink->title }}
-        </a>
-        @endif
-    </nav>
-    @endif
+    @include('front.components.pagination', [
+        'page' => 'blog',
+        'prevLink' => $prevLink,
+        'nextLink' => $nextLink,
+    ])
 </article>
 
 @endsection
