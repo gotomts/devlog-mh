@@ -94,7 +94,13 @@ class MemberController extends WebBaseController
     public function showPostDetail($url=null)
     {
         // 記事情報を取得
-        $post = Post::getByUrl($url);
+        $member = \Auth::user();
+        $post = Post::getByUrl($url, $member);
+        if (is_null($post)) {
+            // 記事情報が見つからなかった場合、権限がなかったことを画面に表示する
+            return view('front.member.post_detail')
+                ->with('message', config('messages.front.member.post.has_not_member_types'));
+        }
         // ページネーションの取得
         $prevLink = Post::getPageLinkUrl($post->created_at, true, config('const.statuses.member_limitation'));
         $nextLink = Post::getPageLinkUrl($post->created_at, false, config('const.statuses.member_limitation'));

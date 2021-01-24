@@ -72,12 +72,26 @@ class Post extends Model
     /**
      * URLをキーに記事を取得します
      *
-     * @param  $url url
-     * @return Post URLに該当する記事
+     * @param  string $url
+     * @param  Member|null   $member
+     * @return Post   URLに該当する記事
      */
-    public static function getByUrl($url)
+    public static function getByUrl($url, $member=null)
     {
-        return self::where('url', '=', $url)->first();
+        // URLから記事を取得
+        $posts = self::where('url', '=', $url);
+
+        // 記事に紐づく会員種別と会員の持つ会員種別が一致するかを確認する
+        if (isset($member)) {
+            // 会員の持つ会員種別のIDのみを配列として取得
+            $memberTypesId = $member->memberTypes->pluck('id');
+            //
+            $posts->whereHas('memberTypes', function ($query) use ($memberTypesId) {
+                $query->whereIn('id', $memberTypesId);
+            });
+        }
+
+        return $posts->first();
     }
 
     /**
