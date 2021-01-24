@@ -24,16 +24,9 @@ jobs:
           command: |
             sudo docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd
             sudo docker-php-ext-install zip bcmath pdo_mysql
-      - run:
-          name: Install Node
-          command: |
-            curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-            sudo apt-get install -y nodejs
 
       # Download and cache dependencies
-
-      # composer cache
-      - run: ls -la
+      - run: sudo composer self-update 1.10.10
       - restore_cache:
           keys:
             - composer-v1-{{ checksum "composer.lock" }}
