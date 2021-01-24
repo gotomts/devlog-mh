@@ -7,7 +7,7 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 class Authenticate extends Middleware
 {
     /**
-     * 未認証のユーザーが認証が必要なURLへアクセスした際のリダイレクト先を定義
+     * 未ログインのユーザーが認証が必要なURLへアクセスした際のリダイレクト先を定義
      *
      * @param  \Illuminate\Http\Request  $request
      * @return string
