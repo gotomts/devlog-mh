@@ -184,6 +184,9 @@ return [
         App\Providers\Helper\HelperServiceProvider::class,
         App\Providers\ViewHelper\ViewHelperServiceProvider::class,
         App\Providers\DataBaseQueryServiceProvider::class,
+
+        // Basic認証
+        Olssonm\VeryBasicAuth\VeryBasicAuthServiceProvider::class
     ],
 
     /*

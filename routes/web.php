@@ -13,7 +13,7 @@
 
 
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web','auth.very_basic']], function () {
     Route::group(['middleware' => ['front']], function () {
         // ブログトップ
         Route::get('/', 'BlogController@showIndex');
