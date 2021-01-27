@@ -19,4 +19,5 @@ return [
     'member_types' => [
         'general' => 1,
     ],
+    'more_keyword' => '<!-- more -->'
 ];

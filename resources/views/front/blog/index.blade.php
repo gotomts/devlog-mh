@@ -29,7 +29,8 @@
     </a>
     @endif
     <div>
-        {!! $post->html_content !!}
+        {{--  {!! substr($post->html_content, 0, strpos($post->html_content, "<!-- more -->")) !!}  --}}
+        {!! \ContentViewHelper::getExistsMoreContent($post->html_content) !!}
         <p><a class="btn btn-primary" href="{{ url('blog/'.$post->url) }}">続きを読む</a></p>
     </div>
 </article>
