@@ -2,6 +2,7 @@
 
 return [
     'CategoryTypeViewHelper',
+    'ContentViewHelper',
     'StatusTypeViewHelper',
     'UserRoleTypeViewHelper',
 ];
