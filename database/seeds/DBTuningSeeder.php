@@ -28,9 +28,9 @@ class DBTuningSeeder extends Seeder
         $time = new Carbon();
 
         // 記事作成
-        for ($i=0; $i < 20; $i++) {
+        for ($i=0; $i < 100; $i++) {
             $postsList = [];
-            for ($j=0; $j < 500; $j++) {
+            for ($j=0; $j < 10; $j++) {
                 $id = uniqid();
                 $day = $time->subSecond("${i}" . "${j}");
                 $posts = [
