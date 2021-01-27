@@ -21,8 +21,8 @@ class DBTuningSeeder extends Seeder
         \DB::table('posts_member_types')->truncate();
 
         // 記事に入れるテキスト取得
-        $markdownContent = storage_path('content/markdown/dummy.md');
-        $htmlContent = storage_path('content/html/dummy.html');
+        $markdownContent = \Storage::disk('content')->get('markdown/dummy.md');
+        $htmlContent = \Storage::disk('content')->get('html/dummy.html');
 
         // 日付算出用
         $time = new Carbon();
