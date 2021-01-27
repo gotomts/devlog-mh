@@ -113,9 +113,23 @@ class Post extends Model
      */
     public static function getPublishingAll()
     {
-        $posts = self::where('status_id', '=', config('const.statuses.publishing'))
-            ->orderBy('posts.created_at', 'desc')
-            ->paginate(config('pagination.items'));
+        $posts = self::select(
+            'posts.url',
+            'posts.title',
+            'posts.description',
+            'posts.keyword',
+            'posts.status_id',
+            'posts.category_id',
+            'posts.html_content',
+            'posts.created_at',
+            'categories.name as categories_name',
+            'posts_images.url as posts_images_url',
+            'posts_images.title as posts_images_title',
+            'posts_images.alt as posts_images_alt',
+        )->leftJoin('categories', 'categories.id', '=', 'posts.category_id')
+        ->leftJoin('posts_images', 'posts_images.id', '=', 'posts.id')
+        ->where('posts.status_id', '=', config('const.statuses.publishing'))
+        ->paginate(config('pagination.items'));
         return $posts;
     }
 
