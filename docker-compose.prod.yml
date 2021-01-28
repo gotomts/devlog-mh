@@ -10,9 +10,6 @@ services:
       - 19000:9000
     volumes:
       - .:/var/www/devlog-mh
-      - ./docker/app/php.ini-production:/usr/local/etc/php/php.ini
-      - ./docker/app/php.ini-production:/usr/local/etc/php/php.ini-development
-      - ./docker/app/php.ini-production:/usr/local/etc/php/php.ini-production
     working_dir: /var/www/devlog-mh
     networks:
       devlog-net:
