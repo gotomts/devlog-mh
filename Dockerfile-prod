@@ -6,9 +6,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN docker-php-ext-install pdo pdo_mysql
 
-# copy php.ini
-COPY docker/app/php.ini-production /usr/local/etc/php/php.ini
-
 # composer install
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
