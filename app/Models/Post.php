@@ -204,13 +204,29 @@ class Post extends Model
      */
     public static function getPostCategoryAll($categoryName, $statusId)
     {
+        // カテゴリを名前から検索
         $category = Category::where('name', '=', $categoryName)
             ->first();
 
-        $posts = self::where('category_id', '=', $category->id)
-            ->where('status_id', '=', $statusId)
-            ->orderBy('posts.created_at', 'desc')
-            ->paginate(config('pagination.items'));
+        // カテゴリの記事検索
+        $posts = self::select(
+            'posts.url',
+            'posts.title',
+            'posts.description',
+            'posts.keyword',
+            'posts.status_id',
+            'posts.category_id',
+            'posts.html_content',
+            'posts.created_at',
+            'posts_images.url as posts_images_url',
+            'posts_images.title as posts_images_title',
+            'posts_images.alt as posts_images_alt',
+        )
+        ->leftJoin('posts_images', 'posts_images.id', '=', 'posts.id')
+        ->where('posts.status_id', '=', $statusId)
+        ->where('posts.category_id', '=', $category->id)
+        ->orderBy('posts.created_at', 'desc')
+        ->paginate(config('pagination.items'));
         return $posts;
     }
 
