@@ -28,21 +28,41 @@ class Post extends Model
         'deleted_at',
     ];
 
-    public function user()
+    /**
+     * ユーザーとのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
+    public function users()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    /**
+     * ステータスとのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
     public function statuses()
     {
         return $this->belongsTo(Status::class, 'status_id', 'id');
     }
 
+    /**
+     * カテゴリーとのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
     public function categories()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    /**
+     * アイキャッチ画像とのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
     public function postImages()
     {
         return $this->hasOne(PostImage::class);
@@ -64,6 +84,12 @@ class Post extends Model
             );
     }
 
+    /**
+     * IDで記事検索
+     *
+     * @param string $id
+     * @return Post
+     */
     public static function getById($id)
     {
         return self::findOrFail($id);
