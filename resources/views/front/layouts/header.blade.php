@@ -19,8 +19,15 @@
 </header>
 <div class="nav-scroller py-1 mb-5">
     <nav class="nav d-flex justify-content-between">
+        @guest('member')
+            @foreach ($navItems as $navItem)
+                <a class="p-2 text-muted" href="{{ url('category/'.$navItem->name) }}">{{ $navItem->name }}</a>
+            @endforeach
+        @endguest
+        @auth('member')
         @foreach ($navItems as $navItem)
-        <a class="p-2 text-muted" href="{{ url('category/'.$navItem->name) }}">{{ $navItem->name }}</a>
+            <a class="p-2 text-muted" href="{{ url('member/category/'.$navItem->name) }}">{{ $navItem->name }}</a>
         @endforeach
+        @endauth
     </nav>
 </div>

@@ -26,7 +26,7 @@
         </h1>
         <p class="blog-post-meta">
             @include('front.components.date_formated', ['date' => $post->created_at])
-            <a href="{{ url('member/post/category/'. $post->categories_name ) }}">{{ $post->categories_name }}</a>
+            <a href="{{ url('member/category/'. $post->categories_name ) }}">{{ $post->categories_name }}</a>
         </p>
     </header>
     @if (isset($post->postImages))
@@ -43,5 +43,5 @@
     </div>
 </article>
 @endforeach
-{{-- @include('front.components.pagilinks', ['property' => $posts]) --}}
+@include('front.components.pagilinks', ['property' => $posts])
 @endsection

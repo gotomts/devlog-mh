@@ -50,10 +50,10 @@ Route::group(['middleware' => ['web','auth.very_basic']], function () {
                 Route::post('edit/{id}', 'MemberController@exeEdit');
                 // 会員限定一覧ページ
                 Route::get('post', 'MemberController@showPost');
-                // 会員限定一覧ページ カテゴリ絞り込み
-                Route::get('post/category/{categoryName}', 'MemberController@showCategory');
                 // 会員限定詳細ページ
                 Route::get('post/{url}', 'MemberController@showPostDetail');
+                // 会員限定一覧ページ カテゴリ絞り込み
+                Route::get('category/{categoryName}', 'MemberController@showCategory');
             });
         });
     });
