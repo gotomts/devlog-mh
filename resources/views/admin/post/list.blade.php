@@ -60,7 +60,7 @@
                             @break
                     @endswitch
                     </td>
-                    <td class="text-center text-nowrap">{{ $post->user->name }}</td>
+                    <td class="text-center text-nowrap">{{ $post->users->name }}</td>
                     <td class="text-center text-nowrap">{{ $post->updated_at->format('Y/m/d H:i:s') }}</td>
                 </tr>
                 @endforeach
