@@ -43,24 +43,24 @@
                     <td class="text-center text-nowrap"></td>
                     <td class="text-center"><a class="btn btn-secondary btn-sm" href='{{ url("admin/post/edit/{$post->id}") }}'>編集</a></td>
                     <td class="text-center">{{ $post->title }}</td>
-                    <td class="text-center">{{ $post->categories->name }}</td>
+                    <td class="text-center">{{ $post->categories_name }}</td>
                     <td class="text-center">
-                    @switch($post->statuses->id)
-                        @case($post->statuses->id === config('const.statuses.draft'))
-                            <span class="badge badge-secondary">{{ $post->statuses->name }}</span>
+                    @switch($post->statuses_id)
+                        @case($post->statuses_id === config('const.statuses.draft'))
+                            <span class="badge badge-secondary">{{ $post->statuses_name }}</span>
                             @break
-                        @case($post->statuses->id === config('const.statuses.publishing'))
-                            <span class="badge badge-success">{{ $post->statuses->name }}</span>
+                        @case($post->statuses_id === config('const.statuses.publishing'))
+                            <span class="badge badge-success">{{ $post->statuses_name }}</span>
                             @break
-                        @case($post->statuses->id === config('const.statuses.member_limitation'))
-                            <span class="badge badge-info">{{ $post->statuses->name }}</span>
+                        @case($post->statuses_id === config('const.statuses.member_limitation'))
+                            <span class="badge badge-info">{{ $post->statuses_name }}</span>
                             @break
                         @default
-                            <span class="badge badge-secondary">{{ $post->statuses->name }}</span>
+                            <span class="badge badge-secondary">{{ $post->statuses_name }}</span>
                             @break
                     @endswitch
                     </td>
-                    <td class="text-center text-nowrap">{{ $post->users->name }}</td>
+                    <td class="text-center text-nowrap">{{ $post->users_name }}</td>
                     <td class="text-center text-nowrap">{{ $post->updated_at->format('Y/m/d H:i:s') }}</td>
                 </tr>
                 @endforeach

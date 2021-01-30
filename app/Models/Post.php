@@ -127,7 +127,19 @@ class Post extends Model
      */
     public static function getAll()
     {
-        $posts = self::orderBy('posts.updated_at', 'desc')
+        $posts = self::select(
+            'posts.id',
+            'posts.title',
+            'posts.updated_at',
+            'categories.name as categories_name',
+            'statuses.id as statuses_id',
+            'statuses.name as statuses_name',
+            'users.name as users_name',
+        )
+        ->leftJoin('categories', 'categories.id', '=', 'posts.category_id')
+        ->leftJoin('statuses', 'statuses.id', '=', 'posts.status_id')
+        ->leftJoin('users', 'users.id', '=', 'posts.updated_by')
+        ->orderBy('posts.updated_at', 'desc')
         ->paginate(config('pagination.items'));
         return $posts;
     }
