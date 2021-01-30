@@ -45,6 +45,7 @@ class ImageTest extends TestCase
     public function testInsert()
     {
         $user = factory(User::class)->create();
+        \Auth::guard('admin')->loginUsingId($user->id);
         $params = [
             'url'           => $this->faker()->url,
             'title'         => $this->faker()->word,
@@ -52,8 +53,8 @@ class ImageTest extends TestCase
             'created_by'    => $user->id,
             'updated_by'    => $user->id,
         ];
-        $result = Image::insert($params);
-        $this->assertInstanceOf(Image::class, $result);
+        $result = Image::insertImage($params);
+        $this->assertTrue($result);
         $this->assertDatabaseHas('images', $params);
     }
 

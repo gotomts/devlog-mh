@@ -28,21 +28,41 @@ class Post extends Model
         'deleted_at',
     ];
 
-    public function user()
+    /**
+     * ユーザーとのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
+    public function users()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    /**
+     * ステータスとのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
     public function statuses()
     {
         return $this->belongsTo(Status::class, 'status_id', 'id');
     }
 
+    /**
+     * カテゴリーとのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
     public function categories()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    /**
+     * アイキャッチ画像とのリレーションを定義
+     *
+     * @return BelongsToMany
+     */
     public function postImages()
     {
         return $this->hasOne(PostImage::class);
@@ -64,6 +84,12 @@ class Post extends Model
             );
     }
 
+    /**
+     * IDで記事検索
+     *
+     * @param string $id
+     * @return Post
+     */
     public static function getById($id)
     {
         return self::findOrFail($id);
@@ -101,7 +127,19 @@ class Post extends Model
      */
     public static function getAll()
     {
-        $posts = self::orderBy('posts.updated_at', 'desc')
+        $posts = self::select(
+            'posts.id',
+            'posts.title',
+            'posts.updated_at',
+            'categories.name as categories_name',
+            'statuses.id as statuses_id',
+            'statuses.name as statuses_name',
+            'users.name as users_name',
+        )
+        ->leftJoin('categories', 'categories.id', '=', 'posts.category_id')
+        ->leftJoin('statuses', 'statuses.id', '=', 'posts.status_id')
+        ->leftJoin('users', 'users.id', '=', 'posts.updated_by')
+        ->orderBy('posts.updated_at', 'desc')
         ->paginate(config('pagination.items'));
         return $posts;
     }
@@ -113,37 +151,61 @@ class Post extends Model
      */
     public static function getPublishingAll()
     {
-        $posts = self::where('status_id', '=', config('const.statuses.publishing'))
-            ->orderBy('posts.created_at', 'desc')
-            ->paginate(config('pagination.items'));
+        $posts = self::select(
+            'posts.url',
+            'posts.title',
+            'posts.description',
+            'posts.keyword',
+            'posts.status_id',
+            'posts.category_id',
+            'posts.html_content',
+            'posts.created_at',
+            'categories.name as categories_name',
+            'posts_images.url as posts_images_url',
+            'posts_images.title as posts_images_title',
+            'posts_images.alt as posts_images_alt',
+        )->leftJoin('categories', 'categories.id', '=', 'posts.category_id')
+        ->leftJoin('posts_images', 'posts_images.id', '=', 'posts.id')
+        ->where('posts.status_id', '=', config('const.statuses.publishing'))
+        ->paginate(config('pagination.items'));
         return $posts;
     }
 
     /**
-     * 会員限定公開記事を全件取得(削除以外)
+     * カテゴリーを絞り込んだ記事を取得
      *
-     * @param MemberTypes $memberTypes
-     * @return Post[] 会員限定記事一覧
+     * @param string $categoryName
+     * @param string $statusId
+     * @return Post[] カテゴリーで絞り込んだ記事一覧
      */
-    public static function getMemberLimitationAll()
+    public static function getPostCategoryAll($categoryName, $statusId)
     {
-        // 会員種別からIDのみ種痘
-        $memberTypesId = \Auth::user()->memberTypes->pluck('id');
+        // 名前からカテゴリを取得
+        $category = Category::where('name', '=', $categoryName)
+            ->first();
 
-        // 記事情報の取得
-        $posts = self::with([
-                'categories',
-                'postImages',
-            ])
-            ->whereHas('statuses', function ($query) {
-                $query->where('id', '=', config('const.statuses.member_limitation'));
-            })
-            ->whereHas('memberTypes', function ($query) use ($memberTypesId) {
-                $query->whereIn('id', $memberTypesId);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(config('pagination.items'));
-
+        // カテゴリの記事検索
+        $posts = self::select(
+            'posts.url',
+            'posts.title',
+            'posts.description',
+            'posts.keyword',
+            'posts.status_id',
+            'posts.category_id',
+            'posts.html_content',
+            'posts.created_at',
+            'posts.created_at',
+            'categories.name as categories_name',
+            'posts_images.url as posts_images_url',
+            'posts_images.title as posts_images_title',
+            'posts_images.alt as posts_images_alt',
+        )
+        ->leftJoin('categories', 'categories.id', '=', 'posts.category_id')
+        ->leftJoin('posts_images', 'posts_images.id', '=', 'posts.id')
+        ->where('posts.status_id', '=', $statusId)
+        ->where('posts.category_id', '=', $category->id)
+        ->orderBy('posts.created_at', 'desc')
+        ->paginate(config('pagination.items'));
         return $posts;
     }
 
@@ -182,21 +244,59 @@ class Post extends Model
     }
 
     /**
-     * カテゴリーを絞り込んだ記事を取得
+     * 会員限定公開記事を全件取得(削除以外)
      *
-     * @param string $categoryName
-     * @param string $statusId
-     * @return Post[] カテゴリーで絞り込んだ記事一覧
+     * @param MemberTypes $memberTypes
+     * @return Post[] 会員限定記事一覧
      */
-    public static function getPostCategoryAll($categoryName, $statusId)
+    public static function getMemberLimitationAll()
     {
-        $category = Category::where('name', '=', $categoryName)
-            ->first();
+        // 会員種別からIDのみ取得
+        $memberTypesId = \Auth::user()->memberTypes->pluck('id');
 
-        $posts = self::where('category_id', '=', $category->id)
-            ->where('status_id', '=', $statusId)
-            ->orderBy('posts.created_at', 'desc')
+        // 記事情報の取得
+        // $posts = self::with([
+        //         'categories',
+        //         'postImages',
+        //     ])
+        //     ->whereHas('statuses', function ($query) {
+        //         $query->where('id', '=', config('const.statuses.member_limitation'));
+        //     })
+        //     ->whereHas('memberTypes', function ($query) use ($memberTypesId) {
+        //         $query->whereIn('id', $memberTypesId);
+        //     })
+        //     ->orderBy('created_at', 'desc')
+        //     ->paginate(config('pagination.items'));
+
+        // 取得するカラム
+        $posts = Post::select(
+            'posts.url',
+            'posts.title',
+            'posts.description',
+            'posts.keyword',
+            'posts.status_id',
+            'posts.category_id',
+            'posts.html_content',
+            'posts.created_at',
+            'categories.name as categories_name',
+            'posts_images.url as posts_images_url',
+            'posts_images.title as posts_images_title',
+            'posts_images.alt as posts_images_alt',
+        )
+        // カテゴリの結合
+        ->leftJoin('categories', 'categories.id', '=', 'posts.category_id')
+        // アイキャッチ画像の結合
+        ->leftJoin('posts_images', 'posts_images.id', '=', 'posts.id')
+        // 記事と会員種別の結合
+        ->leftJoin('posts_member_types', 'posts_member_types.posts_id', '=', 'posts.id')
+        // ステータスの条件
+        ->where('posts.status_id', '=', config('const.statuses.member_limitation'))
+        // 会員種別の条件
+        ->whereIn('posts_member_types.member_types_id', $memberTypesId)
+
+        ->orderBy('created_at', 'desc')
             ->paginate(config('pagination.items'));
+
         return $posts;
     }
 
