@@ -236,21 +236,50 @@ class Post extends Model
      */
     public static function getMemberLimitationAll()
     {
-        // 会員種別からIDのみ種痘
+        // 会員種別からIDのみ取得
         $memberTypesId = \Auth::user()->memberTypes->pluck('id');
 
         // 記事情報の取得
-        $posts = self::with([
-                'categories',
-                'postImages',
-            ])
-            ->whereHas('statuses', function ($query) {
-                $query->where('id', '=', config('const.statuses.member_limitation'));
-            })
-            ->whereHas('memberTypes', function ($query) use ($memberTypesId) {
-                $query->whereIn('id', $memberTypesId);
-            })
-            ->orderBy('created_at', 'desc')
+        // $posts = self::with([
+        //         'categories',
+        //         'postImages',
+        //     ])
+        //     ->whereHas('statuses', function ($query) {
+        //         $query->where('id', '=', config('const.statuses.member_limitation'));
+        //     })
+        //     ->whereHas('memberTypes', function ($query) use ($memberTypesId) {
+        //         $query->whereIn('id', $memberTypesId);
+        //     })
+        //     ->orderBy('created_at', 'desc')
+        //     ->paginate(config('pagination.items'));
+
+        // 取得するカラム
+        $posts = Post::select(
+            'posts.url',
+            'posts.title',
+            'posts.description',
+            'posts.keyword',
+            'posts.status_id',
+            'posts.category_id',
+            'posts.html_content',
+            'posts.created_at',
+            'categories.name as categories_name',
+            'posts_images.url as posts_images_url',
+            'posts_images.title as posts_images_title',
+            'posts_images.alt as posts_images_alt',
+        )
+        // カテゴリの結合
+        ->leftJoin('categories', 'categories.id', '=', 'posts.category_id')
+        // アイキャッチ画像の結合
+        ->leftJoin('posts_images', 'posts_images.id', '=', 'posts.id')
+        // 記事と会員種別の結合
+        ->leftJoin('posts_member_types', 'posts_member_types.posts_id', '=', 'posts.id')
+        // ステータスの条件
+        ->where('posts.status_id', '=', config('const.statuses.member_limitation'))
+        // 会員種別の条件
+        ->whereIn('posts_member_types.member_types_id', $memberTypesId)
+
+        ->orderBy('created_at', 'desc')
             ->paginate(config('pagination.items'));
 
         return $posts;

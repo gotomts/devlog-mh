@@ -26,23 +26,22 @@
         </h1>
         <p class="blog-post-meta">
             @include('front.components.date_formated', ['date' => $post->created_at])
-            <a href="{{ url('member/post/category/'.$post->categories->name) }}">{{ $post->categories->name }}</a>
+            <a href="{{ url('member/post/category/'. $post->categories_name ) }}">{{ $post->categories_name }}</a>
         </p>
     </header>
     @if (isset($post->postImages))
     <a href="{{ url('member/post/'.$post->url) }}">
         <figure class="text-center">
-            <img class="img-fluid" src="{{ $post->postImages->url }}" title="{{ $post->postImages->title }}"
-                alt="{{ $post->postImages->alt }}">
+            <img class="img-fluid" src="{{ $post->posts_images_url }}" title="{{ $post->posts_images_title }}"
+                alt="{{ $post->posts_images_alt }}">
         </figure>
     </a>
     @endif
     <div>
-        {{--  {!! substr($post->html_content, 0, strpos($post->html_content, "<!-- more -->")) !!}  --}}
         {!! \ContentViewHelper::getExistsMoreContent($post->html_content) !!}
         <p><a class="btn btn-primary" href="{{ url('member/post/'.$post->url) }}">続きを読む</a></p>
     </div>
 </article>
 @endforeach
-@include('front.components.pagilinks', ['property' => $posts])
+{{-- @include('front.components.pagilinks', ['property' => $posts]) --}}
 @endsection
