@@ -52,7 +52,7 @@ class ImageTest extends TestCase
             'created_by'    => $user->id,
             'updated_by'    => $user->id,
         ];
-        $result = Image::insert($params);
+        $result = Image::insertImage($params);
         $this->assertInstanceOf(Image::class, $result);
         $this->assertDatabaseHas('images', $params);
     }
