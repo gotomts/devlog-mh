@@ -69,7 +69,9 @@ class ImageController extends WebBaseController
             return redirect('admin/image');
         }
         // 登録処理
-        if (Image::insert($request, $attrs)) {
+        $params = $request->all();
+        $params['url'] = $attrs['url'];
+        if (Image::insertImage($params)) {
             flash(config('messages.common.success'))->success();
         } else {
             flash(config('messages.exception.insert'))->error();

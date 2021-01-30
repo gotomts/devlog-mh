@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreatePostsMemberTypes extends Migration
 {
-    protected $tableName = 'posts_member_types';
+    protected $table = 'posts_member_types';
 
     /**
      * Run the migrations.
@@ -15,8 +15,8 @@ class CreatePostsMemberTypes extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable($this->tableName)) {
-            Schema::create($this->tableName, function (Blueprint $table) {
+        if (!Schema::hasTable($this->table)) {
+            Schema::create($this->table, function (Blueprint $table) {
                 $table->unsignedBigInteger('posts_id');
                 $table->unsignedBigInteger('member_types_id');
 
@@ -32,8 +32,8 @@ class CreatePostsMemberTypes extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable($this->tableName)) {
-            Schema::dropIfExists($this->tableName);
+        if (Schema::hasTable($this->table)) {
+            Schema::dropIfExists($this->table);
         }
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateMemberTypes extends Migration
 {
-    protected $tableName = 'member_types';
+    protected $table = 'member_types';
 
     /**
      * Run the migrations.
@@ -15,8 +15,8 @@ class CreateMemberTypes extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable($this->tableName)) {
-            Schema::create($this->tableName, function (Blueprint $table) {
+        if (!Schema::hasTable($this->table)) {
+            Schema::create($this->table, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name');
             });
@@ -30,8 +30,8 @@ class CreateMemberTypes extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable($this->tableName)) {
-            Schema::dropIfExists($this->tableName);
+        if (Schema::hasTable($this->table)) {
+            Schema::dropIfExists($this->table);
         }
     }
 }

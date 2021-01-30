@@ -47,13 +47,19 @@ class Image extends Model
      * @param $attrs
      * @return bool
      */
-    public static function insert($params)
+    public static function insertImage($params)
     {
         $result = false;
         if (isset($params)) {
             try {
                 $result = \DB::transaction(function () use ($params) {
-                    return self::create($params);
+                    $image = new Image();
+                    $image->url = $params['url'];
+                    $image->title = $params['title'];
+                    $image->alt = $params['alt'];
+                    $image->created_by = \Auth::guard('admin')->user()->id;
+                    $image->updated_by = \Auth::guard('admin')->user()->id;
+                    return $image->save();
                 });
             } catch (\Throwable $th) {
                 \Log::error($th);
